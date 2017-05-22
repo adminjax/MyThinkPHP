@@ -1,0 +1,6 @@
+<div class="msg" style="text-align: center;padding: 20px 0px">
+    <?php if(session('m_type') == 1): ?>
+        <div style="color: green"><?php echo session('msg') ?></div>
+    <?php elseif(session('m_type') == 0): ?>
+        <div style="color: red"><?php echo session('msg'); ?></div><?php endif; ?>
+</div>

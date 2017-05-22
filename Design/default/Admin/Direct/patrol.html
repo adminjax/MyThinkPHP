@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>巡查及管理</title>
+
+	<include file="Common/head" />
+
+	<script src="{$Think.config.PUBLIC_LIB}js/jwplayer-7.7.1/jwplayer.js"></script>
+	<script src="{$Think.config.PUBLIC_LIB}js/jwplayer-7.7.1/jwplayer.flash.swf"></script>
+	<script>jwplayer.key="iP+vLYU9H5KyhZeGt5eVuJJIoULUjltoaMeHXg==";</script>
+</head>
+<body>
+	<div id="direct">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="box-3 clear">
+							<div class="header"><span>巡查及管理</span></div>
+							<div class="box1">
+								<div class="tools clear">
+									<div class="searchs">
+										<form action="{:U('Direct/patrol')}" method="get">
+											<input type="text" name="search" id="searchKey" value="" />
+											<button class="searchKey">
+												<span>搜索</span>
+											</button>
+										</form>
+										<script type="text/javascript">
+											jQuery('.searchKey_').click(function(){
+												var text = jQuery('#searchKey').val();
+												
+												if(text.trim()){
+													jQuery.ajax({
+														type:'GET',
+														url:'{:U("Direct/searchLive")}',
+														data:'live='+text,
+														success:function(data){
+															console.log(data);
+														}
+													});
+												}
+
+											});
+										</script>
+									</div>
+									<!--
+									<div class="filters">
+										<input type="text" name="search" class="filter-key" />
+										<button class="filter">
+											<span>筛选</span>
+										</button>
+									</div>-->
+								</div>
+
+								<div class="direct-list">
+									<ul>
+										<li class="head">
+											<div class="headers clear">
+												<span class="time">创建时间</span>
+												<span class="another">创建者</span>
+												<span class="desc">描述</span>
+											</div>
+										</li>
+										<?php foreach($livelist['array'] as $v): ?>
+										<li>
+											<div class="live clear">
+												<input type="hidden" name="id" value="<?php echo number_format($v['id'], 0, '', ''); ?>" class="id" />
+												<input type="hidden" name="chatroomId" value="<?php echo $v['chatroomId']; ?>" class="chatroomId" />
+												<span class="time"><?php echo date('Y-m-d H:m:s', $v['time']); ?></span>
+												<span class="another"><?php echo $v['pname']; ?></span>
+												<span class="desc"><?php echo $v['desc']; ?></span>
+											</div>
+										</li>
+										<?php endforeach; ?>
+									</ul>
+									<script type="text/javascript">
+										jQuery('.live').click(function(){
+											var id = jQuery(this).find('.id').val();
+
+											jQuery.ajax({
+												type:'GET',
+												url:'{:U("Direct/getLiveById")}',
+												data:'id='+id,
+												success:function(data){
+													console.log(data);
+													if(data.url){
+														jQuery('.roomid').val(id);
+														jwplayer('mediaspace').setup({       
+															file: data.url,     
+															width: '640',        
+															height: '480'
+														}); 
+													}
+												}
+											});
+										});
+									</script>
+								</div>
+								<div class="badoo">{$patrol_page}</div>
+							</div>
+							<div class="box2">
+								<div class="min-title"><span>当前直播界面</span></div>
+								<div class="direct-content">
+									<div id='mediaspace'> </div>  
+									<input type="hidden" name="roomid" class="roomid" value="" />
+								</div>
+							</div>
+							<div class="box3">
+								<div class="top">
+									<div class="min-title"><span>用户检索</span></div>
+									<div class="search-user clear">
+										<input type="text" name="search-user" id="searchUser" placeholder="请输入用户名或ID" value="" />
+										<button class="searchUser"><span>检索</span></button>
+									</div>
+									<div class="user-info">
+										
+									</div>
+									<div class="action">
+										<input type="text" name="time" class="minute" value="" placeholder="请输入禁言分钟" />
+										<button class="silenced"><span>禁言</span></button>
+									</div>
+
+									<script type="text/javascript">
+										jQuery('.searchUser').click(function(){
+											var text = jQuery('#searchUser').val();
+											text = text.trim();
+
+											if(text){
+												jQuery.ajax({
+													type:'GET',
+													url:'{:U("Direct/searchUser")}',
+													data:'text='+text,
+													success:function(data){
+														console.log(data);
+													}
+												});
+											}
+										});
+
+										jQuery('.silenced').click(function(){
+											var uesrId = jQuery('#searchUser').val();
+											uesrId = uesrId.trim();
+
+											var chatroomId = jQuery('.chatroomId').val();
+											var time = parseInt(jQuery('.minute').val());
+
+											if(uesrId && chatroomId){
+												jQuery.ajax({
+													type:'GET',
+													url:'{:U("Direct/silenced")}',
+													data:'uesrId='+uesrId+'&roomid='+chatroomId+'&time='+time,
+													success:function(data){
+														if(data.result == true){
+															alert('禁言成功！');
+														}else{
+															alert('禁言失败，请检查用户ID！');
+														}
+													}
+												});
+											}
+										});										
+									</script>
+								</div>
+
+								<div class="bottom">
+									<div class="min-title"><span>公告发送</span></div>
+									<textarea class="msg"></textarea>
+									<button class="send-msg"><span>发送消息</span></button>
+									<script type="text/javascript">
+										jQuery('.send-msg').click(function(){
+											var text = jQuery('.msg').val();
+											text = text.trim();
+											
+											if(text){
+												jQuery.ajax({
+													type:'POST',
+													url:'{:U("Direct/sendAffiche")}',
+													data:'affiche='+text,
+													success:function(data){
+														console.log(data);
+														if(data.result == true){
+															alert('发送公告成功！');
+														}else{
+															alert(data);
+														}
+													}
+												});
+											}
+										});
+
+									</script>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

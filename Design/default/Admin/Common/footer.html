@@ -1,0 +1,17 @@
+<div class="footer">
+	<div class="box">
+		<span>MET管理工具v1.1.0</span>
+		<span>版权所有 © 2005-2018中哲光宇互动科技有限公司，并保留所有权利。</span>
+		<script type="text/javascript">
+			res();
+			$(window).resize(function(){
+				res();
+			});
+			function res(){
+				messageShow.start();
+				var hei = jQuery(window).height();
+				jQuery(".main>.content").css("min-height", hei-150);
+			}
+		</script>
+	</div>
+</div>

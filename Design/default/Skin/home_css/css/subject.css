@@ -1,0 +1,44 @@
+.contanier{
+    font-family: 微软雅黑;
+    margin: 15px;
+}
+.top>h1{
+    text-align: center;
+}
+.anthor{
+    width: 100%;
+}
+.anthor>div{
+    padding: 0px;
+    margin: 0px;
+    display: inline-block;
+}
+
+.anthor1{
+    font-size: 13px;
+}
+.anthor1>label,span{
+    height:30px;
+    line-height: 30px;
+    display: inline-block;
+}
+.time{
+    float: right;
+}
+.content{
+    width: 100%;
+}
+.content>div.video{
+    margin: 0px auto;
+    text-align: center;
+    width: 100%;
+}
+.content>div.video>video{
+    margin: 0px auto;
+}
+.content>p{
+    width: 100%;
+}
+.content img{
+    width: 100%;
+}

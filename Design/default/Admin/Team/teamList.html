@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>战队列表</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="team">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="team">
+							<div class="header"><span>战队列表</span></div>
+							<div class="list">
+								<ul class="clear">
+								<?php //var_dump($list['array']); ?>
+									<?php foreach($list['array'] as $k => $v): ?>
+										<li>
+											<div class="team-info">
+												<input type="hidden" name="id" class="t_id" value="<?php echo $list['array'][$k]['id']; ?>">
+												<img src="<?php echo $list['array'][$k]['icon']; ?>" />
+												<div class="name">
+													<span><?php echo $list['array'][$k]['name']; ?></span>
+													<span><?php echo date('Y-m-d H:m', $v['time']); ?></span>
+												</div>
+
+												{$edit}
+
+												{$delete}
+											</div>
+										</li>
+									<?php endforeach; ?>
+
+									<li>
+										<div class="add">
+											<a class="add-new-team" href="{:U('Team/teamManage')}"> </a>
+										</div>
+									</li>
+								</ul>
+								<div class="pageTools badoo">
+									<?php echo $pageTools; ?>
+								</div>
+								<script type="text/javascript">
+									jQuery('.edit').click(function(){
+										var id = jQuery(this).parent().find('.t_id').val();
+										var url = window.location.href;
+										var num = url.toLowerCase().indexOf('teamlist');
+										var path = url.substring(0, num);
+										url = path+'teamEdit/id/'+id;
+
+										location.href = url;
+									});
+
+									jQuery('.del').click(function(){
+										var flag = confirm('确定要删除次战队吗？');
+										if(flag == true){
+											var id = jQuery(this).parent().find('.t_id').val();
+											jQuery.ajax({
+												type:'GET',
+												url:'{:U("Team/delTeam")}',
+												data:'id='+id,
+												success:function(data){
+													window.location.reload();
+												}
+											});
+										}
+									});
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

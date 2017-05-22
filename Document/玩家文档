@@ -1,0 +1,33 @@
+请求url  http://metmastersandbox.metworld.com.cn:8093/met/user  post json传输
+
+1、队伍列表
+请求参数
+{
+	type 1 
+	page 当前页数 1开始
+	num 每页显示数量
+}
+返回值{
+	total 总数
+	array {
+		Json{
+			realName 真实姓名---身份证
+			name 昵称
+			sex 性别
+			account 账号---手机号
+			metCard 会员卡
+		}
+	
+	}
+}
+
+1、队伍列表
+请求参数
+{
+	type 2
+	time 封停时间/解封  -1表示解封，
+	account 账号
+}
+返回值{
+	result true
+}

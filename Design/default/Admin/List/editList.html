@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>榜单编辑</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="List">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <include file="Common/msg" />
+                    <div class="List clear">
+                        <div class="onlineList">
+                            <div class="onlineList_top size">
+                                <div class="online">上线榜单列表</div>
+                                <select class="onlineType" style="float: right">
+                                    <option value="">请选择榜单类型</option>
+                                    <foreach name="onlineList" item="v">
+                                        <option value="{$v.id}" pic="{$v.pic}">{$v.desc}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                            <div class="tab_list">
+                                <table class="listList">
+                                    <tr>
+                                        <th style="width: 30%;">序号</th>
+                                        <th>期数</th>
+                                    </tr>
+                                </table>
+                            </div>
+                            {$btn_del_num}
+                        </div>
+
+                        <div class="editList">
+                            <form method="post" class="listInfo_Sub" action="{:U('List/addList')}?type=add" enctype="multipart/form-data">
+                                <input id="listTypes" type="hidden" value="" name="listTypes"/>
+                                <span class="online listType1  line">选择榜单类型</span>
+                                <div class="sel_listTy">
+                                    <select class="onlineType nu" name="onlineType">
+                                        <option value="">请选择榜单类型</option>
+                                        <foreach name="onlineList" item="v">
+                                            <option value="{$v.id}" pic="{$v.pic}">{$v.desc}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                                <br/>
+                                <span class="online listType1  setListNum line">设置榜单期数</span>
+                                <input class="nu  line" type="number" name="listNumber" placeholder="输入期数"/>
+                                <div style="margin-left: 45%;display: inline-block">
+                                    {$edit_list}
+                                    {$add_list}
+                                    <script>
+                                        $(".edit_list").hide();
+                                        $(".add_list").hide();
+                                    </script>
+                                </div>
+                                <div class="addList_info">
+                                    <span class="online listType1  setListNum line">设置视频名称</span>
+                                    <input class="nu line" type="text" name="listTitle" placeholder="输入标题"/>
+                                    <div class="videoAdd">
+                                        <span class="online listType1  setListNum line" style="float: left">设置榜单视频</span>
+                                        <div class="online setListNum line" style="margin-left: 5px;">
+                                            <!--<input class="file_upload" type="hidden" value=""/>-->
+                                            <input type="hidden" class="select video-url" value="" name="videoUrl"/>
+                                            <button class="btnss btn_over" type="button" onclick='return $EDITORUI["edui9"]._onClick(event, this);'>选择视频</button>
+                                            <!--<div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                                                <video class="video preview" src="" controls preload></video>
+                                            </div>
+                                            <input class="file_upload" type="hidden" value=""/>
+                                            <input type="hidden" class="select" value="" name="videoUrl"/>
+                                            <a href="javascript:void(0)" class="btn_tmp btnss button avater" id="btnss_video"><span>选择视频</span></a>-->
+                                            <div class="over">
+                                                <script id="video" type="text/plain">
+
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="videoAdd">
+                                        <span class="online listType1  setListNum line" style="float: left">设置榜单图片</span>
+                                        <div class="online setListNum line" style="margin-left: 5px;">
+                                            <div class="preview_tmp" style="width:120px; height:70px;display: none;">
+                                                <img class="preview logo_img" src="" border="0" style="width: 100%;height: 100%"/>
+                                            </div>
+                                            <input class="file_upload" type="hidden" value=""/>
+                                            <input type="hidden" class="select video_url" value="" name="ImgUrl"/>
+                                            <a href="javascript:void(0)" class="btn_tmp btnss button avater" id="btnss_img" style="height: 25px;line-height: 18px;"><span>选择图片</span></a>
+                                        </div>
+                                    </div>
+                                    <!--<div class="preview_con">
+                                        <span class="online listType1  setListNum line"></span>
+                                        <textarea class="text_list " name="videoDesc" placeholder="视频简介"></textarea>
+                                    </div>-->
+                                </div>
+
+                                <div class="list_ranking" style="display: none">
+                                    <div class="listInfo_bottom line">
+                                        <div class="ranking_pre ranking_write">
+                                            <div class="preview_ranking ranking size">第<span><input class="rankNum" type="text" value="1" style="width: 22px;text-align: center;"/></span>名</div>
+                                            <div class="preview_name">
+                                                <select class="maker_team">
+                                                    <option value="">请选择战队</option>
+                                                    <foreach name="makerTeamList" item="v">
+                                                        <option value="{$v.id}">{$v.name}</option>
+                                                    </foreach>
+                                                </select>
+                                            </div>
+                                            <div class="preview_img">
+                                                <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                                                    <img class="img preview" src=""/>
+                                                </div>
+                                                <span class="makerName size"></span>
+                                            </div>
+
+                                            <!--<div class="preview_video">
+                                                <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                                                    <video class="video preview" src="" controls preload></video>
+                                                </div>
+                                                <input class="file_upload" type="hidden" value=""/>
+                                                <input type="hidden" class="select" value="" name="video[1]"/>
+                                                <a href="javascript:void(0)" class="btn_tmp btnss button avater" id="btnsss"><span>选择视频</span></a>
+                                            </div>-->
+
+                                            <div class="preview_con">
+                                                <textarea class="text_list size" placeholder="简述" disabled></textarea>
+                                            </div>
+                                            <div class="preview_tag">
+                                                <button type="button" class="btn_add">确定</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="list_ranking list_ranking1" style="display: none;">
+                                    <div class="listInfo_bottom line">
+
+                                    </div>
+                                </div>
+
+                                <script type="text/javascript">
+                                    jQuery(function() {
+                                        var uev = UE.getEditor('video', {
+                                            toolbars : [
+                                                ['insertvideo']
+                                            ],
+                                            initialFrameWidth : 217,
+                                            initialFrameHeight: 290,
+                                            isShow : false
+                                        });
+                                        $(".btn_over").click(function(){
+                                            uev.show();
+                                            $(".btn_over").css('float','right');
+                                            $("#edui1_toolbarboxouter").hide();
+                                        });
+                                        var num= '';//期数
+                                        var type= '';//榜单类型
+                                        var data = ['', '一','二','三','四','五','六','七','八','九','十'];
+                                        var val = 1;//名次
+                                        //上传图片
+                                        var uploader = new plupload.Uploader({
+                                            //创建实例的构造方法
+                                            runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+                                            browse_button: 'btnss_img', // 上传按钮
+                                            url: "{:U('List/uploadImage')}", //远程上传地址
+                                            filters: {
+                                                max_file_size: '200mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+                                                mime_types: [//允许文件上传类型
+                                                    {title: "files", extensions: "jpg,png,gif,mp4,jpeg"}
+                                                ]
+                                            },
+                                            init: {
+                                                FilesAdded: function(up, files) { //文件上传前
+                                                    uploader.start();
+                                                },
+                                                FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+                                                    var data = JSON.parse(info.response);console.log(info);console.log(data);
+                                                    $("#btnss_img").siblings('.select').attr('value', data.pic);
+                                                    $("#btnss_img").siblings('.preview_tmp').children('.preview').attr('src', data.pic);
+                                                    $("#btnss_img").css('float','right');
+                                                    $(".preview_tmp").show();
+
+                                                }
+                                            }
+                                        });
+                                        uploader.init();
+
+                                        //保存编辑
+                                        $(".btn_list").click(function()
+                                        {
+                                            var maker_id = $(".onlineType:last").val();
+                                            if(!maker_id){
+                                                alert('请选择榜单类型！');
+                                                $(".onlineType:last").focus();
+                                                return false;
+                                            }
+                                            var type = $(".onlineType:last").find("option[value="+maker_id+"]").text();
+                                            $("#listTypes").val(type);
+
+                                            var listNumber = $('input[name="listNumber"]').val();
+                                            if(!listNumber){
+                                                alert('请输入榜单期数！');
+                                                $('input[name="listNumber"]').focus();
+                                                return false;
+                                            }
+                                            var video_url = $(".video-url").val();
+                                            if(!video_url){
+                                                alert('请上传视频！');
+                                                return false;
+                                            }
+                                            var listTitle = $('input[name="listTitle"]').val();
+                                            if(!listTitle){
+                                                alert('请输入视频名称！');
+                                                $('input[name="listTitle"]').focus();
+                                                return false;
+                                            }
+                                            var logo_img = $('.logo_img').attr('src');
+                                            if(!logo_img){
+                                                alert('请上传榜单LOGO！');
+                                                $('input[name="listTitle"]').focus();
+                                                return false;
+                                            }
+                                            $(".listInfo_Sub").submit();
+                                        });
+
+                                        //修改榜单
+                                        $(".edit_list").click(function(){
+                                            if(confirm('修改榜单期数！')){
+                                                var self = $(".listList tr.active");
+                                                var id = self.attr('lid');
+                                                var videoid = self.attr('videoid');
+                                                var showid = $(".onlineType").val();
+                                                var show_name = $(".onlineType:first option:selected").text();
+                                                var stage_num = $("input[name='listNumber']").val();
+                                                if(id && videoid && showid && stage_num){
+                                                    $.ajax({
+                                                        url : '{:U("List/editListStage")}',
+                                                        type : 'post',
+                                                        data : {id : id,videoid : videoid,showid : showid,stage_num : stage_num,show_name : show_name},
+                                                        success : function(response){
+                                                            //console.log(response);
+                                                            if(response == 1){
+                                                                alert('榜单期数修改成功，待审核！');
+                                                            }else if(response == 2){
+                                                                alert('无权限操作!');
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            }
+
+                                        });
+
+                                        //添加榜单
+                                        $(".add_list").click(function()
+                                        {
+                                            $(".list_ranking1 .listInfo_bottom").html('');
+                                            $(".list_ranking1").hide();
+                                            $(".addList_info").show();
+                                            $("input[name='listNumber']").val('');
+                                            $(".add_list").hide();
+                                            $(".edit_list").hide();
+                                            $(".save_data").show();
+                                            $(".listInfo_Sub").attr('action',"{:U('List/addList')}?type=add");
+                                        });
+
+                                        //获取榜单列表
+                                        $(".onlineType").bind('change',getListList);
+
+                                        function getListList() {
+                                            $(".list_ranking1").hide();
+                                            var on_id = $(this).val();
+                                            $(".onlineType").find("option[value="+on_id+"]").attr("selected",true);
+                                            $(".listList .tr").remove();
+                                            if(!on_id){
+                                                $("input[name='listNumber']").val('');
+                                                return false;
+                                            }
+                                            $.ajax({
+                                                url : '{:U("List/getListList")}',
+                                                type : 'post',
+                                                data : {on_id : on_id},
+                                                success : function(response){
+                                                    var list = eval(response);
+                                                    $.each(list,function(k,v){
+                                                        var html = '';
+                                                        if(v.status == 14){
+                                                            html = '<tr class="tr" lid='+v.id+' videoId='+v.videoId+'><th>'+(k+1)+'</th><th><font>'+v.stage+'</font><span>删除</span></th></tr>';
+                                                        }else if((v.status == 4) || (v.status == 5) || (v.status == 15)){
+                                                            html = '<tr class="tr" lid='+v.id+' videoId='+v.videoId+'><th>'+(k+1)+'</th><th><font>'+v.stage+'</font><span>修改</span></th></tr>';
+                                                        }else{
+                                                            html = '<tr class="tr" lid='+v.id+' videoId='+v.videoId+'><th>'+(k+1)+'</th><th><font>'+v.stage+'</font><span>&nbsp;</span></th></tr>';
+                                                        }
+                                                        $(".listList").append(html);
+                                                    });
+                                                    $(".btn_del_num").show();
+                                                    //获取榜单数据信息
+                                                    $(".tr").unbind('click').bind('click',getOneListData);
+                                                }
+                                            });
+                                        }
+                                        function getOneListData(){
+                                            var self = $(this);
+                                            $(".tr").removeClass('active');
+                                            self.addClass('active');
+                                            var list_id = self.attr('lid');
+                                            var show_id = $(".onlineType:first").val();
+                                            num = $(this).children().eq(1).find('font').text();
+                                            num = num.replace('期','');
+                                            var maker_team = $(".onlineType:first").val();
+                                            if(!list_id) return false;
+                                            $.ajax({
+                                                url : '{:U("List/getListInfo")}',
+                                                type : 'post',
+                                                data : {list_id : list_id,show_id : show_id},
+                                                success : function(response){
+                                                    $(".list_ranking1").show();
+                                                    $(".add_list").show();
+                                                    $(".edit_list").show();
+                                                    $(".save_data").hide();
+                                                    var input = '<input class="topTenListId" type="hidden" value="'+list_id+'" /><button type="button" class="btn_addRank">增加排名</button>';
+                                                    $(".list_ranking1 .listInfo_bottom").html(input+response);
+                                                    $(".editList .onlineType").find("option[value="+maker_team+"]").attr("selected",true);
+                                                    $("input[name='listNumber']").val(num);
+                                                    $(".addList_info").hide();
+                                                    $(".listInfo_Sub").attr('action',"{:U('List/addList')}?type=edit");
+                                                    //增加一个排名
+                                                    $(".btn_addRank").unbind('click').bind('click',addRanking);
+                                                    //删除一个排名
+                                                    $(".btn_delRank").unbind('click').bind('click',delRanking);
+                                                    //选择创客队伍
+                                                    $(".maker_team").unbind('change').bind('change',makerTeam);
+                                                    //删除榜单期数
+                                                    $(".btn_del_num").unbind('click').bind('click',delListNum);
+                                                }
+                                            });
+                                        }
+                                        function addRanking(){
+                                            var self = $(this);
+                                            var maxRank = '';
+                                            //最大排名
+                                            $(".rankNum").each(function(){
+                                                maxRank += $(this).val()+",";
+                                            });
+                                            if($(".rankNum")[10]){
+                                                alert('排名已达上限！');
+                                                return false;
+                                            }
+                                            maxRank = maxRank.split(',');
+                                            maxRank = parseInt(Math.max.apply(null, maxRank));
+                                            if(maxRank >= 10){
+                                                maxRank = 10;
+                                            }else if($(".rankNum")[1]){
+                                                //判断是否有排名
+                                                maxRank = maxRank + 1;
+                                            }else{
+                                                maxRank = 1;
+                                            }
+                                            var addRank = $(".ranking_write:first").clone();
+                                            self.after(addRank);
+                                            $(".rankNum:eq(1)").val(maxRank);
+                                            //选择队伍
+                                            $(".maker_team").unbind('change').bind('change',makerTeam);
+//                                           //确认添加排名
+                                            $(".btn_add").unbind('click').bind('click',conRank);
+                                        }
+                                        function delRanking(){
+                                            var self = $(this);
+                                            var maker_name = self.parent().siblings('.preview_img').find('.makerName').text();
+                                            var maker_desc = self.parent().siblings('.preview_con').find('.text_list').val();
+                                            var maker_url = self.parent().siblings('.preview_img').find('.preview_tmp').find('.img').attr('src');
+                                            var showId = $(".onlineType").val();
+                                            var topTenListId = self.parent().parent().siblings('.topTenListId').val();
+                                            var index = self.parent().parent().find('.ranking').find('.rankNum').val();
+                                            type = $(".onlineType:first").find("option[value="+showId+"]").text();
+                                            if(index && topTenListId && showId){
+                                                $.ajax({
+                                                    url : '{:U("List/delRanking")}',
+                                                    type : 'post',
+                                                    data : {showId : showId,topTenListId : topTenListId,index : index,num : num,type : type,maker_name : maker_name,maker_desc : maker_desc,maker_url : maker_url},
+                                                    success : function(response){
+                                                        console.log(response);
+                                                        if(response == 1)
+                                                        {
+                                                            alert('排名删除成功!');
+                                                            self.parent().css('text-align','center');
+                                                            self.parent().css('color','red');
+                                                            self.parent().css('line-height','111px');
+                                                            self.parent().html('删除排名,待审核');
+                                                        }else if(response == 2){
+                                                            alert('无权限操作!');
+                                                        }else{
+                                                            alert('排名删除失败!');
+                                                        }
+                                                    }
+
+                                                });
+                                            }
+                                        }
+                                        function conRank(){
+                                            var self = $(this);
+                                            var teamId = self.parent().siblings(".preview_name").children(".maker_team").val();
+                                            var showId = $(".onlineType").val();
+                                            var topTenListId = self.parent().parent().siblings('.topTenListId').val();
+                                            var index = self.parent().siblings('.ranking').children('span').children('.rankNum').val();
+                                            var maker_name = self.parent().siblings('.preview_img').find('.makerName').text();
+                                            var maker_desc = self.parent().siblings('.preview_con').find('.text_list').val();
+                                            var maker_url = self.parent().siblings('.preview_img').find('.preview_tmp').find('.img').attr('src');
+                                            type = $(".onlineType:first").find("option[value="+showId+"]").text();
+                                            if(teamId && showId && topTenListId && index && maker_name && maker_url){
+                                                $.ajax({
+                                                    url : '{:U("List/addRanking")}',
+                                                    type : 'post',
+                                                    data : {showId :showId,topTenListId : topTenListId,index : index,teamId : teamId,num : num,type : type,maker_name : maker_name,maker_desc : maker_desc,maker_url : maker_url},
+                                                    success : function(response){
+                                                        //console.log(response);
+                                                        if(response == 1)
+                                                        {
+                                                            alert('排名添加成功!');
+                                                            self.parent().parent().find('.preview_name').remove();
+                                                            self.parent().css('text-align','center');
+                                                            self.parent().css('color','red');
+                                                            self.parent().css('line-height','111px');
+                                                            self.parent().html('增加排名,待审核');
+                                                            return false;
+                                                        }else if(response == 2){
+                                                            alert('不能增加已有的排名');
+                                                        }else if(response == 3){
+                                                            alert('无权限操作!');
+                                                        }else{
+                                                            alert('排名添加失败!');
+                                                        }
+                                                    }
+                                                });
+                                            }else{
+                                                alert('请选择战队！');
+                                            }
+                                        }
+                                        /*function rank(){
+                                            //输入的名次
+                                            val = $(".rankNum:first").val();
+                                            val = parseInt(val);
+                                            if(val == 0){
+                                                alert('名次不能为0！');
+                                                return false;
+                                            }else if(val > 10){
+                                                alert('名次最多为10名！');
+                                                return false;
+                                            }
+                                            var img = $(this).parent().parent().children('.preview_img:first').children('.preview_tmp').children('img').attr('src');
+                                            var maker_team = $(this).parent().siblings(".preview_name").children(".maker_team").val();
+                                            if(img){
+                                                $(this).parent().parent().parent().parent().next('.list_ranking1').children().append($(".ranking_pre:first").clone());
+                                                $(".preview_tag:last").remove();
+
+                                                $(".upload_tmp").removeClass('upload_tmp');
+                                                //清空数据
+                                                $(".rankNum:first").val('');
+                                                $(".makerName:first").text('');
+                                                $(".text_list:first").val('');
+                                                $(".img:first").attr('src','');
+                                                $(".video:first").attr('src','');
+
+                                                //$(".rankNum:last").val(data[val]);
+                                                $(".preview_name:last").find("option[value="+maker_team+"]").attr("selected",true);
+                                                $(".btn_tmp").eq(2).attr('id','btnImg'+val);
+                                                $(".btn_tmp").eq(3).attr('id','btnVideo'+val);
+                                                $(".btn_tmp").eq(2).addClass('upload_tmp');
+                                                $(".btn_tmp").eq(3).addClass('upload_tmp');
+                                                $(".btn_tmp").eq(2).prev().attr('name','img['+val+']');
+                                                $(".btn_tmp").eq(3).prev().attr('name','video['+val+']');
+                                                $(".rankNum:first").val(val+1);
+                                                $(".btn_tmp:gt(1)").removeClass('btn_tmp');
+                                                $(".list_ranking1 .upload_tmp").each(function(){
+                                                    var self = $(this);
+                                                    var self_id = self.attr('id');
+                                                    var preview = self.siblings('.preview_tmp').children('.preview');
+                                                    var hidd = self.siblings('.select');
+                                                    var uploader = new plupload.Uploader({
+                                                        //创建实例的构造方法
+                                                        runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+                                                        browse_button: self_id, // 上传按钮
+                                                        url: "{:U('List/uploadImage')}", //远程上传地址
+                                                        filters: {
+                                                            max_file_size: '200mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+                                                            mime_types: [//允许文件上传类型
+                                                                {title: "files", extensions: "jpg,png,gif,mp4"}
+                                                            ]
+                                                        },
+                                                        init: {
+                                                            FilesAdded: function(up, files) { //文件上传前
+                                                                uploader.start();
+                                                            },
+                                                            FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+                                                                var data = JSON.parse(info.response);
+                                                                hidd.attr('value', data.pic);
+                                                                preview.attr('src', data.pic);
+                                                            }
+                                                        }
+                                                    });
+                                                    uploader.init();
+                                                });
+                                                $(".maker_team").unbind('change').bind('change',makerTeam);
+                                            }
+                                        }*/
+                                        function makerTeam(){
+                                            var status = 1;
+                                            var self = $(this);
+                                            var makerTeam_id = self.val();
+                                            $(".ranking_pre").each(function(){
+                                                var makerid = $(this).attr('makerid');
+                                                if(makerid == makerTeam_id){
+                                                    alert('不能添加重复的队伍!');
+                                                    status = 0;
+                                                    self.parent().parent().find('img').attr('src','');
+                                                    self.parent().parent().find('textarea').val('');
+                                                    return false;
+                                                }
+                                            });
+                                            if(!status) return false;
+                                            if(!makerTeam_id) return false;
+                                            $.ajax({
+                                                url : '{:U("List/getMakerTeamInfo")}',
+                                                type : 'post',
+                                                data : {makerTeam_id : makerTeam_id},
+                                                success : function(response){
+                                                    var res =  JSON.parse(response);
+                                                    self.parent().siblings('.preview_img').children('.preview_tmp').children('.img').attr('src', res.icon);
+                                                    self.parent().siblings('.preview_img').children('.makerName').text(res.name);
+                                                    self.parent().siblings('.preview_con').children('.text_list').text(res.desc);
+                                                }
+                                            });
+                                        }
+
+                                        function delListNum(){
+                                            var l_id = $(".listList tr.active").attr('lid');
+                                            var l_num = $(".listList tr.active th:last").text();
+                                            var show_id = $(".onlineType:first").val();
+                                            var show_name = $(".onlineType:first option[selected='selected']").text();
+                                            if(l_id && show_id) {
+                                                $.ajax({
+                                                    url :  '{:U("List/delListNum")}',
+                                                    type : 'post',
+                                                    data : {l_id : l_id,show_id : show_id,l_num : l_num,show_name :show_name},
+                                                    success : function(response){
+                                                        //console.log(response);
+                                                        if(response ==1){
+                                                            alert('删除榜单期数成功,待审核!');
+                                                            $(".listList tr.active th").find('span').text('删除');
+                                                            $(".msg").html('');
+                                                        }else if(response ==2){
+                                                            alert('无权限操作!');
+                                                        }else{
+                                                            alert('操作失败!');
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+
+                                </script>
+                                <span class="online listType1 size setListNum line"></span>
+                                <div class="save_data" style="width: 217px;display: inline-block;">
+                                    {$btn_list}
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Common/footer" />
+</body>
+</html>

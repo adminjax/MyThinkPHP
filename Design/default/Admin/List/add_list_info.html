@@ -1,0 +1,33 @@
+<br/>
+<br/>
+<foreach name="addListInfo" item="v">
+    <div class="audit_list1_info" style="width: 95%">
+        <span class="online listType1 size line">榜单类型</span>
+        <div class="sel_listTy">
+            <span class="size">{$v.type}</span>
+        </div>
+        <br/>
+        <span class="online listType1 size setListNum line">榜单期数</span>
+        <input class="nu size line" type="text" value="{$v.stage}"/>
+        <div class="addList_info">
+            <span class="online listType1 size setListNum line">视频名称</span>
+            <input class="size line" type="text" value="{$v.video_title}"/>
+            <div class="videoAdd">
+                <span class="online listType1 size setListNum line" style="float: left">榜单视频</span>
+                <div class="online setListNum line">
+                    <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                        <video class="video preview" src="{$v.video_url}" controls preload></video>
+                    </div>
+                </div>
+            </div>
+            <div class="videoAdd">
+                <span class="online listType1 size setListNum line" style="float: left">榜单图片</span>
+                <div class="online setListNum line">
+                    <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                        <img class="preview logo_img" src="{$v.img_url}" border="0" style="width: 100%;height: 100%"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</foreach>

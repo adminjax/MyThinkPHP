@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>公告管理</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="empty">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="top-header">
+							<span>MET管理中心</span>
+						</div>
+						<div class="manage-body">
+							<div class="m-header">
+								<span>系统信息</span>
+							</div>
+							<div class="m-body">
+								<div class="row">
+					                <div class="col-md-6">
+					                    <div class="panel panel-archon">
+					                        <div class="panel-body">
+					                            <table class="table table-bordered">
+					                                <tbody>
+					                                    <volist name="info" id="v">
+					                                    <tr>
+					                                        <td>{$key}</td>
+					                                        <td>{$v}</td>
+					                                    </tr>
+					                                    </volist>
+					                                </tbody>
+					                            </table>                            
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+							</div>
+						</div>
+						<!--<div class="text">
+							<p>欢迎使用MET音乐纪元管理工具</p>
+							<p>当前登录用户:<?php echo $_SESSION['user']['username'];?></p>
+						</div>-->
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

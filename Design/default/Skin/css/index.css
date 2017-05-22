@@ -1,0 +1,72 @@
+/**
+ * 
+ */
+body{
+	background: #efefef;
+}
+#login{
+	width: 100%;
+	text-align: center;
+}
+#login .container{
+	min-width: 1024px;
+}
+#login .container .header{
+	margin-top: 60px;
+    margin-bottom: 17px;
+    font-size: 26px;
+    font-weight: 600;
+}
+#login .container .form{
+	margin-top: 150px;
+    text-align: center;
+    margin-bottom: 150px;
+	text-align: center;
+}
+.login-from{
+	width: 350px;
+	border: 1px solid #000;
+	display: inline-block;
+	border-radius: 6px;
+}
+.login-from ul{
+	padding: 20px 0px;
+}
+.login-from li{
+	margin: 10px 0px;
+}
+.login-from li .input-text{
+	text-align: center;
+	height: 26px;
+}
+
+.login-from li button{
+	height: 30px;
+	width: 150px;
+	cursor: pointer;
+}
+.login-from li a{
+	text-decoration: none;
+	font-size: 12px;
+}
+.login-from .massge .msg{
+	font-size: 12px;
+	color: red;
+}
+.login-from #verify_img{
+	vertical-align: middle;
+}
+.login-from #verify_img:hover{
+	cursor: pointer;	
+}
+.login-from #j_verify{
+	width: 90px;
+}
+.login-from li label{
+	display: inline-block;
+	width: 60px;
+	text-align: right;
+}
+.login-from li input{
+	width: 168px;
+}

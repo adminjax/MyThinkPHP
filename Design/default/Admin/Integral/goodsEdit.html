@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>商品编辑</title>
+	<include file="Common/head" />
+</head>
+<body>
+	<div id="goodsedit">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<include file="Common/msg" />
+						<div class="goodsedit-box3 add clear">
+							<div class="box-1">
+								<div class="title"><span>商品界面</span></div>
+								<div class="slider clear module_list">
+									<ul id="sortable">
+									<foreach name="goods_info" item="v" key="k">
+										<li id="{$v.g_id}" sort="{$v.sort}" class="sort ui-state-default" g_id="{$v.g_id}" img="{$v.img}" content="{$v.content}" title="{$v.title}">
+											<div class="image ">
+												<span class="isActive" style="position: absolute;top: 0px;left: -10px;width: 60px;height: 20px;">
+													<if condition="$v['au'] eq 5">删除
+														<elseif condition="$v['au'] eq 4"/>修改
+														<else/>
+													</if>
+												</span>
+												<img src="{$v.header_img}" style="position: relative">
+												<span>积分：<font>{$v.integral}</font></span>
+											</div>
+										</li>
+									</foreach>
+										<script type="text/javascript">
+											$(document).ready(function(){
+												var oldsort = '';
+												$(".sort").each(function(){
+													oldsort += $(this).attr('sort')+',';
+												});
+												oldsort = oldsort.split(',');
+												oldsort.pop();
+														//异步保存数据
+														$('ul').sortable({
+															placeholder:'',
+															helper:function(e,ele){
+																return $(ele).clone();
+															},
+															update:function(e,ui){
+																var sort = $(this).sortable(
+																		'serialize',{
+																			key:'aa',
+																			expression: /(.*)/
+																		}
+																);
+																$(".new_sort").unbind('click').bind('click',function(){
+																	var dd = '';
+																	var reg = new RegExp("aa=","g");
+																	var newsort = sort.replace(reg,'');
+																	newsort = newsort.split('&');
+																	newsort.pop();
+																	$.ajax({
+																		url:"{:U('Integral/sort')}",
+																		type:'post',
+																		data:{newsort : newsort,oldsort : oldsort},
+																		success:function(response){
+																			if(response == 1) alert('排序保存成功,待审核!');
+																			else alert('排序保存失败！');
+																		}
+																	});
+																});
+															 }
+														});
+													}
+											);
+										</script>
+									</ul>
+								</div>
+
+								<div class="buttom">
+									{$sort}
+									{$addGoods}
+									{$del}
+								</div>
+								<script type="text/javascript">
+									jQuery(function()
+									{
+										$(".del").unbind().bind('click',function()
+										{
+											if($('.activesss')[0])
+											{
+												if(confirm('你确定删除吗?'))
+												{
+													var del_this = $('.activesss');
+													var g_id = $(del_this).attr('g_id');
+													var integral = $(".slider .active font").text();
+													var title = $(".slider .active").attr('title');
+													var img = $(".slider .active").attr('img');
+													var content = $(".slider .active").attr('content');
+													$.ajax({
+														url:"{:U('Integral/delGoods')}",
+														type:'post',
+														data:{g_id:g_id,integral : integral,title : title,img : img,content : content},
+														success:function(response)
+														{console.log(response);
+															if(response == 1)
+															{
+																alert('操作成功,待审核！');
+																window.location.reload();
+																return false;
+															}
+														}
+													});
+												}
+
+											}
+										});
+									});
+								</script>
+							</div>
+
+							<if condition="save">
+								<div class="box-2">
+									<form id="goods-edit" action="{:U('Integral/addGoods')}" method="post" enctype="multipart/form-data">
+										<div class="title"><span>编辑</span></div>
+										<div class="addslider">
+											<form class="goodsedit-form" action="{:U('Info/setNotice')}" method="post">
+												<div class="sub-title">
+													<span class="integral">
+														<label>标题编辑</label>
+														<input type="text" name="title" class="header_title">
+													</span>
+												</div>
+												<br/><br/><br/>
+												<div class="uploadify-box">
+													<div class="formControls col-2">
+
+														<img id="img" src="" border="0"  width="130" height="130"/>
+														<input id="file_upload" type="hidden" value="" name="img"/>
+														<input type="hidden" class="select" value="" id="imgl"  name="imgl"/>
+														<a href="javascript:void(0)" class="btnss button avater" id="btnss"><span>选择图片</span></a>
+
+
+														<!--<img id="img" src="" width="130" height="130" border="0" />
+														<input id="file_upload" name="img" type="file" multiple="true" value="" />
+														<input type="hidden" class="select" value="" id="imgl"  name="imgl"/>-->
+													</div>
+													<script type="text/javascript">
+														 //图片上传
+														jQuery(function() {
+															var uploader = new plupload.Uploader({
+																//创建实例的构造方法
+																runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+																browse_button: 'btnss', // 上传按钮
+																url: "{:U('Integral/uploadImage')}", //远程上传地址
+																filters: {
+																	max_file_size: '200mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+																	mime_types: [//允许文件上传类型
+																		{title: "files", extensions: "jpg,png,gif,mp4,jpeg"}
+																	]
+																},
+																init: {
+																	FilesAdded: function(up, files) { //文件上传前
+																		uploader.start();
+																	},
+																	FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+																		var data = JSON.parse(info.response);
+																		jQuery('#imgl').attr('value', data.pic);
+																		jQuery('#img').attr('src', data.pic);
+																	}
+																}
+															});
+															uploader.init();
+
+															/*jQuery('#file_upload').uploadify({
+																'swf'      : '{$Think.config.PUBLIC_LIB}js/Uploadify/uploadify.swf',
+																'uploader' : '{:U("Integral/uploadImage")}',
+																'buttonText' : '选择图片',
+																'onUploadSuccess' : function(file, data, response) {
+																	jQuery('#imgl').attr('value', data);
+																	jQuery('#img').attr('src', data);
+																	jQuery('#images1').val(data);
+																}
+															});*/
+														});
+													</script>
+												</div>
+
+												<div class="input-up clear">
+													<br />
+													<br />
+													<span class="integral">
+														<label>设置积分</label>
+														<input type="number" name="integral" value="" class="inte">
+													</span>
+													<br /><br />
+													<span class="integral">
+														<label>设置排序</label>
+														<input type="number" name="sort" value="" class="goods_sort">
+													</span>
+												</div>
+												<div class="content-edit">
+													<div class="sub-title"><span>内容编辑</span></div>
+													<div class="contents">
+														<div class="uploadify-box">
+															<div class="formControls col-2 clear">
+
+																<img id="imgs" src="" border="0"  width="130" height="130"/>
+																<input id="file_uploads" type="hidden" value="" name="img"/>
+																<input type="hidden" class="select" value="" id="imgls"  name="imgls"/>
+																<a href="javascript:void(0)" class="btnss button avater" id="btnsss"><span>选择图片</span></a>
+															</div>
+															<script type="text/javascript">
+																//图片上传
+																jQuery(function() {
+																	var uploader = new plupload.Uploader({
+																		//创建实例的构造方法
+																		runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+																		browse_button: 'btnsss', // 上传按钮
+																		url: "{:U('Integral/uploadImage')}", //远程上传地址
+																		filters: {
+																			max_file_size: '200mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+																			mime_types: [//允许文件上传类型
+																				{title: "files", extensions: "jpg,png,gif,mp4,jpeg"}
+																			]
+																		},
+																		init: {
+																			FilesAdded: function(up, files) { //文件上传前
+																				uploader.start();
+																			},
+																			FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+																				var data = JSON.parse(info.response);
+																				jQuery('#imgls').attr('value', data.pic);
+																				jQuery('#imgs').attr('src', data.pic);
+																			}
+																		}
+																	});
+																	uploader.init();
+																	//添加商品
+																	$(".addGoods").click(function(){
+																		window.location.reload();
+																	});
+																	//预览修改商品信息
+																	$(".sort").unbind('click').bind('click',sort);
+																	function sort()
+																	{
+																		var thisElement = $(this);
+																		var ue = UE.getEditor('container');
+																		$(".sort").removeClass('active activesss');
+																		thisElement.addClass('active activesss');
+
+																		//获取商品数据
+																		var g_id = thisElement.attr('g_id');
+																		var sort = thisElement.attr('sort');
+																		var img = thisElement.attr('img');
+																		var title = thisElement.attr('title');
+																		var header_img = thisElement.children('.image').children('img').attr('src');
+																		var content = thisElement.attr('content');
+																		var integral = thisElement.children().children('span').children().text();
+																		integral = parseFloat(integral);
+
+																		//写入表格
+																		$("#goods-edit").attr('action',"{$Think.config.ADMIN_URL}Integral/editGoodsInfo/id/"+g_id+"");
+																		$("#img").attr('src',header_img);
+																		$(".header_title").val(title);
+																		$('#imgl').val(header_img);
+																		$(".inte").val(integral);
+																		$(".goods_sort").val(sort);
+																		$("#imgs").attr('src',img);
+																		$('#imgls').attr('value', img);
+																		ue.setContent(content);
+
+																		//预览
+																		 /*$(".pre-title-img").attr('src',img);
+																		$(".pre_title").text(title);
+																		$(".need-inte").children('span').text(integral);
+																		content = Preview.removeHTMLTag(content);
+																		$(".desc").text(content);*/
+
+																		//取消选中商品
+																		/*$(".activesss").unbind('click').bind('click', off);*/
+																	}
+																	function off()
+																	{
+																		var thisElement = $(this);
+																		var ue = UE.getEditor('container');
+																		thisElement.removeClass('active activesss');
+
+																		$(".pre_title").text('');
+																		$(".pre-title-img").attr('src','');
+																		$(".need-inte").children('span').text('');
+																		$(".desc").text('');
+
+																		//清空表格
+																		$("#img").attr('src','');
+																		$('#imgl').attr('value', '');
+																		$(".integral").children('input').val('');
+																		$("#imgs").attr('src','');
+																		$('#imgls').attr('value', '');
+																		$(".sort").unbind('click').bind('click',sort);
+																		ue.setContent('');
+																	}
+
+																	var proinfo = '<p>品名 : </p><p>品牌 : </p><p>品种类型 : </p><p>规格 : </p><p>等级 : </p>';
+																	ue.ready(function() {
+																		ue.setContent(proinfo);
+																	});
+																});
+															</script>
+															<script id="container" type="text/javascript">
+
+															</script>
+														</div>
+													</div>
+												</div>
+											</form>
+										</div>
+
+										<div class="preview">
+											<button class="view">
+												<span>预览</span>
+											</button>
+
+											<script type="text/javascript">
+												Action.preview('.view');
+												//商品预览
+												var ue = UE.getEditor('container', {
+													toolbars:  [
+																	['fullscreen', 'source', '|', 'undo', 'redo',
+																	'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript',  '|', 'forecolor', 'insertorderedlist', 'insertunorderedlist', '|',
+																	'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+																	'customstyle', 'fontsize', '|',
+																	'directionalityltr', 'directionalityrtl', 'indent', '|',
+																	'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify'
+																	]
+																],
+													initialFrameHeight: 300,
+													scaleEnabled:true
+												});
+
+												$(".preview>.view").unbind('click').bind('click',pre_view);
+												function pre_view()
+												{
+													var header_title = $(".header_title").val();
+													var img_url = $("#imgs").attr('src');//图片地址
+													var inte = $(".inte").val();//积分
+													var text = ue.getContent();//内容
+													if(con()){
+														$(".pre_title").text(header_title);
+														$(".pre-title-img").attr('src',img_url);
+														$(".need-inte>span").text(inte);
+														$(".desc").html(text);
+													}
+												}
+											</script>
+										</div>
+									</form>
+								</div>
+
+
+								<div class="box-3">
+									<div class="title"><span>效果预览</span></div>
+									<div class="sub-title"><span>标题预览</span><span class="pre_title" style="margin-left: 5px;color: red;"></span></div>
+									<!--<div class="name">
+										<div>公告2</div>
+									</div>-->
+									<div class="sub-title"><span>内容预览</span></div>
+									<div class="body">
+										<img src="" width="303" height="200" class="pre-title-img">
+										<div class="middle">
+											<div class="title">【积分兑换】<span class="pre_title"></span></div>
+											<div class="show-inte">
+												<span class="need-inte">需要积分:<span></span></span>
+											</div>
+										</div>
+										<div class="desc">
+
+										</div>
+									</div>
+									<br/><br/>
+									<div class="bottom">
+										<div class="submit">
+											{$save}
+										</div>
+										<script type="text/javascript">
+											//提交表单
+											jQuery(".save").click(function(){
+												if(con()){
+													jQuery("#goods-edit").submit();
+												}
+											});
+											function con(){
+												var header_title = $(".header_title").val();
+												if(!header_title) {
+													alert('请输入商品标题！');
+													$(".header_title").focus();
+													return false;
+												}
+												var header_img = $("#img").attr('src');
+												if(!header_img) {
+													alert('请上传标题图片！');
+													$("#img").focus();
+													return false;
+												}
+												var inte = $(".inte").val();//积分
+												if(!inte) {
+													alert('请设置兑换积分！');
+													$(".inte").focus();
+													return false;
+												}
+												var goods_sort = $(".goods_sort").val();//积分
+												if(!goods_sort) {
+													alert('请设置商品排列顺序！');
+													$(".goods_sort").focus();
+													return false;
+												}
+												var img_url = $("#imgs").attr('src');//图片地址
+												if(!img_url) {
+													alert('请上传内容图片！');
+													$("#imgs").focus();
+													return false;
+												}
+
+												var text = ue.getContent();//内容
+												if(!text){
+													alert('请输入内容！');
+													$("#container").focus();
+													return false;
+												}
+												return true;
+											}
+										</script>
+									</div>
+								</div>
+								<else/></if>
+						</div>
+					</div>
+				</div>
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

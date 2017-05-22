@@ -1,0 +1,9 @@
+<!--商品排序预览-->
+<foreach name="new_goods_sort" item="v">
+   <li sort_id="{$v.sort}">
+       <div class="image">
+           <img src="{$v.header_img}">
+           <span>积分:{$v.integral}</span>
+       </div>
+   </li>
+</foreach>

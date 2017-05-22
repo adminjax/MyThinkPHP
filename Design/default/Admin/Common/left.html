@@ -1,0 +1,29 @@
+<div class="box-left">
+	<div class="menu">
+
+		<ul class="nav">
+		<?php foreach($menu as $k => $v): ?>
+			<li class="li_<?php echo $k?> level1">
+				<a href="javascript:void(0)" class="onclick"><span><?php echo $v['name']; ?></span></a>
+				<?php if($v['low']): ?>
+					<ul class="sub-nav">
+						<?php foreach($v['low'] as $k => $v): ?>
+							<li class="li_<?php echo $k; ?> level2">
+								<a href="{$Think.config.ADMIN_URL}<?php echo $v['path']?>"><span><?php echo $v['name']; ?></span></a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+			</li>
+		<?php endforeach; ?>
+		</ul>
+	
+	</div>
+	<div class="logout">
+		<a href="{:U('Login/logout')}">注销</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+	Nav.init();
+</script>

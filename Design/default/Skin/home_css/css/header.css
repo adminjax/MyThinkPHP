@@ -1,0 +1,52 @@
+header{
+    height: 1.26rem;
+    width: 6.4rem;
+    border-bottom: 0.02rem solid #1c1e1e;
+    background: #2e3232;
+    color: white;
+    font-size: 0.3rem;
+    text-align: center;
+    position: fixed;
+    margin-bottom: 1.28rem;
+    top: 0;
+    z-index: 999;
+}
+.index-header-text,.goods-rules-text,.goods-detail-header-text,.integral-detail-header-text,.order-detail-header-text{
+    position: relative;
+    top: 0.54rem;
+}
+.index-header-arrow{
+    width: 1.5rem;
+    top: 0.04rem;
+    line-height: 0.75rem;
+    font-size: 0.24rem;
+    left:4.9rem;
+    position: relative;
+}
+.index-header-arrow b{
+    font-weight: 900;
+}
+.banner,.top{
+    margin-top: 1.26rem;
+}
+.index-detail-header-arrow,.index-rules-arrow,.integral-detail-header-arrow,.order-detail-header-arrow{
+    width: 1.5rem;
+    top: 0.04rem;
+    line-height: 0.75rem;
+    font-size: 0.5rem;
+    left:-0.35rem;
+    position: relative;
+}
+.order-main{
+    margin-top: 1.26rem;
+}
+.rules-main{
+    margin-top: 1.34rem;
+}
+.loading{
+    font-size: 0.2rem;
+    text-align: center;
+    position: relative;
+    top: 1.2rem;
+}
+

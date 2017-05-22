@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>专题编辑</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="subject">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<?php //echo "<div class="msg"><span class="msg">".$msg."</span></div>" ?>
+						<div class="subject-box3 clear">
+							<div class="box-1">
+								<div class="title"><span>专题列表</span></div>
+								<div class="slider clear">
+									<?php foreach($list as $k => $v): ?>
+										<div class="img sort-<?php echo $k; ?>">
+											<img src="<?php echo $v['icon']; ?>" id="<?php echo $v['id']; ?>">
+											<font><if condition="$v['au'] eq 3">删除<elseif condition="$v['au'] eq 4"/>修改<else/></if></font>
+											<?php if($v['isTop']): ?>
+											<span class="sub-icon">专题</span>
+											<?php endif; ?>
+										</div>
+									<?php endforeach; ?>
+									<input type="hidden" name="delete" class="del-sub" value="" />
+								</div>
+								<script type="text/javascript">
+									Selected.click();
+								</script>
+
+								<div class="badoo">
+									<?php echo $page; ?>
+								</div>
+
+								<div class="buttom">
+									<?php echo $add; ?>
+									<?php echo $delete; ?>
+								</div>
+
+								<script type="text/javascript">
+									jQuery('.buttom .add').live('click', function(){
+										window.location.href = '{:U("Info/subject")}';
+									});
+									jQuery('.delete').live('click', function(){
+										var id = jQuery('.del-sub').val();
+										if(!id){
+											alert("请选择要删除的专题！");
+											return false;
+										}
+										var flag = confirm("是否删除此资讯！");
+										if(!flag){
+											return false;
+										}
+
+										jQuery.ajax({
+											type:'GET',
+											url:'{:U("Subject/delSubject")}',
+											data:'ids='+id,
+											success:function(data){
+												if(data == 0){
+													alert('删除成功！');
+												}else{
+													alert('删除失败！');
+												}
+												//window.location.reload();
+											}
+										});
+									});
+
+									Preview.edit('.img', '{:U("Subject/editSubject")}');
+								</script>
+							</div>
+							<div class="box-2">
+								<div class="title"><span>专题编辑</span></div>
+								<div class="addslider">
+									<form class="subject-form" action="{:U('Subject/setSubject')}" method="post">
+										<input type="hidden" name="id" class="sub-id" value="" />
+										<div class="head">
+											<div class="sub-title"><span>标题编辑</span></div>
+
+											<div class="uploadify-box">
+												<div class="formControls col-2">
+
+													<img id="img" src="" border="0"  width="130" height="130"/>
+													<input id="file_upload" type="hidden" value="" name="img"/>
+													<input type="hidden" class="select" value="" id="imgl"  name="imgl"/>
+													<a href="javascript:void(0)" class="btnss button avater" id="btnss"><span>选择图片</span></a>
+
+													<!--<img id="img" src="" width="130" height="130" border="0" />
+									    			<input id="file_upload" name="img" type="file" multiple="true" value="" />
+									  				<input type="hidden" class="select" value="" id="imgl"  name="imgl"/>-->
+												</div>
+
+												<div class="select-tag">
+													<?php foreach($tag as $v): ?>
+													<label><input name="tag[]" type="checkbox" value="<?php echo $v['id']; ?>" /><?php echo $v['desc']; ?> </label> 
+													<?php endforeach; ?>
+												</div>
+
+												<span class="subject">
+													<label style="vertical-align: text-top;">是否设置为专题</label><input type="checkbox" name="is_subject" value="1" class="is-subject" />
+												</span>
+												<script type="text/javascript">
+												    //图片上传
+												    jQuery(function() {
+
+														//图片上传
+														var uploader = new plupload.Uploader({
+															//创建实例的构造方法
+															runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+															browse_button: 'btnss', // 上传按钮
+															url: "{:U('Subject/uploadImage')}", //远程上传地址
+															filters: {
+																max_file_size: '200mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+																mime_types: [//允许文件上传类型
+																	{title: "files", extensions: "jpg,png,gif,mp4"}
+																]
+															},
+															init: {
+																FilesAdded: function(up, files) { //文件上传前
+																	uploader.start();
+																},
+																FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+																	var data = JSON.parse(info.response);
+																	jQuery('#imgl').attr('value', data.pic);
+																	jQuery('#img').attr('src', data.pic);
+																}
+															}
+														});
+														uploader.init();
+
+												        /*jQuery('#file_upload').uploadify({
+												            //'swf'      : '/MET_V2/Public/lib/js/Uploadify/uploadify.swf?ver='+Math.random(),
+												            //'uploader' : '/MET_V2/index.php/Admin/Subject/uploadImage.html?ver='+Math.random(),
+												            'swf'      : '{$Think.config.PUBLIC_LIB}js/Uploadify/uploadify.swf?ver='+Math.random(),
+												            'uploader' : '{:U("Subject/uploadImage")}?ver='+Math.random(),
+												            'buttonText' : '选择图片',
+												            'onUploadSuccess' : function(file, data, response) {
+												            	console.log(data);
+												                jQuery('#imgl').attr('value', data);
+												                jQuery('#img').attr('src', data);
+												                jQuery('#images1').val(data);
+												            },
+												        });*/
+												    });
+										    	</script> 
+											</div>
+										</div>
+										<div class="content-edit">
+											<div class="sub-title"><span>内容编辑</span></div>
+											<div class="contents">
+												<input type="text" name="title" value="" placeholder="标题" class="input-text subtitle" />
+												
+												<div class="selction">
+													<ul>
+														<li class="title switch clear">
+															<div class="image active"><span>图文编辑</span></div>
+															<div class="video"><span>视频编辑</span></div>
+														</li>
+														<li class="contents">
+															<div class="image active">
+																<script id="container" name="image-word" type="text/plain">
+																</script>
+
+																<script type="text/javascript">
+																	var ue = UE.getEditor('container', {
+																		toolbars : [
+																			['source', '|',
+																			'undo', 'redo', '|',
+				            												'bold', 'italic', 'underline', 'fontborder', 'strikethrough', '|',
+				            												'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'cleardoc', '|',
+				            												'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|','indent','|',
+				            												'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+				            												'link', 'unlink', '|',
+				            												'simpleupload', 'horizontal']
+																		],
+																	});
+																</script>
+															</div>
+
+															<!-- shop -->
+															<div class="video">
+																<input type="hidden" name="embed-url" value="" class="embed-url" />
+																<input type="hidden" name="video-url" value="" class="video-url" />
+																<script id="video" name="video" type="text/plain">
+																</script>
+
+																<script type="text/javascript">
+																	var uev = UE.getEditor('video', {
+																		toolbars : [
+																			['source', '|', 
+																			'undo', 'redo', '|',
+				            												'insertvideo']
+																		],
+																	});
+																</script>
+																<div class="time-box">
+																<label>视频时长</label><input type="text" name="time" class="video-time" value="" placeholder="视频总时长秒" />
+																</div>
+
+																<input type="hidden" name="size" class="videoSize" value="" />
+
+																<textarea id="imgword" name="imgword" placeholder="视频简介"></textarea>
+															</div>
+														</li>
+													</ul>
+												</div>
+
+												<script type="text/javascript">
+													Selection.switch();
+												</script>
+
+												<div class="sub-title"><span>编辑者信息</span></div>
+												<textarea name="anthor" class="input-text anthor" placeholder="输入编辑者信息"></textarea>
+
+												<div class="sub-title"><span>提交说明</span></div>
+												<textarea name="desc" class="input-text desc" placeholder="提交说明"></textarea>
+											</div>
+										</div>
+										
+									</form>
+								</div>
+
+								<div class="preview">
+									<button class="view">
+										<span>预览</span>
+									</button>
+
+									<script type="text/javascript">
+										Preview.viewSub();
+									</script>
+								</div>
+							</div>
+							<div class="box-3">
+								<div class="title"><span>效果预览</span></div>
+								<!--<div class="name">
+									<div>专题2</div>
+								</div>-->
+								<div class="body">
+
+									<div class="header">
+										<div class="sub-title"><span>标题预览</span></div>
+										<div class="title-preview clear">
+											<div class="left">
+												<img src="" class="header-img" width="100%" height="60">
+											</div>
+											<div class="right">
+												<div class="head-title"></div>
+												<div class="briefing"></div>
+												<div class="sub"><span>专题</span></div>
+											</div>
+										</div>
+									</div>
+
+									<div class="content">
+										<div class="sub-title"><span>内容预览</span></div>
+										<div class="content-preview">
+											<div class="top"></div>
+											<div class="middle">
+												<label class="from" style="display: none">来源于:</label><span class="name"></span>
+												<span class="time"></span>
+											</div>
+											<div class="bottom sub-content" style="width: 100%">
+
+
+											</div>
+										</div>
+									</div>
+
+									<div class="bottom">
+										<div class="submit">
+											<?php echo $save; ?>
+										</div>
+										<script type="text/javascript">
+											
+											jQuery(".add").click(function(){
+												jQuery(".subject-form").find('.sub-id').attr('value', '');
+												jQuery(".subject-form").find('.subtitle').attr('value', '');
+												jQuery(".subject-form").find('.is-subject').attr('checked', '');
+												jQuery(".subject-form").find('#img').attr('src', '');
+												jQuery(".subject-form").find('.anthor').text('');
+												jQuery(".subject-form").find('.desc').text(''); 
+												jQuery("#ueditor_0").contents().find(".view").find('p').text(' ');
+												jQuery("#ueditor_1").contents().find(".view").html('');
+												jQuery("#ueditor_2").contents().find(".view").find('p').text('');
+											});
+
+											//提交表单
+											jQuery(".save").click(function(){
+												var flag = formCheck.subject(".subject-form");
+												if(flag == false){
+													return false;
+												}
+												jQuery(".subject-form").submit();
+											});
+										</script>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

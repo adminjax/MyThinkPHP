@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>数据库操作</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="notice">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+<!--
+						<button class="buck"><span>备份数据</span></button>
+						<script type="text/javascript">
+							jQuery('.buck').click(function(){
+								jQuery.ajax({
+									type:"GET",
+									url:"{:U('DbAction/dbBackup')}",
+									data:"flag=true",
+									success:function(data){
+										if(data == 'true'){
+											alert("备份成功！");
+										}else{
+											alert("系统繁忙请稍后重试！");
+										}
+									}
+								});
+							});
+						</script>
+
+						<div>
+							<select class="backupfile">
+								<option>选择要还原的备份</option>
+								<?php 
+									foreach($files as $k => $v){
+										if(is_array($v)){
+											echo '<optgroup label="'.$k.'">';
+											foreach($v as $val){
+												echo '<option>'.$val.'</option>';
+											}
+											echo '</optgroup>';
+										}
+									}
+								?>
+							</select>
+							<button class="restore"><span>还原此备份</span></button>
+							<script type="text/javascript">
+								jQuery('.restore').click(function(){
+									var file = jQuery(".backupfile  option:selected").text();
+
+									jQuery.ajax({
+										type:"GET",
+										url:"{:U('DbAction/restoreData')}",
+										data:"data="+file,
+										success:function(data){
+											if(data == 'true'){
+												alert("数据库恢复成功！");
+											}else{
+												alert("系统繁忙请稍后重试！");
+											}
+										}
+									});
+								});
+							</script>
+						</div>
+-->
+						<div class="dbaction">
+							<div class="loading">
+								<img src="{$Think.config.SKIN_URL}images/waiting.gif">
+								<span>处理中，请等待...</span>
+							</div>
+							<button class="repair"><span>修复数据表</span></button>
+							<label>修复数据表功能：当数据网站数据查询，写入异常或错误时执行此操作，可以修复部分因数据库导致的错误。若不能请联系管理人员。</label>
+							<script type="text/javascript">
+								jQuery('.repair').click(function(){
+									jQuery('.loading').css('display', 'block');
+									jQuery.ajax({
+										type:"GET",
+										url:"{:U('DbAction/repairTable')}",
+										data:"flag=true",
+										success:function(data){console.log(data);
+											jQuery('.loading').css('display', 'none');
+											if(data == 'true'){
+												alert("修复数据表成功！");
+											}else{
+												alert("系统繁忙请稍后重试！");
+											}
+										}
+									});
+								});
+							</script>
+
+							<button class="optimize"><span>优化数据表</span></button>
+							<label>数据表优化：当数据网站访问，写入速度过慢时执行此操作，可以提高系统速度。若不能请联系管理人员。</label>
+							<script type="text/javascript">
+								jQuery('.optimize').click(function(){
+									jQuery('.loading').css('display', 'block');
+									jQuery.ajax({
+										type:"GET",
+										url:"{:U('DbAction/optimize')}",
+										data:"flag=true",
+										success:function(data){
+											jQuery('.loading').css('display', 'none');
+											if(data == 'true'){
+												alert("优化数据表成功！");
+											}else{
+												alert("系统繁忙请稍后重试！");
+											}
+										}
+									});
+								});
+							</script>
+
+							<button class="clearlog"><span>清除日志</span></button>
+							<label>清除日志：请定期执行此操作，日志文件过大会影响整个系统速度。</label>
+							<script type="text/javascript">
+								jQuery('.clearlog').click(function(){
+									jQuery('.loading').css('display', 'block');
+									jQuery.ajax({
+										type:"GET",
+										url:"{:U('DbAction/clearLog')}",
+										data:"flag=true",
+										success:function(data){
+											jQuery('.loading').css('display', 'none');
+											if(data == 'true'){
+												alert("日志清除成功！");
+											}else{
+												alert("日志已经清除！");
+											}
+										}
+									});
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

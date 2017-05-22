@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>积分卡管理</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="goodsedit">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content integral-ex clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="selction">
+							<ul>
+								<li class="title switch clear">
+									<div class="bindcard active"><span>积分卡绑定及查询</span></div>
+									<div class="shop"><span>购物</span></div>
+									<div class="change"><span>积分兑换</span></div>
+									<div class="importE"><span>导入商品</span></div>
+								</li>
+								<li class="contents">
+									<div class="bindcard active">
+										<div class="info clear">
+											<div class="bindcard-left">
+												<div class="search-box">
+													<input type="text" name="phone" class="input-text phone" placeholder="请输入用户手机号">
+													<button class="sure"><span>确定</span></button>
+
+													<script type="text/javascript">
+														jQuery('.sure').click(function(){
+															var phone = jQuery('.phone').val();
+
+															if(phone.length <= 0){
+																alert("请填写用户手机号！");
+																return false;
+															}
+
+															jQuery.ajax({
+																type:'GET',
+																url:"{:U('Integral/seachUser')}",
+																data:'phone='+phone,
+																success:function(data){
+																	if(data == 'no_data'){
+																		alert('未获取到数据！请检查帐号');
+																		return false;
+																	}
+																	jQuery('.avatar').attr('src', data.head);
+																	jQuery('.name').text(data.account);
+																	if(data.sex == 0){
+																		sex = '女';
+																	}else{
+																		sex = '男';
+																	}
+																	jQuery('.gander').text(sex);
+																	jQuery('.account').attr('value', data.account);
+																	jQuery('.shiper').attr('value', data.account);
+																	jQuery('.currIntegral').text(data.integral);
+																	if(data.metCard){
+																		jQuery('.inte-box1').addClass('hidden');
+																		jQuery('.inte-box2').removeClass('hidden');
+																		jQuery('.integral-card').attr('value', data.metCard);
+																	}
+
+																	jQuery(".integral-info .head").nextAll().remove();
+																	for(var i in data){
+																		if(data[i].if_id){
+																			var dates =  DateTime.UnixToDate(data[i].created); 
+																			var get = data[i].get == '0.00'?'':data[i].get;
+																			var use = data[i].use == '0.00'?'':data[i].use;
+
+																			var str =  '<tr class="'+data[i].if_id+'">' +
+																							'<th class="id"><input type="hidden" class="id" value="'+data[i].if_id+'" name="id" /></th>' +
+																							'<th class="created">'+dates+'</th>' +
+																							'<th class="get">+'+get+'</th>' +
+																							'<th class="use">-'+use+'</th>' +
+																							'<th class="desc">'+data[i].desc+'</th>'+
+																						'</tr>';
+
+																			jQuery('.integral-info').find('table').find('.head').after(str);
+																		}
+																	}
+																}
+															});
+														});
+													</script>
+												</div>
+												<div class="result-box">
+													<ul>
+														<li>
+															<div class="img">
+																<img src="http://tuempetslb.kss.ksyun.com/pics/player_init.png" width="126" height="126" class="avatar">
+															</div>
+														</li>
+														<li>
+															<label>用户名</label>
+															<div class="name">用户名</div>
+															<input type="hidden" name="account" class="account" value="" />
+														</li>
+														<li>
+															<label>性&nbsp;&nbsp;&nbsp;别</label>
+															<div class="gander">性&nbsp;&nbsp;&nbsp;别</div>
+														</li>
+													</ul>
+												</div>
+											</div>
+											<div class="bindcard-right">
+												<ul>
+													<li>
+														<label>用户积分卡号</label>
+													</li>
+													<li>
+														<div class="inte-box1" style="display: block;">
+															<input type="text" name="integral" class="integral-card" placeholder="请输入积分卡号">
+															{$bind}
+														</div>
+														<!-- 修改
+														<div class="inte-box2 hidden">
+															<input type="text" name="integral" class="integral-card" placeholder="请输入积分卡号">
+															<button class="update">
+																<span>修改</span>
+															</button>
+														</div>
+ 														-->
+														<script type="text/javascript">
+															jQuery('.bind').click(function(){
+																var account = jQuery('.account').val();
+																var integral = jQuery('.integral-card').val();
+
+																if(account == '' || integral == ''){
+																	alert("请填写用户手机号和卡号！");
+																	return false;
+																}
+
+																jQuery.ajax({
+																	type:'GET',
+																	url:'{:U("Integral/bindCard")}',
+																	data:'account='+account+'&integral='+integral,
+																	success:function(data){
+																		console.log(data.result);
+																		if(data.result){
+																			alert('积分卡绑定成功');
+																		}else{
+																			alert('积分卡绑定失败');
+																		}
+																	}
+																});
+															});
+														</script>
+													</li>
+													<li>
+														<label>当前积分:</label>
+														<span class="currIntegral"></span>
+													</li>
+													<li>
+														<div class="integral-info">
+															<table>
+																<tr class="head">
+																	<th class="created">消费时间</th>
+																	<th class="get">获取积分</th>
+																	<th class="use">消费积分</th>
+																	<th class="desc">说明</th>
+																</tr>
+															</table>
+
+
+														</div>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+
+									<!-- shop -->
+									<div class="shop">
+										<div class="cart clear">
+											<div class="cart-add left">
+												<ul class="add">
+													<li><label>添加商品</label></li>
+													<li>
+														<label class="goods-name number">输入商品编码或名称</label>
+														<input type="text" name="info" class="input-text search-goods" value="" />
+													</li>
+													<li>
+														{$add}
+														<script type="text/javascript">
+															jQuery('button.add').click(function(){
+																var sku = jQuery('.search-goods').val();
+																var account = jQuery('.account').attr('value');
+																if(account == '' || sku == ''){
+																	alert("请填写用户手机号和商品名称！");
+																	return false;
+																}
+																if(jQuery('li.'+sku).html()){
+																	return;
+																}
+																jQuery.ajax({
+																	type:"GET",
+																	url:'{:U("Product/addCart")}',
+																	data:'product='+sku,
+																	success:function(data){
+																		console.log(data);
+																		var str = '<li class="'+data.sku+'"><input type="hidden" class="goods_num" value="'+data.sku+'" /><div class="box"><div class="goods-img"><img src="'+data.img+'"><span class="delete" title="删除商品">x</span></div><div class="price"><span>'+data.price+'</span></div><div class="num"><span class="reduce">-</span><input type="text" name="num" class="total-num" value="1" /><span class="plus">+</span></div></div></li>';
+																		var flag = jQuery('.'+data.sku).html();
+																		if(!flag){
+																			jQuery('.goods .clera').append(str);
+																			var totalPrice = jQuery('.total-price').val();
+																			var newTPrice = parseFloat(totalPrice) + parseFloat(data.price);
+																			var totalPrice = jQuery('.total-price').attr('value', newTPrice);
+																		}
+																	}
+																});
+															});
+														</script>
+													</li>
+												</ul>
+
+												<form class="shipping" action="{:U('Product/checkout')}" method="post">
+												<ul class="checkout">
+													<input type="hidden" name="shiper" class="shiper" value="">
+													<li>
+														<label>实&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;收</label>
+														<input type="text" name="amount" class="amount" value="">
+													</li>
+													<li>
+														<label>商品总价</label>
+														<input type="text" name="total" class="total-price" value="0">
+														<input type="hidden" name="intratio" class="intratio" value="">
+														<label>获得积分<span class="interesult"><?php echo '100'; ?></span></label>
+														<input type="hidden" name="intere" class="intere" value="">
+														<script type="text/javascript">
+															var  tPrice = 0;
+															setInterval(function(){
+																if(tPrice != parseFloat(jQuery('.total-price').val())){
+																	tPrice = parseFloat(jQuery('.total-price').val());
+																	var ratio = jQuery('.intratio').val();
+																	var inte = Math.round(tPrice/ratio*100)/100;
+																	jQuery('.interesult').text(inte);
+																	jQuery('.intere').attr('value',inte);
+																}
+															}, 100);
+														</script>
+													</li>
+													<li>
+														<label>找&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;零</label>
+														<input type="text" name="change" class="change" value="">
+														<script type="text/javascript">
+															var amount = 0;
+															var total = 0;
+															setInterval(function(){
+																if(parseFloat(jQuery('.total-price').val()) > 0 && parseFloat(jQuery('.amount').val()) != 0){
+																	total = parseFloat(jQuery('.total-price').val());
+																	amount = parseFloat(jQuery('.amount').val());
+																	var re = amount - total;
+																	if(re >= 0){
+																		jQuery('.change').attr('value', re);
+																	}else{
+																		jQuery('.change').attr('value', '');
+																	}
+																}
+															}, 100);
+														</script>
+													</li>
+													<li>
+														{$confirm}
+														<script type="text/javascript">
+															jQuery('.confirm').live('click', function(){
+																jQuery('.shipping').submit();
+															});
+														</script>
+													</li>
+												</ul>
+												</form>
+											</div>
+
+											<div class="cart-info right">
+												<div class="header">
+													<span>购物车</span>
+												</div>
+												<div class="goods">
+													<script type="text/javascript">
+														//减少数量
+														jQuery('.reduce').live('click', function(){
+															var price = jQuery(this).parent().parent().find('.price span').text();
+															var totalPrice = jQuery('.total-price').val();
+															var newTPrice = parseFloat(totalPrice) - parseFloat(price);
+												
+															var num = jQuery(this).next('.total-num').val();
+															var sku = jQuery(this).parent().parent().parent().attr('class');
+															if(parseInt(num) > 1){
+																var price = jQuery(this).parent().parent().find('.price span').text();
+																var totalPrice = jQuery('.total-price').val();
+																var newTPrice = parseFloat(totalPrice) - parseFloat(price);
+																
+																jQuery(this).next('.total-num').attr('value', parseInt(num)-1);
+																var re = jQuery(this).next('.total-num').val();
+																jQuery.ajax({
+																	type:'GET',
+																	url:'{:U("product/reduceNum")}',
+																	data:'sku='+sku+'&num='+re,
+																	success:function(data){
+																		if(data == 0){
+																			var totalPrice = jQuery('.total-price').attr('value', Math.round(newTPrice*100)/100);
+																		}
+																	}
+																});
+															}
+														});
+
+														//添加数量
+														jQuery('.plus').live('click', function(){
+															var price = jQuery(this).parent().parent().find('.price span').text();
+															var totalPrice = jQuery('.total-price').val();
+															var newTPrice = parseFloat(totalPrice) + parseFloat(price);
+
+															var num = jQuery(this).parent().find('.total-num').val();
+															var sku = jQuery(this).parent().parent().parent().attr('class');
+															jQuery(this).parent().find('.total-num').attr('value', parseInt(num)+1);
+															var re = jQuery(this).parent().find('.total-num').val();
+
+															jQuery.ajax({
+																type:'GET',
+																url:'{:U("product/addNum")}',
+																data:'sku='+sku+'&num='+re,
+																success:function(data){
+																	if(data == 0){
+																		var totalPrice = jQuery('.total-price').attr('value', Math.round(newTPrice*100)/100);
+																	}
+																}
+															});
+														});
+														//删除购物车商品
+														jQuery('.delete').live('click', function(){
+															var sku = jQuery(this).parent().parent().parent().attr('class');
+															var num = jQuery(this).parent().parent().find('.num input').val();
+															var price = jQuery(this).parent().parent().find('.price span').text();
+															var totalPrice = jQuery('.total-price').val();
+														
+															jQuery.ajax({
+																type:'GET',
+																url:'{:U("product/delCart")}',
+																data:'sku='+sku,
+																success:function(data){
+																	if(data == 0){
+																		jQuery('.'+sku).remove();
+																		var newPrice = parseFloat(totalPrice) - (parseFloat(price) * parseInt(num));
+																		jQuery('.total-price').attr('value', Math.round(newPrice*100)/100);
+																	}
+																}
+															});
+														})
+													</script>
+													<ul class="clera">
+														<li class="template" style="display: none">
+															<div class="box">
+																<div class="goods-img">
+																	<img src="https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=296493428,252326694&fm=58">
+																	<span class="delete" title="删除商品">x</span>
+																</div>
+																<div class="price">																	
+																	<span><?php echo '￥120.00'; ?></span>
+																</div>
+																<div class="num">
+																	<span class="reduce">-</span>
+																	<input type="text" name="num" class="total-num" value="1" />
+																	<span class="plus">+</span>
+																</div>
+															</div>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- change -->
+									<div class="change clear">
+										<div class="exchange">
+											<ul>
+												<li>
+													<if condition="$code">
+														<label>输入兑换码添加商品</label>
+														<input type="text" name="redeem-code" class="redeem-code">
+														{$code}
+														<br />
+														<br />
+														<label>输入商品码添加商品</label>
+														<input type="text" name="sku" class="skucode">
+														{$sku}
+														<script type="text/javascript">
+															var i = 1;
+															jQuery('.code').click(function(){
+																var code = jQuery('.redeem-code').val();
+																var account = jQuery('.account').val();
+
+																	if(code == '' || account == ''){
+																		alert("请填写完整信息！");
+																		return false;
+																	}
+
+																	jQuery.ajax({
+																	type:'GET',
+																	url:'{:U("Product/getRedeem")}',
+																	data:'code='+code,
+																	success:function(data){
+																		console.log(data);
+																		var str = '<li class="'+data.sku+'"><input type="hidden" value="'+account+'" name="account['+i+']" /><input type="hidden" value="'+data.code+'" name="code['+i+']" /><div class="box"><div class="goods-img"><img src="'+data.header_img+'"></div><div class="price"><span>'+data.integral+' x '+data.num+'</span></div></div></li>';
+																		if(!jQuery('.'+data.sku).html()){
+																			jQuery('.change-goods').find('ul:last').append(str);
+																			/*
+																			var redeem = jQuery('.redeemIntegral').text();
+																			var redeem = (parseFloat(data.integral) * parseInt(data.num)) + parseFloat(redeem);
+																			jQuery('.redeemIntegral').text(redeem);
+																			*/
+																			i++;
+																		}
+																	}
+																});
+															});
+
+															jQuery('.sku').click(function(){
+																var code = jQuery('.skucode').val();
+																var account = jQuery('.account').val();
+
+																if(code == '' || account == ''){
+																	alert("请填写完整信息！");
+																	return false;
+																}
+
+																jQuery.ajax({
+																	type:'GET',
+																	url:'{:U("Product/getRedeem")}',
+																	data:'sku='+code,
+																	success:function(data){
+																		console.log(data);
+																		var str = '<li class="'+data.goods_num+'"><input type="hidden" value="'+account+'" name="account['+i+']" /><input type="hidden" value="'+data.goods_num+'" name="sku['+i+']" /><div class="box"><div class="goods-img"><img src="'+data.header_img+'"><span class="del">x</span></div><div class="price in-price"><span>'+data.integral+' x <input type="text" name="innum['+i+']" class="innum" value="1" />'+'</span></div></div></li>';
+																		if(!jQuery('.'+data.goods_num).html()){
+																			jQuery('.change-goods').find('ul:last').append(str);
+																			var redeem = jQuery('.redeemIntegral').text();
+																			var redeem = parseFloat(data.integral) + parseFloat(redeem);
+																			jQuery('.redeemIntegral').text(redeem);
+																			i++;
+																		}
+																	}
+																});
+															});
+
+
+															function setPrice(){
+																var total = 0;
+																jQuery('.in-price').each(function(){
+																	var integral = jQuery(this).find('span').text();
+																	var num = jQuery(this).find('span').find('input').val();
+
+																	total += parseFloat(integral) * parseInt(num);
+																});
+																jQuery('.redeemIntegral').text(total);
+															}
+
+															jQuery('.innum').live('keyup', function(){
+																setPrice();
+															});
+
+															jQuery('.del').live('click', function(){
+																jQuery(this).parent().parent().parent().remove();
+																setPrice();
+															});
+															</script>
+														<else/></if>
+												</li>
+
+
+												<li>
+													<label>兑换商品</label>
+												</li>
+												<if condition="$confirm1">
+													<form action="{:U('Product/redeem')}" method="post" class="redeem-form">
+														<li>
+															<div class="change-goods">
+																<ul>
+
+																</ul>
+															</div>
+														</li>
+														<li>
+															{$confirm1}
+														</li>
+														<script type="text/javascript">
+															jQuery('.confirm1').live('click', function(){
+																jQuery('.redeem-form').submit();
+															})
+														</script>
+													</form>
+												<else/></if>
+
+											</ul>
+										</div>
+
+										<div class="user-info">
+											<ul>
+												<li><label>用户当前积分数:</label><span class="currIntegral">0</span></li>
+												<li><label>未兑换商品积分数:</label><span><label class="fh">-</label><span class="redeemIntegral">0</span></li>
+												<li><label>兑换后积分数:</label><span class="afterIntergral">0</span></li>
+											</ul>
+											<script type="text/javascript">
+												setInterval(function(){
+													var curr;
+													var redeem;
+													if(curr != jQuery('.currIntegral').text() || redeem != jQuery('.redeemIntegral').text()){
+														var after = parseFloat(jQuery('.currIntegral').text()) - parseFloat(jQuery('.redeemIntegral').text());
+														after = Math.floor(after * 100) / 100;
+														jQuery('.afterIntergral').text(after);
+													}
+
+												}, 100);
+											</script>
+										</div>
+									</div>
+
+									<!-- import -->
+									<div class="importE">
+										<div class="import">
+											<if condition="$importExcel">
+												<form class="import-form" method="post" action="{:U('Integral/importProduct')}" enctype="multipart/form-data">
+											<span class="limit-box">
+											<input type="file" name="product" class="import-goods" value="" ></span>
+													{$importExcel}
+												</form>
+												<script type="text/javascript">
+													jQuery('.importExcel').click(function(){
+														var file = jQuery(".import-goods").val();
+														if(file == ''){
+															alert("请选择要导入的文件！");
+															return false;
+														}
+														jQuery(this).submit();
+													});
+												</script>
+												<else/>
+											</if>
+										</div>
+
+										<div class="ratio">
+											<if condition="$set_ratio">
+												<p>设置消费人民币所获得积分比例</p>
+												<br />
+												<input type="text" name="rmb" value="" class="rmb" placeholder="人民币CNY" />:
+												<input type="text" name="integ" value="" class="integ" placeholder="积分INTEGRAL" />
+												{$set_ratio}
+												<script type="text/javascript">
+													jQuery(document).ready(function(){
+														jQuery.ajax({
+															type:'GET',
+															url:'{:U("Product/getRatio")}',
+															success:function(data){
+																jQuery('.intratio').attr('value', data.ratio);
+																jQuery('.rmb').attr('value', data.rmb);
+																jQuery('.integ').attr('value', data.integral);
+															}
+														});
+
+														jQuery('.set-ratio').click(function(){
+															var rmb = jQuery('.rmb').val();
+															var integ = jQuery('.integ').val();
+
+															jQuery.ajax({
+																type:'POST',
+																url:'{:U("Product/setRatio")}',
+																data:'rmb='+rmb+'&int='+integ,
+																success:function(data){
+																	if(data == 0){
+																		alert('设置比例成功！');
+																	}else{
+																		alert('设置比例失败！');
+																	}
+																}
+															});
+
+														});
+													});
+												</script>
+												<else/>
+											</if>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+
+						<script type="text/javascript">
+							Selection.switch();
+						</script>
+					</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

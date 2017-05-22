@@ -1,0 +1,43 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+.holder-num{
+    color:#5b9bd5;
+    font-size:14px
+}
+.holder-num span{
+    display:inline-block;
+    padding:5px;
+    border:1px solid gainsboro;
+    margin:0px 5px 0px 5px;
+}
+.holder-num .current{
+    background: #FF6C16;
+    display:inline-block;
+    padding:5px;
+    color: #fff;
+}
+.friends table,
+.near table{
+    width: 100%;
+}
+.friends table tr th,
+.near table tr th{
+    padding: 2px 5px;
+}
+.friends table .time ,
+.near table .time {
+    width: 86px;
+}
+.friends table .title ,
+.near table .title {
+    width: 120px;
+}
+.friends table .action ,
+.near table .action {
+    width: 15%;
+}
+.friends table th,.near table th{
+    border: 1px solid #ccc;
+}

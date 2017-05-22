@@ -1,0 +1,88 @@
+请求url  http://metmastersandbox.metworld.com.cn:8093/met/informamtion  post json传输
+
+1、资讯列表
+请求参数{
+	page 第几页
+	num 每页几条	
+	type 1
+}
+返回值{
+	size 资讯总数量
+	informations jsonArray{
+			jsonObject{  
+				id  资讯id
+				icon 资讯icon
+				title
+				briefing 简介
+				time 创建时间秒
+				isTop 是否置顶
+				type  1直播, 2 视频, 3 图文
+				if（type == 1）{
+					roomId 房间id
+				}else if（type == 2）{
+					picUrl 视频封面url
+					videoUrl 视频url
+				}else if（type == 3）{
+					url 网页链接url
+				}
+			}
+	}
+}
+
+2、删除资讯
+请求参数{
+	id 资讯id
+	type 2
+}
+返回值{
+	id 删除的资讯id
+}
+ 
+3、编辑资讯
+请求参数{
+	type 3
+	id 资讯i
+	icon
+	title
+	briefing
+	time 秒int
+	isTop boolean 是否置顶
+	if（type == 1）{
+		roomId 房间id
+	}else if（type == 2）{
+		picUrl 视频封面url
+		videoUrl 视频url
+	}else if（type == 3）{
+		url 网页链接url
+	}
+}
+返回值{
+	id 编辑的资讯id
+}
+
+4、新增
+请求参数{
+	type 4
+	array jsonArray数组{
+		json{
+			type  1直播, 2 视频, 3 图文
+			if（type == 1）{
+					roomId 房间id
+				}else if（type == 2）{
+					picUrl 视频封面url
+					videoUrl 视频url
+				}else if（type == 3）{
+					url 网页链接url
+			}
+			icon 
+			title
+			briefing
+			isTop 
+		}
+	}
+}
+返回值{
+	result true
+	ids id返回数组
+}
+

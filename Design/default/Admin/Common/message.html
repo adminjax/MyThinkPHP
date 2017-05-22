@@ -1,0 +1,7 @@
+<?php if(session('msg')): ?>
+	<div class="msg"><?php echo session('msg'); ?></div>
+<?php endif; ?>
+
+<?php if(session('error')): ?>
+	<div class="error"><?php echo session('error'); ?></div>
+<?php endif; ?>

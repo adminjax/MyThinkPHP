@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=”renderer” content=”webkit” />
+    <title>榜单类型设置</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="List">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <include file="Common/msg" />
+                    <div class="List clear">
+                        <div class="listTypeList">
+                            <div class="title_type size online">榜单类型设置</div><br/>
+                            <div class="cur size online">当前上线榜单</div>
+                            <div class="onlineList_d">
+                                <div class="onlineList_list">
+                                    <foreach name="onlineList" item="v">
+                                        <span class="box_list" onlineID="{$v.id}" pic="{$v.icon}" score="{$v.score}">
+                                            <span>{$v.name}</span>
+                                            <font>
+                                                <?php switch($v['sta']){
+                                                    case '9' : echo '删除';break ;
+                                                    case '11' : echo '修改';break ;
+                                                    default : echo ''; break;
+                                                }?>
+                                            </font>
+                                        </span>
+                                    </foreach>
+                                </div>
+                            </div>
+                            <div class="btn_check">
+                                {$add_type}
+                                {$del_type}
+                            </div>
+                        </div>
+                        <div class="listTypeInfo">
+                            <form class="setTypeSave" action="{:U('List/listTypeSave')}" method="post" enctype="multipart/form-data">
+                                <div class="trrr">
+                                    <span class="heig size">榜单名称</span>
+                                    <input class="mar size listName" type="text" name="listName" placeholder="输入榜单名称"/>
+                                </div>
+                                <div class="trrr">
+                                    <span class="heig size">榜单LOGO</span>
+
+                                    <img class="logo_img" id="img" src="" border="0"  width="120" height="80"/>
+                                    <input id="file_upload" type="hidden" value="" name="img"/>
+                                    <input type="hidden" class="select" value="" id="imgl"  name="listLOGO_url"/>
+                                    <a href="javascript:void(0)" class="btnss button avater" id="btnss" style="display: inline-block;vertical-align: bottom;"><span>选择图片</span></a>
+                                </div>
+                                <!--<div class="trrr1" style="margin-top: 70px;">
+                                    <span class="heig size">榜单简介</span>
+                                    <textarea class="mar textLen size" name="listInstr" placeholder="输入榜单简介" ></textarea>
+                                </div>
+                                <div class="trrr1">
+                                    <span class="heig size">榜单规则</span>
+                                    <textarea class="mar textLen size" name="listRule" placeholder="输入榜单规则" ></textarea>
+                                </div>-->
+                                <div class="trrr">
+                                    <span class="heig size">榜单排序</span>
+                                    <input type="number" class="mar textLen size" name="score" placeholder="输入榜单排序" >
+                                </div>
+                                <div class="trrr">
+                                    <span class="heig size">&nbsp;</span>
+                                    <span class="btn_typeSub">
+                                        {$btn_listAudit}
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Common/footer" />
+</body>
+<script type="text/javascript">
+    //图片上传
+    jQuery(function() {
+        var uploader = new plupload.Uploader({
+            //创建实例的构造方法
+            runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+            browse_button: 'btnss', // 上传按钮
+            url: "{:U('List/uploadImage')}", //远程上传地址
+            filters: {
+                max_file_size: '200mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+                mime_types: [//允许文件上传类型
+                    {title: "files", extensions: "jpg,png,gif,mp4,jpeg"}
+                ]
+            },
+            init: {
+                FilesAdded: function(up, files) { //文件上传前
+                    uploader.start();
+                },
+                FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+                    var data = JSON.parse(info.response);
+                    jQuery('#imgl').attr('value', data.pic);
+                    jQuery('#img').attr('src', data.pic);
+                }
+            }
+        });
+        uploader.init();
+
+        $(".add_type").click(function(){
+            window.location.reload();
+        });
+
+        //提交表单
+        $(".btn_typeSub").click(function(){
+            var listName = $("input[name='listName']").val();
+            if(!listName){
+                alert('请输入榜单名称！');
+                $("input[name='listName']").focus();
+                return false;
+            }
+            var listLOGO_url = $("input[name='listLOGO_url']").val();
+            if(!listLOGO_url){
+                alert('请上传榜单LOGO！');
+                $("input[name='listLOGO_url']").focus();
+                return false;
+            }
+            var score = $("input[name='score']").val();
+            if(!score){
+                alert('请输入榜单排序！');
+                $("input[name='score']").focus();
+                return false;
+            }
+            $(".setTypeSave").submit();
+        });
+
+        //修改榜单类型
+        var url = $(".setTypeSave").attr('action');
+        $(".onlineList_list .box_list").click(function(){
+            $(".onlineList_list .box_list").removeClass('active');
+            $(this).addClass('active');
+
+            var onlineID = $(this).attr('onlineID');
+            var pic = $(this).attr('pic');
+            var score = $(this).attr('score');
+            var con = $(this).find('span').text();
+            if(onlineID && pic && con){
+                $(".listName").val(con);
+                $(".logo_img").attr('src',pic);
+                $("#imgl").val(pic);
+                $('input[name="listInstr"]').val();//榜单简介
+                $('input[name="listRule"]').val();//榜单规则
+                $('input[name="score"]').val(score);
+                $(".setTypeSave").attr('action',url+'?id='+onlineID);
+            }
+        });
+
+        //删除榜单类型
+        $(".del_type").unbind('click').bind('click',function(){
+            var self = $(this).parent().parent().find('span.active');
+            var onlineID = self.attr('onlineID');
+            var url = self.attr('pic');
+            var con = self.find('span').text();
+            var score = self.attr('score');
+            if(onlineID && con && url && score){
+                $.ajax({
+                    url : '{:U("List/delList")}',
+                    type : 'post',
+                    data : {onlineID : onlineID,con : con,url : url,score : score},
+                    success : function(response){
+                        //console.log(response);
+                        if(response == 1){
+                            alert('添加至审核表，待审核!');
+                            window.location.reload();
+                        }else if(response == 2){
+                            alert('无权限操作!');
+                        }else{
+                            alert('添加至审核表失败!');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+</html>

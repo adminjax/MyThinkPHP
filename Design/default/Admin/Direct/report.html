@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>战报系统</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="report">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="selction">
+							<div class="header"><span>战报系统</span></div>
+							<ul>
+								<li class="title switch clear">
+									<div class="section active"><span>小节管理</span></div>
+									<div class="words"><span>文字战报</span></div>
+								</li>
+								<li class="contents">
+									<div class="section active clear">
+										<div class="left">
+											<!--<div class="match clear">
+												<div class="label">
+													<label>当前赛程</label>
+												</div>
+												<div class="select">
+													<div class="date">
+														<?php echo date('Y-m-d H:m:s', time()); ?>
+														<input type="hidden" class="createTime" name="date" value="<?php echo time();?>">
+													</div>
+													<div class="games">第<input type="text" class="currgames" name="games" value="">场</div>
+													<div class="sections">第<input type="text" class="currsectons" name="sections" value="">节</div>
+												</div>
+											</div>-->
+											<div class="team clear">
+												<div class="label">
+													<label>比赛队伍</label>
+												</div>
+												<?php //var_dump($live); ?>
+												<div class="teams clear">
+													<div class="selectTeam">
+														<select name="team1" class="teams1">
+															<option value="0">请选择队伍</option>
+															<?php foreach($team['array'] as $value): ?>
+															<option value="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></option>
+															<?php endforeach; ?>
+														</select>
+														<span>VS</span>
+														<select name="team2" class="teams2">
+															<option value="0">请选择队伍</option>
+															<?php foreach($team['array'] as $value): ?>
+															<option value="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></option>
+															<?php endforeach; ?>
+														</select>
+														<script type="text/javascript">
+															jQuery(".teams1").change(function(){
+															    var tid = jQuery(this).val();
+															    var name = jQuery(this).attr('name');
+															    var t2id = jQuery('.teams2').val();
+
+															    if(tid == t2id){
+															    	alert('请选择不同的队伍！');
+															    	return;
+															    }
+
+															    jQuery.ajax({
+															    	type:'GET',
+															    	url:'{:U("Direct/getTeamById")}',
+															    	data:'attackId='+tid,
+															    	success:function(data){
+															    		console.log(data);
+															    		jQuery('.team1').find('.logo img').attr('src', data.icon);
+													    				jQuery('.team1').find('.team-name').text(data.name);
+													    				jQuery('.team1').find('.t_id').attr('value', data.id);
+															    	}
+															    });
+															});
+
+															jQuery(".teams2").change(function(){
+															    var tid = jQuery(this).val();
+															    var name = jQuery(this).attr('name');
+															    var t1id = jQuery('.teams1').val();
+
+															    if(tid == t1id){
+															    	alert('请选择不同的队伍！');
+															    	return;
+															    }
+
+															    jQuery.ajax({
+															    	type:'GET',
+															    	url:'{:U("Direct/getTeamById")}',
+															    	data:'attackId='+tid,
+															    	success:function(data){
+															    		console.log(data);
+															    		jQuery('.team2').find('.logo img').attr('src', data.icon);
+													    				jQuery('.team2').find('.team-name').text(data.name);
+													    				jQuery('.team2').find('.t_id').attr('value', data.id);
+															    	}
+															    });
+															});
+														</script>
+
+													</div>
+													<div class="team1">
+														<div class="title"><?php echo 'TEAM A'; ?></div>
+														<input type="hidden" name="team1" value="<?php echo $live['team1']['id']?>" class="t_id" />
+														<div class="logo">
+															<img src="<?php echo $live['team1']['icon']; ?>">
+														</div>
+														<div class="team-name"><?php echo $live['team1']['name']?$live['team1']['name']:'队名'; ?></div>
+													</div>
+													<div class="team2">
+														<div class="title"><?php echo 'TEAM B'; ?></div>
+														<input type="hidden" name="team2" value="<?php echo $live['team2']['id']?>" class="t_id" />
+														<div class="logo">
+															<img src="<?php echo $live['team2']['icon']; ?>">
+														</div>
+														<div class="team-name"><?php echo $live['team2']['name']?$live['team2']['name']:'队名'; ?></div>
+													</div>
+
+													<div class="enter-title">
+														<textarea class="live-title" placeholder="输入直播标题"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="right">
+											<div class="action clear">
+												<div class="section-select" id="action">
+													<button class="confim">
+														<span>确认切换</span>
+													</button>
+													<?php if(!$live['isOpen']): ?>
+													<button class="begin">
+														<span>开&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;播</span>
+													</button>
+													<?php endif; ?>
+													<button class="close">
+														<span>关闭直播</span>
+													</button>
+													<script type="text/javascript">
+														jQuery('#action button').click(function(){
+															var time = jQuery('.createTime').val();
+															var games = jQuery('.currgames').val(); 
+															var sections = jQuery('.currsectons').val();
+															var title = jQuery('.live-title').val();
+															var t1 = jQuery('.team1').find('.t_id').val();
+															var t2 = jQuery('.team2').find('.t_id').val();
+
+															var type = jQuery(this).attr('class');
+															if(type == 'confim'){
+																var type = 3;	
+															}
+															if(type == 'begin'){
+																var type = 1;	
+															}
+															if(type == 'close'){
+																var type = 2;	
+															}
+															jQuery.ajax({
+																type:'POST',
+																url:'{:U("Direct/liveManage")}',
+																data:'title='+title+'&team1='+t1+'&team2='+t2+'&type='+type,
+																success:function(data){
+																	console.log(data);
+																	if(data.result){
+																		alert('操作成功！');
+																	}else{
+																		alert('操作失败 ！');
+																	}
+																}
+															});
+
+														});
+													</script>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- words -->
+									<div class="words clear">
+										<div class="left">
+											<div class="edit clear">
+												<div class="header"><span>战报编辑</span></div>
+												<div class="edit-r clear">
+													<div class="left">
+														<label>选择的战报</label>
+													</div>
+													<div class="right clear">
+														<input type="hidden" name="id" class="reportid" value="" />
+														<input type="text" name="event" class="event" value="" />
+
+														<!--
+														<input type="text" name="cource" class="cource" value="" />
+														<input placeholder="请输入日期" class="laydate-icon" id="laydate" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+														<input type="hidden" name="reid" class="reportreid" value="" />
+														<input type="text" name="team" class="team" value="" />
+														-->
+
+														<button class="editReport">
+															<span>编辑</span>
+														</button>
+														<button class="delReport">
+															<span>删除</span>
+														</button>
+														<script type="text/javascript">
+															jQuery('.delReport').click(function(){
+																var id = jQuery('.reportid').val();
+																
+																if(parseInt(id) > 0){
+																	jQuery.ajax({
+																		type:'GET',
+																		url:'{:U("Direct/delReport")}',
+																		data:'id='+id,
+																		success:function(data){
+																			console.log(data);
+																			if(data.result == true){
+																				jQuery('#'+id).remove();
+																				alert('删除成功！');
+																			}else{
+																				alert('删除失败，请重试！');
+																			}
+																			}
+
+																	});
+																}
+															});
+
+															jQuery('.editReport').click(function(){
+																var id = jQuery('.reportid').val();
+																var event = jQuery('.event').val();
+
+																jQuery.ajax({
+																	type:'POST',
+																	url:'{:U("Direct/editReport")}',
+																	data:'id='+id+'&event='+event,
+																	success:function(data){
+																		if(data.result == true){
+																			jQuery('td.event').parent('#'+id).find('td.event').text(event);
+																			alert('编辑成功！');
+																		}else{
+																			alert('编辑失败，请重试！');
+																		}
+																	}
+
+																});
+															});
+														</script>
+													</div>
+												</div>
+											</div>
+											<div class="new-r">
+												<div class="header"><span>发送新战报</span></div>
+												<div class="new-content clear">
+													<div class="left">
+														<!--<div class="demo2">
+															<input placeholder="请输入日期" id="reportTime" class="laydate-icon" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+														</div>
+														-->
+													</div>
+													<div class="right">
+														<!--
+														<select name="team1" class="teams1">
+															<option>请选择队伍</option>
+															<?php foreach($team as $value): ?>
+															<option value="<?php echo $value['t_id']; ?>"><?php echo $value['title']; ?></option>
+															<?php endforeach; ?>
+														</select>
+														<span>VS</span>
+														<select name="team2" class="teams2">
+															<option>请选择队伍</option>
+															<?php foreach($team as $value): ?>
+															<option value="<?php echo $value['t_id']; ?>"><?php echo $value['title']; ?></option>
+															<?php endforeach; ?>
+														</select>	
+														-->
+														<textarea name="new-report" class="newReport"></textarea>
+														<!--<label>比分：</label><input type="text" name="source" id="source" value="">-->
+
+														<button class="send"><span>发送战报</span></button>
+														<script type="text/javascript">
+															jQuery('.send').click(function(){
+																var text = jQuery('.newReport').val();
+
+																jQuery.ajax({
+																	type:'POST',
+																	url:'{:U("Direct/sendReport")}',
+																	data:'event='+text,
+																	success:function(data){
+																		console.log(data);
+																		if(data.result == true){
+																			var str = '<tr id="'+data.id+'" class="select"><td class="time">'+DateTime.currTime("yyyy-MM-dd hh:mm:ss")+'</td><td class="event">'+text+'</td></tr>'
+																			jQuery('#headerRow').after(str);
+																			alert('添加成功！');
+																		}else{
+																			alert('添加失败，请重试！')
+																		}
+																	}
+																});
+															});
+														</script>
+													</div>
+												</div>	
+											</div>
+										</div>
+										<div class="right">
+											<div class="header"><span>战报</span></div>
+											<div class="data-table">
+												<table>
+													<tbody>
+														<tr id="headerRow">
+															<th class="time">时间</th>
+															<th class="event">事件</th>
+															<!--<th class="source">比分</th><th class="title">队伍</th>-->
+														</tr>
+														<?php foreach($live['reports'] as $v): ?>
+														<tr id="<?php echo $v['id']; ?>" class="select">
+															<td class="time"><?php echo date('Y-m-d H:m:s', $v['time']); ?></td>
+															<td class="event"><?php echo $v['event']?></td>
+															<!--<td class="source"><span><?php echo $v['source']; ?></span></td>
+															<td class="title"><?php echo $v['title']?></td>-->
+														</tr>
+														<?php endforeach; ?>
+													</tbody>
+												</table>
+												<script type="text/javascript">
+													jQuery('.select').click(function(){
+														var id = jQuery(this).attr('id');
+														var text = jQuery(this).find('.event').text();
+														jQuery('.event').attr('value', text);
+														jQuery('.reportid').attr('value', id);
+													})
+												</script>
+											</div>
+
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+
+						<script type="text/javascript">
+							Selection.switch();
+						</script>
+					</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标签管理</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="tagMenage">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <div class="tagMenage">
+                        <div class="tag_menage_info clear">
+                            <div class="tag_info">
+                                <span class="APP_tag size">当前APP标签</span>
+                                <div class="tag_info_1">
+                                    <foreach name="tag_infos" item="v">
+                                        <div class="size" tagID="{$v.id}" score="{$v.score}"><span class="desc">{$v.desc}</span><?php if($v['status']==4){echo '<span class="var">修改</span>';}else if($v['status']==5){echo '<span class="var">删除</span>';}?></div>
+                                    </foreach>
+                                </div>
+                                
+                            </div>
+                            <div class="act">
+                                {$del_tag}
+                                <input class="size tag_desc" type="text" name="add_tag" placeholder="输入标签关键字"/>
+                                <input class="score_desc" type="text" name="score_tag" placeholder="输入标签排序"/>
+                                <div class="btn_tag">
+                                    {$edit_tag}
+                                    {$add_tag}
+                                    <!--{$save}-->
+                                </div>
+                                <div class="btn_sub">
+                                    
+                                    <script type="text/javascript">
+                                        $(document).ready(function(){
+                                            $(".add_tag").click(function(){
+                                                window.location.reload();
+                                            });
+
+                                            //删除标签
+                                            var tagID = '';
+                                            $(".del_tag").unbind('click').bind('click',function(){
+                                                $(".tag_info_1>.active").each(function(){
+                                                    tagID += $(this).attr('tagID')+'.'+$(this).text()+'.'+$(this).attr('score')+',';
+                                                });
+                                                if(!tagID){
+                                                    alert('请选择项目！');
+                                                    return false;
+                                                }
+                                                var flag = confirm('确认删除选中的标签!');
+                                                if(flag == false){
+                                                    return false;
+                                                }
+                                                $.ajax({
+                                                    url : '{:U("Registration/del_tag")}',
+                                                    type : 'post',
+                                                    data : {tagID : tagID},
+                                                    success : function(response){
+                                                        if(response == 1){
+                                                            alert('提交成功!');
+                                                        }
+                                                        window.location.reload();
+                                                    }
+                                                });
+                                            });
+
+
+                                            $(".tag_info_1>div").click(action);
+                                            function action(){
+                                                var desc = $(this).find('.desc').text();
+                                                var tagID = $(this).attr('tagID');
+                                                var score = $(this).attr('score');
+
+                                                $(".tag_desc").val(desc);
+                                                $(".edit_tag").attr('tagID',tagID);
+                                                $(".score_desc").val(score);
+                                                $(".tag_info_1>div").removeClass('active');
+                                                $(this).addClass('active');
+                                                $(".tag_info_1>div").click(action);
+                                            }
+
+                                            //修改标签
+                                            $(".edit_tag").unbind('click').bind('click',edit_tag);
+                                            function edit_tag(){
+                                                var tag_desc = $(".tag_desc").val();
+                                                if(!tag_desc){
+                                                    alert('请输入标签内容!');
+                                                    return false;
+                                                }
+                                                var flag = confirm('确认修改标签!');
+                                                if(flag == false){
+                                                    return false;
+                                                }
+                                                var tagID = $(this).attr('tagID');
+                                                var score = $(".score_desc").val();
+
+                                                if(!tag_desc) return false;
+                                                $.ajax({
+                                                    url : '{:U("Registration/saveTag")}',
+                                                    type : 'post',
+                                                    data : {tag_desc : tag_desc,tagID : tagID,score : score},
+                                                    success : function(response){
+                                                        if(response == 1){
+                                                            alert('提交成功!');
+                                                        }window.location.reload();
+                                                    }
+                                                });
+                                            }
+
+                                            //添加标签
+                                            $(".add_tag").unbind('click').bind('click',add_tag);
+                                            function add_tag(){
+                                                var tag_desc = $(".tag_desc").val();
+                                                if(!tag_desc){
+                                                    alert('请输入标签内容!');
+                                                    return false;
+                                                }
+                                                var flag = confirm('确认添加标签!');
+                                                if(flag == false){
+                                                    return false;
+                                                }
+                                                var score = $(".score_desc").val();
+                                                if(!tag_desc) return false;
+                                                $.ajax({
+                                                    url : '{:U("Registration/saveTag")}',
+                                                    type : 'post',
+                                                    data : {tag_desc : tag_desc,score : score},
+                                                    success : function(response){
+                                                        if(response == 1){
+                                                            alert('提交成功!');
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                            /*
+                                            //保存标签信息
+                                            $(".save").unbind('click').bind('click',save);
+                                            function save(){
+                                                var score = '';
+                                                var tagID = $(this).attr('tagID');
+                                                var tag_desc = $(".tag_desc").val();
+                                                score = $(".tag_info_1 div:last").attr('score');
+
+                                                if(tagID){
+                                                    score = $(this).attr('score');
+                                                }
+
+                                                if(!tag_desc) return false;
+                                                $.ajax({
+                                                    url : '{:U("Registration/saveTag")}',
+                                                    type : 'post',
+                                                    data : {tag_desc : tag_desc,tagID : tagID,score : score},
+                                                    success : function(response){
+                                                        if(response == 1){
+                                                            alert('提交成功!');
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                            */
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Common/footer" />
+</body>
+</html>

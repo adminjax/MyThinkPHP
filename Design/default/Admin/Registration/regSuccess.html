@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报名成功</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="regSuccess">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <div class="playList clear">
+                        <div class="setTypeSave regSuc">
+                            <form id="form" method="post" action="{:U('Registration/regSuc')}">
+                                <div class="trrr">
+                                    <span class="heig size">报名成功</span>
+                                </div>
+                                <div class="trrr">
+                                    <span class="heig size">报名时间设置</span>
+                                    <input class="mar size" type="text" name="reg_time" placeholder="报道时间"/>
+                                </div>
+                                <div class="trrr trrr1">
+                                    <span class="heig size">报道地址设置</span>
+                                    <textarea class="mar textLen size" name="listIntr" placeholder="报道地址" ></textarea>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="btn_sub">
+                            {$save}
+                            <script type="text/javascript">
+                                $(document).ready(function(){
+                                    $(".save").click(function(){
+                                        $("#form").submit();
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

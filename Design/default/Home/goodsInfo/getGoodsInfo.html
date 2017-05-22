@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <link rel="stylesheet" href="{$Think.config.SKIN_URL}home_css/css/goods-detail.css"/>
+    <include file="Public/head"/>
+</head>
+<body>
+<header>
+    <div class="goods-detail-header-text">商品详情</div>
+    <div class="index-detail-header-arrow" onclick="javascript:history.back(-1)">&lt;</div>
+</header>
+<div id="container" class="scroller" >
+    <div class="loading">
+        <span>下拉刷新数据</span>
+    </div>
+    <foreach name="goods_info" item="v">
+        <div class="goods-img" style="margin-top: 1.39rem;">
+            <div class="goods-image"><img src="{$v.img}" alt=""></div>
+            <p class="convert-title">积分兑换：<span class="goods_title">{$v.title}</span></p>
+            <input type="hidden" id="goods_id" goods_id="{$v.goods_num}">
+            <p class="how-much"><img src="{$Think.config.SKIN_URL}images/index/pay.png" alt=""><span class="inte"> {$v.integral}</span> 积分</p>
+            <p class="my-integral">我的积分: <span class="my_inte">{$user_inte}</span>积分</p>
+        </div>
+        <div class="goods-detail">
+            <div class="goods-detail-main">
+                <div class="goods-detail-title"><img src="{$Think.config.SKIN_URL}images/index/que-mark.png" alt=""> 商品详情</div>
+                {$v.content}
+            </div>
+        </div>
+    </foreach>
+</div>
+    <div class="convert">
+        <div>立即兑换</div>
+    </div>
+    <div class="modal-main-bg">
+        <div class="modal-main">
+            <p>兑换数量</p>
+            <div class="modal-main-num">
+                <div class="reduce"><img src="{$Think.config.SKIN_URL}images/num_03.png" alt=""></div>
+                <div class="modal-num number">1</div>
+                <div class="add"><img src="{$Think.config.SKIN_URL}images/num_05.png" alt=""></div>
+            </div>
+            <div class="modal-main-button">
+                <div class="main-cancel main-cancel2">取消</div>
+                <div class="main-done" url="{:U('GoodsInfo/ruleInte')}">兑换</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-false-bg">
+        <div class="modal-false">
+            <p>积分不足，无法兑换</p>
+            <div class="modal-false-button">
+                <div class="false-cancel main-cancel2">取消</div>
+                <div class="false-done main-cancel2">确定</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-success-bg">
+        <div class="modal-success">
+            <p>兑换成功</p>
+            <div class="modal-success-button">
+                <div class="success-cancel"><a href="{:U('Integral/integralInfo')}">积分详情</a></div>
+                <div class="success-done main-cancel2">确定</div>
+            </div>
+        </div>
+    </div>
+
+<script src="{$Think.config.SKIN_URL}home_js/js/goods-detail.js"></script>
+</body>
+</html>

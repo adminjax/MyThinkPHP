@@ -1,0 +1,147 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: SimHei;
+}
+body{
+    background: #dbdbde;
+    width: 6.4rem;
+}
+.top{
+    height: 2.88rem;
+    width: 6.4rem;
+}
+.top-top{
+    height: 2.60rem;
+    width: 6.4rem;
+    background: url("../../images/integral_background4.png")no-repeat;
+    background-size: 100% ;
+}
+.top-top-bg{
+    width: 2rem;
+    height: 2rem;
+    margin: auto;
+    background: url("../../images/integral_background3.png")no-repeat;
+    background-size: 100%;
+    position: relative;
+    top: 0.36rem;
+    color: #ffffff;
+}
+.residual-title{
+    font-size: 0.25rem;
+    font-weight: 100;
+    position: relative;
+    top: 0.4rem;
+    text-align: center;
+}
+.residual-int{
+    font-size: 0.44rem;
+    position: relative;
+    top: 0.55rem;
+    text-align: center;
+}
+
+.top-bottom{
+    height: 0.28rem;
+    width: 6.4rem;
+    background: url("../../images/integral_background2.png");
+    background-size: 100% ;
+    position: relative ;
+    bottom: 0.1rem;
+}
+
+.mid-title{
+    font-size: 0.3rem;
+    text-align: center;
+    line-height: 0.6rem;
+}
+
+
+
+/*没有记录*/
+.no-record{
+    min-height: 6.4rem;
+    width: 6.1rem;
+    margin: auto;
+    background: url("../../images/integral_background1.png")no-repeat #ffffff left 50% top 32%;
+    background-size: 1.84rem 1.11rem;
+    border-radius: 5px;
+}
+
+.no-record p:first-child{
+    font-size: 0.22rem;
+    text-align: center;
+    position: relative;
+    top: 3rem;
+}
+.no-record p:last-child{
+    font-size: 0.24rem;
+    text-align: center;
+    position: relative;
+    top: 5.6rem;
+    color: #399ae7;
+}
+
+
+
+
+/*有记录*/
+
+.has-record{
+    min-height: 6.4rem;
+    width: 6.1rem;
+    margin: auto;
+    background: #ffffff;
+    border-radius: 5px;
+}
+.record-title{
+    width: 6.1rem;
+    height: 0.74rem;
+    font-size: 0.22rem;
+}
+
+.time-title,.num-title,.from-title,.name-title{
+    outline: 0.01rem solid #e4e4e4;
+    height: 0.74rem;
+}
+.time-title{
+    width: 1.38rem;
+}
+.num-title{
+    width: 1.15rem;
+}
+.from-title{
+    width: 2.1rem;
+}
+.name-title{
+    width: 1.45rem;
+}
+.record-list{
+    font-size: 0.2rem;
+    position: relative;
+}
+
+.time,.num,.from,.name{
+    outline: 0.01rem solid #e4e4e4;
+    text-align: center;
+    font-size: 0.2rem;
+    padding: 0 0.15rem;
+}
+
+.name{
+    width: 1.25rem;
+    color: #399ae7;
+    background: url("../../images/arrow-bg_03.png")no-repeat;
+    background-size: 100%;
+    background-position: center;
+}
+.name a{
+    text-decoration: none;
+    color: #399ae7;
+}
+/*.pad{
+    padding-right: 0.2rem;
+}*/
+td{
+    word-break:break-all;
+}

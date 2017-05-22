@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>公告管理</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="enrollList">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="team">
+							<div class="header"><span>报名列表</span></div>
+							<div class="list">
+								<div class="lable">选择时间段</div>
+								<div class="begin">
+									<label>开始时间</label><input placeholder="请输入日期" name="begin" class="beginTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+								</div>
+								<div class="end">
+									<label>结束时间</label><input placeholder="请输入日期" name="end" class="endTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+								</div>
+								<button class="find"><span>查询</span></button>
+								<script type="text/javascript">
+									jQuery('.find').click(function(){
+										var begin = jQuery('.beginTime').val();
+										var end = jQuery('.endTime').val();
+
+										if(begin.length > 0 || end.length > 0){
+											jQuery.ajax({
+												type:'GET',
+												url:'{:U("Team/searchEnroll")}',
+												data:'begin='+begin+'&end='+end,
+												success:function(data){
+													console.log(data);
+													var str = '';
+													jQuery('.pageTools').html(data.tools);
+													for(var i in data.array){
+														str = str+'<li><div class="name">'+data.array[i].name+'</div><div class="type">'+data.array[i].teamTypeId+'</div></li>';
+													}
+
+													jQuery('.pageTools').before(str);
+												}
+											});
+										}
+									});
+								</script>
+
+
+								<ul class="clear">
+
+
+									
+									<li class="pageTools">
+										
+									</li>
+								
+								</ul>
+								<script type="text/javascript">
+									jQuery('.edit').click(function(){
+										var id = jQuery(this).parent().find('.t_id').val();
+										var url = window.location.href;
+										url = url.replace('teamList', '')+'teamManage/id/'+id;
+										location.href = url;
+									});
+
+									jQuery('.delete').click(function(){
+										var id = jQuery(this).parent().find('.t_id').val();
+										jQuery.ajax({
+											type:'GET',
+											url:'{:U("Team/delTeam")}',
+											data:'id='+id,
+											success:function(data){
+												console.log(data);
+												if(data == 0){
+													window.location.reload();
+												}
+											}
+										});
+									});
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

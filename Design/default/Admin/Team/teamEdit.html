@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>公告管理</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="teamEdit">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right clear edit-form">
+						<div class="team-edit">
+						<?php //var_dump($list);?>
+							<form id="edit-form" class="clear" method="post" action="{:U('team/editTeam')}">
+								<div class="header"><span>战队资料编辑</span></div>
+								<ul class="teaminfo">
+									<li>
+										<input type="hidden" name="id" class="teamid" value="<?php echo $list['id']; ?>">
+										<label>战队LOGO</label>
+										<div class="logo">
+											<input type="hidden" name="t_id" value="<?php echo $v['t_id']?>">
+											<img id="img" src="<?php echo $list['icon']; ?>" border="0" />
+							  				<input type="hidden" class="icon" value="<?php echo $list['icon']; ?>" id="imgl"  name="imgl"/>
+
+							  				<a href="javascript:void(0)" class="btns button" id="btns"><span>选择图片</span></a>
+										</div>
+									</li>
+									<li class="name">
+										<label>战队名称</label>
+										<input type="text" name="name" value="<?php echo $list['name']; ?>" placeholder="输入战队名称" />
+									</li>
+									<li>
+										<label>创客战队</label>
+										<input type="checkbox" name="ck" class="ck" value="1" checked="<?php if($list['isMaker'] == 'true'){echo 'checked';}?>" />
+									</li>
+									<li class="decl">
+										<label>战队宣言</label>
+										<input type="text" name="decl" value="<?php echo $list['sign']; ?>" placeholder="输入战队宣言" />
+									</li>
+									<li class="brief">
+										<label>战队简介</label>
+										<textarea name="brief" placeholder="输入战队简介"><?php echo $list['desc']; ?></textarea>
+									</li>
+									<li class="decl">
+										<label>战队排序</label>
+										<input type="text" name="score" value="<?php echo $list['score']; ?>" placeholder="战队排序" />
+									</li>
+								</ul>
+
+								<div class="box">
+									<button class="save"><span>保存</span></button>
+								</div>
+							</form>								
+						</div>
+
+						<!--队员信息编辑-->
+						<div class="userinfo team-edit">
+							<div class="header"><span>队员资料编辑</span></div>
+							<ul>
+								<li class="members clear">
+									<ul>
+										<li class="clear">
+											<div class="avater">头像</div>
+											<div class="name">姓名</div>
+											<div class="gander">性别</div>
+											<div class="age">年龄</div>
+											<div class="position">职位</div>
+											<div class="profession">队员职业</div>
+											<div class="desc">描述</div>
+										</li>
+										<?php foreach($list['members'] as $k => $v): ?>
+										<li class="clear members userlist">
+											<div class="avater clearP">
+												<input type="hidden" class="userid" name="members[<?php echo $k;?>][id]" value="<?php echo $v['id']?>" />
+												<img src="<?php echo $v['icon']?>">
+												<input type="hidden" name="members[<?php echo $k;?>][icon]" value="<?php echo $v['icon']?>">
+											</div>
+											<input type="text" readonly="true" class="name" name="members[<?php echo $k;?>][name]" value="<?php echo $v['name']?>">
+											<input type="text" readonly="true" class="gander" name="members[<?php echo $k;?>][gander]" value="<?php if($v['sex'] == 0){echo '女';}else{echo '男';} ?>">
+											<input type="text" readonly="true" class="age" name="members[<?php echo $k;?>][age]" value="<?php echo $v['age']?>">
+											<input type="text" readonly="true" class="position" name="members[<?php echo $k;?>][position]" value="<?php
+												switch ($v['position']) {
+													case '1':
+														echo '队长';
+														break;
+													case '2':
+														echo '副队长';
+														break;
+													case '3':
+														echo '队员';
+														break;
+												}
+											?>">
+											<input type="text" readonly="true" class="profession" name="members[<?php echo $k;?>][profession]" value="<?php echo $v['profession']?>">
+											<input type="text" readonly="true" class="desc" name="members[<?php echo $k;?>][desc]" value="<?php echo $v['desc']?>">
+											<a href="javascript:void(0)" class="delete">x</a>
+										</li>
+										<?php endforeach; ?>
+									</ul>
+								</li>
+							</ul>
+
+							<form id="editform" class="clear" method="post" action="{:U('team/editTeamUser')}">
+							<ul class="team-user">
+								<li class="icon">
+									<label>头像</label>
+									<div class="logo">
+										<input type="hidden" name="id" class="tid" value="<?php echo $list['id']; ?>">
+										<input type="hidden" name="userid" class="uid" value="">
+										<img class="headerimg avater" src="" border="0" />
+						  				<input type="hidden" class="icon userinfo" value="" id="avater"  name="avater"/>
+
+						  				<a href="javascript:void(0)" class="btnss button avater" id="btnss"><span>选择图片</span></a>
+									</div>
+								</li>
+								<li>
+									<label>姓名</label><input type="text" class="userinfo username" name="name" value="" />
+								</li>
+								<li>
+									<label>性别</label>
+									<select class="gander userinfo" name="gander">
+										<option>请选择</option>
+										<option value="1">男</option>
+										<option value="0">女</option>
+									</select>
+								</li>
+								<li>
+									<label>年龄</label><input type="text" class="userinfo ages" name="age" value="" />
+								</li>
+								<li>
+									<label>职位</label>
+									<select class="position userinfo" name="position">
+										<option>请选择</option>
+										<option value="1">队长</option>
+										<option value="2">副队长</option>
+										<option value="3">队员</option>
+									</select>
+								</li>
+								<li>
+									<label>队员职业</label><input type="text" class="userinfo professions" name="profession" />
+								</li>
+								<li>
+									<label>描述</label><textarea class="desc userinfo descs" name="desc"></textarea>
+								</li>
+							</ul>
+							<div class="box">
+								<button class="save"><span>添加</span></button>
+								<button class="save"><span>保存</span></button>
+							</div>
+							</form>
+						</div>
+
+					</div>
+				</div>
+				<script type="text/javascript">
+				    //图片上传
+				    var uploader = new plupload.Uploader({
+		                //创建实例的构造方法
+		                runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+		                browse_button: 'btns', // 上传按钮
+		                url: "{:U('Team/uploadImage')}", //远程上传地址
+		                filters: {
+		                    max_file_size: '500kb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+		                    mime_types: [//允许文件上传类型
+		                        {title: "files", extensions: "jpg,png,gif"}
+		                    ]
+		                },
+		                init: {
+		                    FilesAdded: function(up, files) { //文件上传前
+		                        uploader.start();
+		                    },
+		                    FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+		                        var data = JSON.parse(info.response);
+		                        var d = jQuery(this).attr('class');
+		                        console.log(d);
+		                        jQuery('#imgl').attr('value', data.pic);
+		                        jQuery('#img').attr('src', data.pic);
+		                        
+		                    },
+		                }
+		            });
+		            uploader.init();
+
+		            //图片上传
+				    var uploaders = new plupload.Uploader({
+		                //创建实例的构造方法
+		                runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+		                browse_button: 'btnss', // 上传按钮
+		                url: "{:U('Team/uploadImage')}", //远程上传地址
+		                filters: {
+		                    max_file_size: '500kb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+		                    mime_types: [//允许文件上传类型
+		                        {title: "files", extensions: "jpg,png,gif"}
+		                    ]
+		                },
+		                init: {
+		                    FilesAdded: function(up, files) { //文件上传前
+		                        uploaders.start();
+		                    },
+		                    FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+		                        var data = JSON.parse(info.response);
+		                        var d = jQuery(this).attr('class');
+		                        console.log(d);
+		                        jQuery('#avater').attr('value', data.pic);
+		                        jQuery('.headerimg').attr('src', data.pic);
+		                        
+		                    },
+		                }
+		            });
+		            uploaders.init();
+
+		            //编辑成员
+		            jQuery('.userlist').click(function(){
+		            	jQuery('.uid').attr('value', jQuery(this).find('.userid').val());
+		            	jQuery('#editform  .headerimg').attr('src', jQuery(this).find('img').attr('src'));
+		            	jQuery('#avater').attr('value', jQuery(this).find('img').attr('src'));
+		            	jQuery('.username').attr('value', jQuery(this).find('.name').val());
+		            	jQuery('#editform  .ages').attr('value', jQuery(this).find('.age').val());
+		            	jQuery('#editform  .professions').attr('value', jQuery(this).find('.profession').val());
+		            	jQuery('#editform  .descs').attr('value', jQuery(this).find('.desc').val());
+
+		            	jQuery("#editform .gander").val(jQuery(this).find('.gander').val());
+		            	jQuery("#editform .position").val(jQuery(this).find('.position').val());
+		            });
+
+					//删除成员
+					jQuery('a.delete').live('click', function(){
+						var flag = confirm('是否删除此成员！');
+						if(flag == true){
+							var id = jQuery(this).parent().find('.userid').val();
+							var teamid = jQuery('.teamid').val();
+							jQuery.ajax({
+								type:'GET',
+								url:'{:U("team/delTeamUser")}',
+								data:'id='+id+'&tid='+teamid,
+								success:function(data){
+									console.log(data);
+									if(data){
+										alert('删除成功！');
+										window.location.reload();
+									}
+								}
+							});
+						}	
+					});
+		    	</script> 
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>榜单审核</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="List">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <div class="List clear">
+                        <div class="list_audit">
+                            <ul class="clear">
+                                <li class="switch title">
+                                    <div class="list_audit_y active">榜单审核</div>
+                                    <div class="list_typeaudit_y">榜单类型审核</div>
+                                    <div class="list_sortaudit_y">榜单顺序审核</div>
+                                </li>
+                                <li class="contents">
+                                    <!-- 榜单审核 -->
+                                    <div class="list_audit_y active" style="display: none;">
+                                        <div class="audit_list1">
+                                            <div class="audit_list1_1">
+                                                <table class="tab_audit_list">
+                                                    <tr>
+                                                        <th class="action_top"><span class="">操作</span></th>
+                                                        <th class="list_type_audit"><span class="">榜单类型</span></th>
+                                                        <th><span class="">期数</span></th>
+                                                        <th><span class="">修改时间</span></th>
+                                                        <th class="select_true">选择<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+                                                    </tr>
+                                                    <foreach name="list" item="v">
+                                                        <tr listID="{$v.id}" show_id="{$v.show_id}" list_id="{$v.list_id}" class="get_list_info click">
+                                                            <th>
+                                                                <span class=" action_user">
+                                                                    <?php switch($v['is_active']){
+                                                                    case '4' : echo '增加排名';break ;
+                                                                    case '5' : echo '删除排名';break ;
+                                                                    case '6' : echo '添加榜单';break ;
+                                                                    case '14' : echo '删除榜单';break ;
+                                                                    case '15' : echo '修改榜单';break ;
+                                                                    default : echo ''; break;
+                                                                }?>
+                                                                </span>
+                                                            </th>
+                                                            <th><span class="">{$v.type}</span></th>
+                                                            <th><span class="">{$v.stage}</span>期</th>
+                                                            <th><span class="">{$v.create|date='Y/m/d H:i',###}</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                    </foreach>
+
+                                                </table>
+                                            </div>
+                                            <div style="width: 50%">
+                                                <div class="badoo">{$list_page}</div>
+                                            </div>
+                                            <p class="btn_auditList">
+                                                {$reject_l}
+                                                {$adopt_l}
+                                            </p>
+                                            <div class="audit_list1_info audit_listInfo">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 榜单类型审核 -->
+                                    <div class="list_typeaudit_y" style="display: none;">
+                                        <div class="audit_list2">
+                                            <div class="audit_list1_1">
+                                                <table class="tab_audit_list">
+                                                    <tr>
+                                                        <th class="action_top"><span class="">操作</span></th>
+                                                        <th><span class="">修改时间</span></th>
+                                                        <th class="select_true">选择<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+                                                    </tr>
+                                                    <foreach name="list_type" item="v">
+                                                        <tr listID="{$v.id}" class="list_type click" url="{$v.img_url}" desc="{$v.type}" score="{$v.index}" instr="{$v.list_desc}" rule="{$v.list_rule}">
+                                                            <th>
+                                                                    <span class="">
+                                                                        <?php switch($v['is_active']){
+                                                                    case '8' : echo '添加榜单';break ;
+                                                                    case '9' : echo '删除榜单';break ;
+                                                                    case '11' : echo '修改榜单';break ;
+                                                                    default : echo ''; break;
+                                                                }?>
+                                                                    </span>
+                                                            </th>
+                                                            <th><span class="">{$v.create|date='Y/m/d H:i',###}</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                    </foreach>
+                                                </table>
+                                            </div>
+                                            <div style="width: 50%">
+                                                <div class="badoo">{$list_t_page}</div>
+                                            </div>
+                                            <p class="btn_auditList">
+                                                {$reject_t}
+                                                {$adopt_t}
+                                            </p>
+                                            <div class="audit_list1_info setTypeSave">
+                                                <div class="size show_audit_title">预 览</div>
+                                                <div class="trrr">
+                                                    <span class="heig size">榜单名称</span>
+                                                    <div class="mar size list_type_name" style="width: 50%;display: inline-block"> </div>
+                                                </div>
+                                                <div class="trrr">
+                                                    <span class="heig size">榜单LOGO</span>
+                                                    <img class="logo_img list_type_img" src="" width="120" height="80"/>
+                                                    <input class="logo_img1" type="hidden" name="listLOGO_url"/>
+                                                </div>
+                                                <div class="trrr trrr1">
+                                                    <span class="heig size">榜单简介</span>
+                                                    <textarea class="mar " name="listInstr" style="width: 300px;height: 110px;"></textarea>
+                                                </div>
+                                                <div class="trrr trrr1">
+                                                    <span class="heig size">榜单规则</span>
+                                                    <textarea class="mar " name="listRule" style="width: 300px;height: 110px;"></textarea>
+                                                </div>
+                                                <div class="size">
+                                                    <span class="heig size">榜单排序</span>
+                                                    <span class="mar size" ></span>
+                                                </div>
+                                                <!--<div class="trrr trrr1">
+                                                    <span class="heig ">榜单规则</span>
+                                                    <div class="mar textLen " name="listRule" placeholder="输入榜单规则" style="width: 50%;" disabled ></div>
+                                                </div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 榜单顺序审核 -->
+                                    <div class="list_sortaudit_y" style="display: none;">
+                                        <div class="audit_list3">
+                                            <div class="audit_list1_1">
+                                                <table class="tab_audit_list">
+                                                    <tr>
+                                                        <th><span class="">操作</span></th>
+                                                        <th><span class="">修改时间</span></th>
+                                                        <th class="select_true">选择<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+                                                    </tr>
+                                                    <foreach name="list_sort" item="v">
+                                                        <tr listID="{$v.id}" class="get_list_sort click">
+                                                            <th><span class="">榜单排序</span></th>
+                                                            <th><span class="">{$v.create|date='Y/m/d H:i',###}</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                    </foreach>
+
+                                                </table>
+                                            </div>
+                                            <div style="width: 50%">
+                                                <div class="badoo">{$list_s_page}</div>
+                                            </div>
+
+                                            <p class="btn_auditList">
+                                                {$reject_s}
+                                                {$adopt_s}
+                                            </p>
+                                            <div class="audit_list1_info">
+                                                <div class="size preview" style="line-height: 36px;text-align: center">预 览</div>
+                                                <div class="checkSort">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <script type="text/javascript">
+                                Selection.switch();
+                                $(document).ready(function(){
+                                    check_all.check_all('.all_checkbox');
+                                    //榜单审核--通过
+                                    $(".adopt_l").unbind('click').bind('click',adopt_l);
+
+                                    //榜单审核--拒绝
+                                    $(".reject_l").unbind('click').bind('click',adopt_l);
+
+                                    //榜单类型审核--通过
+                                    $(".adopt_t").unbind('click').bind('click',adopt_l);
+
+                                    //榜单类型审核--拒绝
+                                    $(".reject_t").unbind('click').bind('click',adopt_l);
+
+                                    //榜单顺序审核--通过
+                                    $(".adopt_s").unbind('click').bind('click',adopt_l);
+
+                                    //榜单顺序审核--拒绝
+                                    $(".reject_s").unbind('click').bind('click',adopt_l);
+                                    function adopt_l(){
+                                        var listID = '';
+                                        var ty= $(this).attr('class');
+                                        var className = $(this).parent().parent().parent().attr('class');
+                                        var className1 = className.split(' ');
+                                        $("."+className1[0]+" tr.click input[type='checkbox']:checked").each(function(){
+                                            listID += $(this).parent().parent().attr('listID')+',';
+                                        });
+                                        if(!listID){
+                                            alert('请选择项目！');
+                                            return false;
+                                        }
+                                        $.ajax({
+                                            url : '{:U("List/'+ty+'")}',
+                                            type : 'post',
+                                            data : {listID:listID},
+                                            success : function(response){console.log(response);
+                                                if(response == 1)
+                                                {
+                                                    alert('操作成功!');
+                                                    window.location.reload();
+                                                }else if(response == 2)
+                                                {
+                                                    alert('不能添加已有的排名？');
+                                                }else{
+                                                    alert('操作失败!');
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    //榜单预览信息
+                                    $(".get_list_info").unbind('click').bind('click',getListInfo_ss);
+                                    //榜单顺序预览信息
+                                    $(".get_list_sort").unbind('click').bind('click',getListSort_ss);
+                                    //榜单类型预览信息
+                                    $(".list_type").unbind('click').bind('click',getListType_ss);
+                                    function getListInfo_ss(){
+                                        var self = $(this);
+                                        var id = self.attr('listid');
+                                        var list_id = self.attr('list_id');
+                                        var show_id = self.attr('show_id');
+                                        $.ajax({
+                                            url : '{:U("List/getListInfoById")}',
+                                            type : 'post',
+                                            data : {list_id : list_id,id : id,show_id : show_id},
+                                            success : function(response){
+                                                $(".audit_listInfo").css('border','1px solid gainsboro');
+                                                $(".audit_listInfo").html(response);
+                                            }
+                                        });
+                                    }
+                                    function getListSort_ss(){
+                                        var self = $(this);
+                                        var id = self.attr('listid');
+                                        $.ajax({
+                                            url : '{:U("List/getListSortById")}',
+                                            type : 'post',
+                                            data : {id : id},
+                                            success : function(response){
+                                                $(".checkSort").html(response);
+                                            }
+                                        });
+                                    }
+                                    function getListType_ss(){
+                                        var self = $(this);
+                                        var url = self.attr('url');
+                                        var desc = self.attr('desc');
+                                        var score = self.attr('score');
+                                        var instr = self.attr('instr');
+                                        var rule = self.attr('rule');
+                                        $("textarea[name='listInstr']").val(instr);
+                                        $("textarea[name='listRule']").val(rule);
+                                        $(".list_type_name").text(desc);
+                                        $(".list_type_img").attr('src',url);
+                                        $(".mar:last").text(score);
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Common/footer" />
+</body>
+</html>

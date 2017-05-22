@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>审核</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="regAudit">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <div class="regAudit clear">
+                        <div style="margin: 20px 0px 0px 20px;position: relative">
+                            <ul>
+                                <li class="switch title">
+                                    <div class="list_audit_y active">打榜说明审核</div>
+                                    <div class="list_typeaudit_y">标签审核</div>
+                                    <!--<div class="list_sortaudit_y">报名成功审核</div>-->
+                                </li>
+
+                                <li class="contents">
+                                    <!-- 打榜说明审核 -->
+                                    <div class="list_audit_y active" style="display: none;">
+                                        <div class="list_reg list_reg_1">
+                                            <div class="list_reg2 clear">
+                                                <div class="list_reg1">
+                                                    <table class="tab_audit_list">
+                                                        <tr>
+                                                            <th>操作</th>
+                                                            <th>修改时间</th>
+                                                            <th>选择<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+                                                        </tr>
+                                                        <!--<tr class="col_bor"><th colspan="4"></th></tr>-->
+                                                        <foreach name="play_instr" item="v">
+                                                            <tr class="play_in click" listID="{$v['id']}">
+                                                                <th>
+                                                                    <span class="size">
+                                                                        <if condition="$v['p_instr']">修改<else/>添加</if>
+                                                                    </span>
+                                                                </th>
+                                                                <th><span class="size"><?php echo date('Y-m-d H:i:s', $v['create']);?></span></th>
+                                                                <th><input type="checkbox" name="checkbox"></th>
+                                                            </tr>
+                                                        </foreach>
+                                                    </table>
+                                                    <div style="position: absolute;bottom: -60px;margin: 0px auto;width: 100%">
+                                                        <div class="badoo">{$instr_page}</div>
+                                                        <div class="btn_reg_audit">
+                                                            {$reject_p}
+                                                            {$adopt_p}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="reg_preview">
+                                                    <div style="float: left">
+                                                        <span class="reg_pre size">打榜说明预览</span>
+                                                        <div class="pre_content">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div style="float: left;margin-left: 15px;margin-top: 35px;">
+                                                        <div class="sign_up_time">
+                                                            <div class="size" style="font-weight: 600;">报名时间</div>
+                                                            <div class="sign_up_time1">
+                                                                <div class="size">开始时间: <span class="start_time"></span></div>
+
+                                                                <div class="size">结束时间: <span class="end_time"></span></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 个性标签审核 -->
+                                    <div class="list_typeaudit_y" style="display: none;">
+                                        <div class="list_reg list_reg_2">
+                                            <div class="tag_au">
+                                                <table class="tab_audit_list">
+                                                    <tr>
+                                                        <th>操作</th>
+                                                        <th>修改时间</th>
+                                                        <th>详细内容</th>
+                                                        <th>选择<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+                                                    </tr>
+                                                    <!--<tr class="col_bor"><th colspan="4"></th></tr>-->
+                                                    <foreach name="tags_info" item="v">
+                                                        <tr listID="{$v['id']}" class="click">
+                                                            <th>
+                                                                <?php switch($v['is_active']){
+                                                                    case '3' : echo '添加标签';break ;
+                                                                    case '4' : echo '修改标签';break ;
+                                                                    case '5' : echo '删除标签';break ;
+                                                                    default : echo ''; break;
+                                                                }?>
+                                                            </th>
+                                                            <th><span class="size">
+                                                            <?php if($v['modify'] > 0){
+                                                                echo date('Y-m-d H:i:s', $v['modify']);
+                                                            }else{
+                                                                echo date('Y-m-d H:i:s', $v['create']);
+                                                            }?></span></th>
+                                                            <th><span class="size">{$v.desc}({$v.score})</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                    </foreach>
+                                                </table>
+                                            </div>
+                                            <div style="width: 50%">
+                                                <div class="badoo">{$tag_page}</div>
+                                            </div>
+                                            <div class="btn_reg_audit" style="width: 50%;margin: 0px">
+                                                {$reject_t}
+                                                {$adopt_t}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 报名成功审核 -->
+                                    <!--<div class="list_sortaudit_y" style="display: none;">
+                                        <div class="list_reg list_reg_3">
+                                            <div class="suc_reg">
+                                                <div class="tag_au">
+                                                    <table class="tab_audit_list">
+                                                        <tr>
+                                                            <th><span class="size">操作</span></th>
+                                                            <th><span class="size">修改时间</span></th>
+                                                            <th><span class="size">详细内容</span></th>
+                                                            <th><span class="size">选择</span></th>
+                                                        </tr>
+                                                        <tr class="col_bor"><th colspan="4"></th></tr>
+                                                        <tr>
+                                                            <th><span class="size">修改报道时间</span></th>
+                                                            <th><span class="size">2017/02/01 13:05</span></th>
+                                                            <th><span class="size">xx</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span class="size">修改报道时间</span></th>
+                                                            <th><span class="size">2017/02/01 13:05</span></th>
+                                                            <th><span class="size">xx</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span class="size">修改报道时间</span></th>
+                                                            <th><span class="size">2017/02/01 13:05</span></th>
+                                                            <th><span class="size">xx</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span class="size">修改报道地址</span></th>
+                                                            <th><span class="size">2017/02/01 13:05</span></th>
+                                                            <th><span class="size">xx</span></th>
+                                                            <th><input type="checkbox" name="checkbox"></th>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="report_info">
+                                                    <div class="report_info1">
+                                                        <span class="size report_time">报道时间</span>
+                                                        <div class="time_JT">
+                                                            <div class="time size">2017-01-01</div>
+                                                            <div class="JT size">→</div>
+                                                            <div class="time size" style="color: red">2017-01-30</div>
+                                                        </div>
+
+                                                        <span class="size report_time report_address1">报道地址</span>
+                                                        <div class="report_address size">
+                                                            北京市东花市北里20号楼6单元501室
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="btn_reg_audit">
+                                                {$reject_s}
+                                                {$adopt_s}
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                </li>
+                            </ul>
+                            <script type="text/javascript">
+                                Selection.switch();
+                                $(document).ready(function(){
+                                    check_all.check_all('.all_checkbox');
+                                    //打榜说明审核--通过
+                                    $(".adopt_p").unbind('click').bind('click',adopt_l);
+
+                                    //打榜说明审核--拒绝
+                                    $(".reject_p").unbind('click').bind('click',adopt_l);
+
+                                    //个性标签审核--通过
+                                    $(".adopt_t").unbind('click').bind('click',adopt_l);
+
+                                    //个性标签类型审核--拒绝
+                                    $(".reject_t").unbind('click').bind('click',adopt_l);
+
+                                    //报名成功审核--通过
+                                    //$(".adopt_s").unbind('click').bind('click',adopt_l);
+
+                                    //报名成功审核--拒绝
+                                    //$(".reject_s").unbind('click').bind('click',adopt_l);
+                                    function adopt_l(){
+                                        var listID = '';
+                                        var ty= $(this).attr('class');
+                                        var className = $(this).parent().parent().parent().attr('class');
+
+                                        var className1 = className.split(' ');
+                                        $("."+className1[0]+" tr.click input[type='checkbox']:checked").each(function(){
+                                            listID += $(this).parent().parent().attr('listID')+',';
+                                        });
+                                        if(!listID){
+                                            alert('请选择项目！');
+                                            return false;
+                                        }
+                                        $.ajax({
+                                            url : '{:U("Registration/'+ty+'")}',
+                                            type : 'post',
+                                            data : {listID:listID},
+                                            success : function(response){
+                                                if(response == 1) {
+                                                    alert('审核成功！');
+                                                }else{
+                                                    alert('审核失败！');
+                                                }
+                                                window.location.reload();
+                                                //console.log(response);
+                                            }
+                                        });
+                                    }
+
+                                    //获取打榜说明内容信息
+                                    $(".play_in").unbind('click').bind('click',function(){
+                                        var listID = $(this).attr('listID');
+                                        if(!listID) return false;
+                                        $.ajax({
+                                            url : '{:U("Registration/getPlayInfo")}',
+                                            type : 'post',
+                                            data : {listID : listID},
+                                            success : function(response){
+                                                //console.log(response);
+                                                if(response !=0){
+                                                    if($(".pre_content").html().trim() == ''){
+                                                        var I = document.createElement("iframe");
+                                                        $(".pre_content").append(I);
+                                                        I.contentWindow.document.write(response.content);
+                                                    }
+                                                    $(".start_time").text(DateTime.datatime(parseInt(response.start_time)*1000));
+                                                    $(".end_time").text(DateTime.datatime(parseInt(response.end_time)*1000));
+                                                }
+                                            }
+                                        });
+                                    });
+                                });
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Common/footer" />
+</body>
+</html>

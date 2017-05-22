@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>报名信息</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="notice">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="enroll-list">
+							<div class="header">
+								<span>报名信息</span>
+								<form class="exportenroll" action="{:U('Team/enrollExport')}" method="get">
+								<div class="begin">
+									<label>开始时间</label><input placeholder="选择起始时间" name="begin" class="beginTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+								</div>
+								<div class="end">
+									<label>结束时间</label><input placeholder="选择结束时间" name="end" class="endTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+								</div>
+								<button class="batch export"><span>导出报名列表</span></button> 
+								</form>
+								<!--<button class="batch print"><span>批量打印</span></button>-->
+								
+							</div>
+							<hr />
+							<div class="times clear">
+								<form action="{:U('Team/enroll')}" method="GET">
+								<div class="begin">
+									<label>开始时间</label><input name="begin" class="beginTime" value="<?php echo date('Y-m-d H:m:s', $begin); ?>" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+								</div>
+								<div class="end">
+									<label>结束时间</label><input name="end" class="endTime" value="<?php echo date('Y-m-d H:m:s', $end); ?>" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+								</div>
+								<button class="find"><span>查询</span></button>
+								</form>
+								<script type="text/javascript">
+									jQuery('.finds').click(function(){
+										var begin = jQuery('.beginTime').val();
+										var end = jQuery('.endTime').val();
+
+										if(begin.length > 0 || end.length > 0){
+											jQuery.ajax({
+												type:'GET',
+												url:'{:U("Team/enroll")}',
+												data:'begin='+begin+'&end='+end,
+												success:function(data){
+													console.log(data);
+													var str = '';
+													jQuery('.pageTools').html(data.tools);
+													for(var i in data.array){
+														str = str+'<li><div class="name">'+data.array[i].name+'</div><div class="type">'+data.array[i].teamTypeId+'</div></li>';
+													}
+
+													jQuery('.pageTools').before(str);
+												}
+											});
+										}
+									});
+								</script>
+							</div>
+
+							<div class="data-table">
+								<table>
+									<tbody>
+										<tr id="headerRow">
+											<th class="registTime">报名时间</th>
+											<th class="name">队伍名称</th>
+											<th class="tag">挑战榜单</th>
+											<th class="declaration">宣言</th>
+											<th class="phone">联系电话</th>
+											<th class="time">创建时间</th>
+											
+											<!--
+											<th class="user">战队成员</th>
+											<th class="checkbox"></th>-->
+										</tr>
+										<?php //var_dump($team); ?>
+										<?php foreach($team['array'] as $K => $v): ?>
+										<tr>
+											<td class="registTime"><?php echo date('Y-m-d H:i', $v['teamRegistTime']); ?></td>
+											<td class="name"><?php echo $v['teamName']; ?></td>
+											<td class="tag"><?php echo $v['teamTag']; ?></td>
+											<td class="declaration"><?php echo $v['teamDeclaration']; ?></td>
+											<td class="phone"><?php echo $v['teamPhone']; ?></td>
+											<td class="time"><?php echo date('Y-m-d H:i', $v['teamTime']); ?></td>
+											
+											<!--
+											<td class="user">
+												<ul>
+												<?php foreach($v['members'] as $val): ?>
+													<li>
+														<div class="headerRow">
+															<span class="">队员名称</span>
+															<span class="">性别</span>
+															<span class="">年龄</span>
+															<span class="">身份证</span>
+															<span class="">艺名</span>
+															<span class="">标签</span>
+														</div>
+													</li>
+													<li>
+														<div class="box">
+															<span class=""><?php echo $val['memberName']?></span>
+															<span class=""><?php echo $val['memberSex']?></span>
+															<span class=""><?php echo $val['memberAge']?></span>
+															<span class=""><?php echo $val['memberIdCard']?></span>
+															<span class=""><?php echo $val['memberStageName']?></span>
+															<span class=""><?php echo $val['memberSign']?></span>
+														</div>
+													</li>
+												<?php endforeach; ?>
+												</ul>
+											</td>
+											-->
+											<!--<td class="checkbox"><input type="checkbox" name="info" class="select"></td>-->
+										</tr>
+										<?php endforeach; ?>
+										<tr class="pageTools">
+											<td colspan="8" class="badoo"><div class="badoo"><?php echo $pageTools; ?></div></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!--
+							<div class="header">
+								<span>队伍详情</span>
+								<button class="print details"><span>打印详情</span></button>
+								<script type="text/javascript">
+						            jQuery(document).ready(function(){
+						                jQuery('.details').click(function(){
+						                    jQuery('.printData').printArea();
+						                });
+						            });
+								</script>
+							</div>
+							
+							<div class="team-data clear printData" style="border: 1px solid #000;padding: 10px 10px;">
+								<div class="left" style="float: left;width: 40%;">
+									<ul>
+										<li>
+											<div class="info-logo" style="font-style: 15px;margin-bottom: 5px;"><label>战队LOGO</label></div>
+											<div class="info-img" style="margin-bottom: 10px;"><img src="https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=296493428,252326694&fm=58" /></div>
+										</li>
+										<li>
+											<div class="info-name" style="font-style: 15px;margin-bottom: 5px;"><label>战队名称</label></div>
+											<div class="info-name-re" style="margin-bottom: 10px;"><span>XXX战队</span></div>
+										</li>
+										<li>
+											<div class="info-decl" style="font-style: 15px;margin-bottom: 5px;"><label>战队口号</label></div>
+											<div class="info-decl-re" style="margin-bottom: 10px;"><span>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></div>
+										</li>
+									</ul>
+								</div>
+								<div class="right" style="float: right;width: 60%;">
+									<div class="info-user header" style="font-style: 15px;"><label>战队成员</label></div>
+									<div class="info-user-list">
+										<ul>
+											<li class="header clear">
+												<span class="name">姓名</span>
+												<span class="job">职位</span>
+												<span class="contact">联系方式</span>
+											</li>
+
+											<li class="user1 clear">
+												<span class="name">A</span>
+												<span class="job">AAAA</span>
+												<span class="contact">AAAAAAAAAAA</span>
+											</li>
+											<li class="user2 clear">
+												<span class="name">A</span>
+												<span class="job">AAAA</span>
+												<span class="contact">AAAAAAAAAAA</span>
+											</li>
+											<li class="user3 clear">
+												<span class="name">A</span>
+												<span class="job">AAAA</span>
+												<span class="contact">AAAAAAAAAAA</span>
+											</li>
+											<li class="user4 clear">
+												<span class="name">A</span>
+												<span class="job">AAAA</span>
+												<span class="contact">AAAAAAAAAAA</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							-->
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<foreach name="user_info" item="v">
+    <div style="display: inline-block;width: 50%;">
+        <p style="height: 150px;"><img src="{$v.headPic}" width="126" height="126"/></p>
+        <p class="size colors">昵称：<span class="size">{$v.name}</span></p>
+        <p class="size colors">真实姓名：<span class="size">{$v.realName}</span></p>
+        <p class="size colors">账号状态：
+             <if condition="($v['time'] eq 0) OR ($v['time'] eq -1)">
+                 <span class="size colors" style="color: green">正常</span>
+                 <else/>
+                 <span class="size colors" style="color: red">封号(至{$v.time|date='Y-m-d H:i:s',###})</span>
+             </if>
+        </p>
+        <p class="size colors">性别：<span class="size"><if condition="$v['sex'] eq 0">女<else/>男</if></span></p>
+        <p class="size colors">账号：<span class="size">{$v.account}</span></p>
+        <p class="size colors">会员卡：<span class="size">{$v.metCard}</span></p>
+        <p class="size colors">账户余额：</p>
+        <p class="size colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mb：<span class="size">{$v.mb}</span></p>
+        <p class="size colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最大mb：<span class="size">{$v.maxMb}</span></p>
+        <p class="size colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金币：<span class="size">{$v.gold}</span></p>
+    </div>
+    <div style="width: 400px;border: 1px solid #5b9bd5;padding: 5px;display: inline-block; vertical-align: top;">
+        <div class="header" style="padding: 2px 5px;"><span>操作</span></div>
+        <div class="set">
+            <ul>
+                <if condition="($v['time'] eq 0) OR ($v['time'] eq -1)">
+                    <li class="stop_add">
+                        <span class="account_status stop">{$stop}</span>
+                    </li>
+                    <li class="stop_time" style="display: none;">
+                        <div style="margin: 20px auto">
+                            <label>结束时间: </label><input placeholder="请输入日期" name="end" class="endTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                        </div>
+                        <div>{$save}</div>
+                    </li>
+                    <else/>
+                    <li><span class="account_status">{$nomal}</span></li>
+                </if>
+                <!--<li><span class="account_status">{$reported}</span></li>-->
+            </ul>
+            <div style="margin-top: 50px;text-align: center" account="{$v.account}">
+                <div class="size">是否官方授权账号</div>
+                <if condition="$v['is_official'] eq 1">
+                    <input type="radio" name="is_official" value="1" checked />是
+                    <input type="radio" name="is_official" value="0" />否
+                    <else/>
+                    <input type="radio" name="is_official" value="1" />是
+                    <input type="radio" name="is_official" value="0" checked />否
+                </if>
+
+            </div>
+
+        </div>
+    </div>
+
+</foreach>
+
+

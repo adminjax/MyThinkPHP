@@ -1,0 +1,161 @@
+请求url  http://metmastersandbox.metworld.com.cn:8093/met/room  post json传输
+
+1、直播间列表
+请求参数
+{
+	type 1 直播间
+	page 当前页数 1开始
+	num 每页显示数量
+}
+返回值{
+	total 总数
+	array{
+		JsonObject{
+			pname 发布者名字
+			id 房间id
+			time 创建时间 秒
+			desc 房间标题
+			...
+		}
+	
+	}
+}
+
+
+2、单个直播间详情
+请求参数
+{
+	type 2
+	id 唯一标示
+}
+返回值{
+	urls  直播间的url。
+}
+
+
+
+3、搜索
+请求参数
+{
+	type 3
+	searchTxt 搜索内容
+	page 当前页数 1开始
+	num 每页显示数量
+}
+返回值{
+	total 总数
+	array{
+		JsonObject{
+			pname 发布者名字
+			id 房间id
+			time 创建时间 秒
+			desc 房间标题
+		}
+	
+	}
+}
+
+4.用户检索
+请求参数
+{
+	type 4
+	userName || userId 搜索内容 if(username != null) 根据姓名查找
+	page 当前页数 1开始
+	num 每页显示数量
+}
+返回值{
+	total 总数
+	array{
+		JsonObject{
+			pname 发布者名字
+			id 房间id
+			time 创建时间 秒
+			desc 房间标题
+		}
+	
+	}
+}
+
+5.公告发送————APP暂时没有发送任何消息，此接口暂时调通
+请求参数
+{
+	type 5
+	content 发送内容
+}
+返回值{
+	result{
+		true | false
+	}
+}
+
+6.战报系统
+请求参数
+{
+	type 6
+	time int 开播时间
+	games int 第几场
+	sections int 第几节
+	title 直播标题
+	flag 1开播 2关闭直播 3切换
+	source 比分
+	array {
+		Json{
+			teamName 队伍名称
+			teamId  队伍ID
+			logo 队伍LOGO url
+		
+		}
+			
+		Json{
+			teamName 队伍名称
+			teamId  队伍ID
+			logo 队伍LOGO url
+		
+		}
+	}
+		
+}
+返回值{
+	result{
+		successful || error
+	}
+}
+
+7.文字战报——添加
+请求参数
+{
+	type 7
+	time string 时间 
+	event 描述
+	
+}
+返回值{
+	result successful操作成功，error操作失败
+	id
+}
+
+8添加 
+请求参数
+{
+	type 8
+	id 战报id
+	time string 时间 
+	event 描述
+	
+}
+返回值{
+	result true操作成功，false操作失败
+	
+}
+
+
+9.文字战报删除
+请求参数
+{
+	type 9删除
+	id 
+}
+返回值
+{
+	result true操作成功，false操作失败
+}

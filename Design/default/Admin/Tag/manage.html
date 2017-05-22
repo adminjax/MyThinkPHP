@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>标签编辑</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="tag">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="tag-box">
+							<div class="title"><span>当前标签</span></div>
+							<div class="list">
+								<ul class="clear tag-list">
+									<?php foreach($tag as $k => $v): ?>
+										<li>
+											<div class="tag">
+												<input type="hidden" name="tag" class="id" value="<?php echo $v['id'];?>">
+												<span>
+													<?php echo $v['desc']?>
+													<span class="isActive">
+														<if condition="$v['au'] eq 2">修改
+															<elseif condition="$v['au'] eq 3"/>删除
+															<else/>
+														</if>
+													</span>
+												</span>
+											</div>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+								<script type="text/javascript">
+									jQuery('.tag').click(function(){
+										var id = jQuery(this).find('.id').val();
+										var tag = jQuery(this).find('span').text();
+										if(id && tag){
+											jQuery('.edit-id').attr('value', id);
+											jQuery('.edit-tag').attr('value', $.trim(tag));
+										}
+										jQuery('.tag').removeClass('active');
+										jQuery(this).addClass('active');
+									});									
+								</script>
+							</div>
+							<div class="action">
+								<input type="hidden" name="tag" class="edit-id" value="" />
+								<input type="text" name="tag" class="edit-tag" value="" />
+								<?php echo $edit; ?>
+								<script type="text/javascript">
+									jQuery('.edit').click(function(){
+										var id = jQuery(this).parent().find('.edit-id').val();
+										var tag = jQuery(this).parent().find('.edit-tag').val();
+
+										if(id == '' || tag == ''){
+											alert('请选择要修改的标签！');
+											return false;
+										}
+
+										jQuery.ajax({
+											type:'GET',
+											url:'{:U("Tag/editTag")}',
+											data:'id='+id+'&tag='+tag,
+											success:function(data){
+												if(data == 0){
+													alert('修改标签成功！等待审核');
+												}else{
+													alert('修改标签失败！');
+												}
+												window.location.reload();
+											}
+										});
+									});
+								</script>
+								<?php echo $delet; ?>
+								<script type="text/javascript">
+									jQuery('.delet').click(function(){
+										var ids = '';
+										jQuery('.tag-list .active').each(function(){
+											var id = jQuery(this).find('.id').val();
+											ids = id;
+										});
+
+										if(ids == ''){
+											alert('请选择要删除的标签！');
+											return false;
+										}
+
+										var flag = confirm("是否删除次标签！");
+										if(!flag){
+											return false;
+										}
+
+										jQuery.ajax({
+											type:"GET",
+											url:'{:U("Tag/delTag")}',
+											data:'id='+ids,
+											success:function(data){
+												console.log(data);
+												if(data != 1){
+													alert('删除标签成功！等待审核');
+												}else{
+													alert('删除标签失败！');
+												}
+												window.location.reload();
+											}
+										});
+									});
+								</script>
+							</div>
+							<br />
+							<div id="add-tag">
+								<input type="text" name="tag" class="add-tag" value="" placeholder="请输入新标签关键字" />
+								<?php echo $add; ?>
+								<script type="text/javascript">
+									jQuery('.add').click(function(){
+										var tag = jQuery('.add-tag').val();
+										if(tag == ''){
+											alert('请填写标签！');
+											return false;
+										}
+										jQuery.ajax({
+											type:'GET',
+											url:'{:U("Tag/addTag")}',
+											data:'tag='+tag,
+											success:function(data){
+												console.log(data);
+												if(data == 0){
+													alert('添加标签成功！等待审核');
+												}else{
+													alert('添加标签失败！');
+												}
+											}
+										});
+									});
+								</script>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

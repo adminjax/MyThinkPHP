@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>订单详情</title>
+    <link rel="stylesheet" href="{$Think.config.SKIN_URL}home_css/css/order-detail-2.css">
+    <include file="Public/head"/>
+</head>
+<body>
+<header>
+    <div class="order-detail-header-text">订单详情</div>
+    <div class="order-detail-header-arrow"  onclick="javascript:history.back(-1)">&lt;</div>
+</header>
+<div id="container" class="scroller" >
+    <div class="loading">
+        <span>下拉刷新数据</span>
+    </div>
+    <foreach name="order_info" item="v">
+        <main style="margin-top: 1.39rem;">
+            <div class="main-top">
+
+                <div class="main-top-img">
+                    <if condition="$v['header_img']">
+                        <img src="{$v.header_img}" alt="">
+                        <else/>
+                        <img src="{$v.img}" alt="">
+                    </if>
+                </div>
+
+                <div class="main-top-name">
+                    <ul>
+                        <if condition="$v['title']">
+                            <li>{$v.title}</li>
+                            <else/>
+                            <li>{$v.name}</li>
+                        </if>
+
+                        <if condition="$v['integral']">
+                            <li>{$v.integral} x{$v.num}</li>
+                            <else/>
+                            <li>{$v.price} x{$v.num}</li>
+                        </if>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="main-center">
+                <ul>
+                    <li>兑换码</li>
+                    <li><img src="{$Think.config.SKIN_URL}images/juxing507.png" alt=""></li>
+                    <li>
+                        <if condition="$v['status'] eq 1">
+                            {$v.code}
+                            <else/>
+                            已使用1份消费码
+                        </if>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="main-foot">
+                <ul>
+                    <li>温馨提示</li>
+                    <li><img src="{$Think.config.SKIN_URL}images/juxing507.png" alt=""></li>
+                </ul>
+                <p>
+                    使用下方兑换码至现场柜台处兑换商品，本兑换码无
+                    使用期限，一次兑换所有商品，请保管好您的兑换码
+                    不要让他人知道您的兑换码。
+                </p>
+            </div>
+        </main>
+    </foreach>
+</div>
+</body>
+</html>

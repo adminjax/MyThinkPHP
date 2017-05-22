@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>社区内容管理</title>
+
+	<include file="Common/head" />
+	<link rel="stylesheet" type="text/css" href="{$Think.config.SKIN_URL}css/page.css">
+</head>
+<body>
+	<div id="community">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="community clear">
+							<div class="left">
+								<div class="header">
+									<span>社区内容管理</span>
+								</div>
+
+								<div class="selction">
+									<ul>
+										<li class="title switch clear">
+											<div class="friends active"><span>朋友圈</span></div>
+											<div class="near"><span>附近</span></div>
+										</li>
+										<li class="contents">
+											<div class="friends active">
+												<div class="tools clear">
+													<!--
+													<div class="filters">
+														<input type="text" name="search" class="filter-key" />
+														<button class="filter">
+															<span>筛选</span>
+														</button>
+													</div>
+													-->
+													<div class="searchs">
+														<form class="friend-search" action='{:U("Community/search",array("type"=>5))}' method="get">
+															<input type="text" name="search" class="search-key" value="{$search_textP}" />
+															<button class="searchF">
+																<span>搜索</span>
+															</button>
+														</form>
+
+													</div>
+													<script type="text/javascript">
+														$(function(){
+
+															//朋友圈
+															jQuery('.searchF').click(function(){
+																var text = jQuery.trim(jQuery('.search-key').val());
+
+																if(text.length > 0 && text.length < 20){
+																	/*jQuery.ajax({
+																		type: 'GET',
+																		url:'{:U("Community/search")}',
+																		data:'text='+text+'&type=5',
+																		success:function(data){
+																			searchPage(data,'.friends');
+																		}
+																	})*/
+																	$(".friend-search").submit();
+																}else{
+																	alert("请输入1到20个字！");
+																	return false;
+																}
+															});
+
+															//附近
+															/*
+															function searchPage(data,wh){
+																$(wh+" .data-table table").remove();
+																var tr_head = '';
+																if(wh == 'friends'){
+																	tr_head = '<tr id="headerRow_f" class="friendHead">';
+																}else{
+																	tr_head = '<tr id="headerRow_n" class="nearHead">';
+																}
+
+																var tr = tr_head +
+																		'<th class="time">创建时间</th>'+
+																		'<th class="author">提交人</th>'+
+																		'<th class="title">标题</th>'+
+																		'<th class="action">操作</th>'+
+																		'</tr>';
+																var tab = '<table>'+tr+'</table>';
+																$(wh).find('.tit').html(tab);
+																if(!data.error){
+																	var str = '<table>';
+																	for(var v in data.array ){
+																		if(data.array[v].desc != 'null' && data.array[v].desc){
+																			var desc = data.array[v].desc;
+																		}else{
+																			var desc = '';
+																		}
+																		if(wh == '.friends'){
+																			str = str + '<tr class="friend" datatype="'+data.type+'"><td class="time">'+DateTime.UnixToDate(data.array[v].time)+'</td><td class="author">'+data.array[v].pname+'</td><td class="title">'+desc+'</td><td class="action"><input type="hidden" name="id" class="community_id" value="'+data.array[v].id+'"><input type="hidden" name="type" class="community_type" value="'+1+'"><button class="delFriend"><span>删除<papan></button></td></tr>';
+																		}else{
+																			str = str + '<tr class="nears" datatype="'+data.type+'"><td class="time">'+DateTime.UnixToDate(data.array[v].time)+'</td><td class="author">'+data.array[v].pname+'</td><td class="title">'+desc+'</td><td class="action"><input type="hidden" name="id" class="community_id" value="'+data.array[v].id+'"><input type="hidden" name="type" class="community_type" value="'+2+'"><button class="delFriend"><span>删除<papan></button></td></tr>';
+																		}
+																	}
+																	search.searchN('{:U("Community/getDataById")}');
+																	search.searchF('{:U("Community/getDataById")}');
+
+																	jQuery(wh+' .data-table').append(str);
+																	str += '</table>';
+
+
+																	$(wh+" .data-table").css('overflow','hidden');
+																	$(wh+" .data-table").css('position','relative');
+																	$(wh+" .data-table").css('max-height','507px');
+																	$(wh+" .data-table table").css('max-height','507px');
+																	$(wh+" .data-table table tr td").css('height','41px');
+																	$(wh+" .data-table table").css('position','absolute');
+																	$(wh+" .data-table table").css('top','0px');
+																	page(data.total,11,wh);
+																}else{
+																	$(wh+" .badoo").remove();
+																}
+															}
+
+															//分页
+															function page(total,p,wh){
+																var k = Math.ceil(total/p);
+																var html = '';
+																html += '<span class="num current">'+1+'</span>';
+																for(var i=2;i<=k;i++){
+																	html += '<span class="num">'+i+'</span>';
+
+																}
+																html += '   第 <font class="fir-tw">1</font> 页/共 '+k+' 页 ( '+p+' 条/页 共 '+total+' 条)';
+																$(wh+" .badoo").remove();
+																$(wh+" .holder-num").html(html);
+																$(wh+" .num").click(function(){
+																	var self = $(this);
+																	var num = self.text();
+																	$(".fir-tw").text(num);
+																	var m = '-'+(num-1)*507+'px';
+																	$('.data-table table').css('top',m);
+																	$(".num").removeClass('current');
+																	self.addClass('current');
+																});
+															}*/
+														})
+													</script>
+												</div>
+
+												<div class="tit">
+
+												</div>
+												<div class="data-table">
+												<?php //var_dump($data); ?>
+													<table>
+														<tbody>
+															<tr id="headerRow_f" class="friendHead">
+																<th class="time">创建时间</th>
+																<th class="author">提交人</th>
+																<th class="title">标题</th>
+																<th class="action">操作</th>
+															</tr>
+															<?php foreach($data['friend']['array'] as $v): ?>
+															<tr class="friend" dataType="<?php echo $data['friend']['type']; ?>">
+																<td class="time"><?php echo date('Y-m-d H:i:s', $v['time']); ?></td>
+																<td class="author"><?php echo $v['pname']; ?></td>
+																<td class="title"><?php if($v['desc'] == 'null'){echo '';}else{echo $v['desc'];} ?></td>
+																<td class="action">
+																	<input type="hidden" name="id" class="community_id" value="<?php echo $v['id']; ?>">
+																	<input type="hidden" name="type" class="community_type" value="<?php echo $data['friend']['type']; ?>">
+																	<button class="delFriend"><span>删除</span></button>
+																</td>
+															</tr>
+															<?php endforeach; ?>
+														</tbody>
+													</table>
+
+													<script type="text/javascript">
+														jQuery('.delFriend').live('click', function(){
+															var flag = confirm('是否确认删除！'); 
+															if(flag == true){
+																var id = jQuery(this).parent().find('.community_id').val();
+																var type = jQuery(this).parent().find('.community_type').val();
+
+																jQuery.ajax({
+																	type:'GET',
+																	url:'{:U("Community/delAction")}',
+																	data:'id='+id+'&type='+type,
+																	success:function(data){
+																		console.log(data);
+																		if(data == 0){
+																			alert('删除成功！');
+																			window.location.reload(); 
+																		}else{
+																			alert(data.error);
+																		}
+																	}
+																});
+															}
+														});
+
+														search.searchF('{:U("Community/getDataById")}');
+
+													</script>
+												</div>
+												<div class="badoo">
+													<?php echo $pageF; ?>
+												</div>
+												<div class="holder-num"></div>
+											</div>
+
+											<div class="near">
+												<div class="tools clear">
+													<!--
+													<div class="filters">
+														<input type="text" name="search" class="filter-key" />
+														<button class="filter">
+															<span>筛选</span>
+														</button>
+													</div>
+													-->
+													<div class="searchs">
+														<form class="near-search" action='{:U("Community/search",array("type"=>6))}' method="get">
+															<input type="text" name="search" class="search-key1" value="{$search_textN}" />
+															<button class="searchN">
+																<span>搜索</span>
+															</button>
+														</form>
+													</div>
+													<script type="text/javascript">
+														jQuery('.searchN').click(function(){
+															var text = jQuery.trim(jQuery('.search-key1').val());
+
+															if(text.length > 0 && text.length < 20){
+																/*jQuery.ajax({
+																	type: 'GET',
+																	url:'{:U("Community/search")}',
+																	data:'text='+text+'&type=6',
+																	success:function(data){
+																		searchPage(data,'.near');
+																	}
+																})*/
+																$(".near-search").submit();
+															}else{
+																alert("请输入1到20个字！");
+																return false;
+															}
+														})
+													</script>
+												</div>
+												<div class="tit">
+
+												</div>
+												<div class="data-table">
+													<table>
+														<tbody>
+															<tr id="headerRow_n" class="nearHead">
+																<th class="time">创建时间</th>
+																<th class="author">提交人</th>
+																<th class="title">标题</th>
+																<th class="action">操作</th>
+															</tr>
+															<?php foreach($data['near']['array'] as $v): ?>
+															<tr class="nears" dataType="<?php echo $data['near']['type']; ?>">
+																<td class="time"><?php echo date('Y-m-d H:i:s', $v['time']); ?></td>
+																<td class="author"><?php echo $v['pname']; ?></td>
+																<td class="title"><?php echo $v['desc']; ?></td>
+																<td class="action">
+																	<input type="hidden" name="id" class="community_id" value="<?php echo $v['id']; ?>">
+																	<input type="hidden" name="type" class="community_type" value="<?php echo $data['near']['type']; ?>">
+																	<button class="delNear"><span>删除</span></button>
+																</td>
+															</tr>
+															<?php endforeach; ?>
+														</tbody>
+													</table>
+													<script type="text/javascript">
+														jQuery('.delNear').live('click', function(){
+															var flag = confirm('是否确认删除！'); 
+															if(flag == true){
+																var id = jQuery(this).parent().find('.community_id').val();
+																var type = jQuery(this).parent().find('.community_type').val();
+
+																jQuery.ajax({
+																	type:'GET',
+																	url:'{:U("Community/delAction")}',
+																	data:'id='+id+'&type='+type,
+																	success:function(data){
+																		console.log(data);
+																		if(data == 0){
+																			alert('删除成功！');
+																			window.location.reload(); 
+																		}else{
+																			alert(data.error);
+																		}
+																	}
+																});
+															}
+														});
+
+														search.searchN('{:U("Community/getDataById")}');
+
+													</script>
+												</div>
+												<div class="badoo">
+													<?php echo $pageN; ?>
+												</div>
+												<script type="text/javascript">
+													jQuery(document).ready(function(){
+
+														var url = window.location.href;
+														if(url.indexOf('search') > 0){
+															if(url.indexOf("type/5") > 0){
+																jQuery('.friends').addClass('active');
+																jQuery('.near').removeClass('active');
+															}else if(url.indexOf("type/6") > 0){
+																jQuery('.friends').removeClass('active');
+																jQuery('.near').addClass('active');
+															}
+														}
+
+														jQuery('.near .badoo').find('a').each(function(){
+															var a = jQuery(this).attr('href');
+															var text = jQuery(this).text();
+
+															var search = $(".friends .search-key1").val();
+															if(!search){
+																var url = window.location.href;
+																var a2 = url.split('Community');
+																a = a2[0]+'Community/contentManage/p/'+text+'.html';
+																jQuery(this).attr("href", a);
+															}
+
+															var a2 = a.split('contentManage');
+															if(a2[1]){
+																a = a2[0]+'contentManage/n/'+text+'.html';
+																jQuery(this).attr("href", a);
+															}
+															var url = window.location.href;
+															if(url.indexOf("contentManage/n/") > 0){
+																jQuery('.friends').removeClass('active');
+																jQuery('.near').addClass('active');
+															}
+														});
+
+
+														jQuery('.friends .badoo').find('a').each(function(){
+															var a = jQuery(this).attr('href');
+															var text = jQuery(this).text();
+
+															var search = $(".friends .search-key").val();
+															if(!search){
+																var url = window.location.href;
+																var a2 = url.split('Community');
+																a = a2[0]+'Community/contentManage/p/'+text+'.html';
+																jQuery(this).attr("href", a);
+															}
+
+															var a2 = a.split('contentManage');
+															if(a2[1]){
+																a = a2[0]+'contentManage/p/'+text+'.html';
+																jQuery(this).attr("href", a);
+															}
+															var url = window.location.href;
+															if(url.indexOf("contentManage/p/") > 0){
+																jQuery('.friends').addClass('active');
+																jQuery('.near').removeClass('active');
+															}
+														});
+													});
+												</script>
+												<div class="holder-num"></div>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<script type="text/javascript">
+									Selection.switch();
+								</script>
+								
+								
+
+							</div>
+							<div class="right">
+								<div class="header">
+										<span>内容预览</span>
+									</div>
+								<div class="content-preview">
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

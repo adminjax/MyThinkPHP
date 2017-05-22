@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>榜单展示</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="List">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <include file="Common/msg" />
+                    <div class="List clear">
+                        <div class="show_www">
+                            <div class="size listShow" style="position: relative">榜单展示管理</div>
+                            <div>
+                                <div class="size listShow">拖动以更改当前APP展示顺序</div>
+                                <div class="checkSort">
+                                    <table class="sort_tit">
+                                        <tr><th class="num">序号</th><th class="type">类别</th></tr>
+                                    </table>
+                                    <ul class="table_listShow">
+                                        <foreach name="onlineList" item="v" key="k">
+                                            <li  id="{$v.id}" class="newsort" newsort="{$v.score}">
+                                                <span class="num">{$k+1}</span>
+                                                <span class="type">{$v.desc}</span>
+                                            </li>
+                                        </foreach>
+                                    </ul>
+                                </div>
+                                <script type="text/javascript">
+                                    jQuery(function(){
+                                        var newsort = '';
+                                        $(".newsort").each(function(){
+                                            newsort += $(this).attr('newsort')+',';
+                                        });
+                                        var newscore = '';
+                                        $('ul').sortable({
+                                            placeholder:'',
+                                            helper:function(e,ele){
+                                                return $(ele).clone();
+                                            },
+                                            update:function(e,ui){
+                                                newscore = $(this).sortable(
+                                                        'serialize',{
+                                                            key:'aa',
+                                                            expression: /(.*)/
+                                                        }
+                                                );
+                                                var reg = new RegExp('&','g');
+                                                newscore = newscore.replace(reg,'');
+                                                var record = $(".checkSort").html();
+                                                $("#newsort").val(newsort);
+                                                $("#newscore").val(newscore);
+                                                $("#record").val(record);
+
+                                                $(".save").unbind('click').bind('click',function(){
+                                                    if(newsort && newscore && record){
+                                                        $('#form_btn').submit();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="btn_saveSort">
+                                <form id="form_btn" action='{:U("List/sort")}' method="post">
+                                    <input type="hidden" name="newsort" id="newsort">
+                                    <input type="hidden" name="newscore" id="newscore">
+                                    <input type="hidden" name="record" id="record">
+                                </form>
+                                {$save}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Common/footer" />
+</body>
+</html>

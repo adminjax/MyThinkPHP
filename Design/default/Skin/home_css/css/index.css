@@ -1,0 +1,183 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: SimHei;
+}
+body{
+    background: #dbdbde;
+    width: 6.4rem;
+}
+
+
+.banner{
+    height: 2.78rem;
+    width: 6.4rem;
+}
+/*轮播*/
+.slide{
+    height: 2.78rem;
+    width: 6.4rem;
+    overflow: hidden;
+    margin: auto;
+    position: relative;
+}
+.slide-ul{
+    position: relative;
+    left: 0;
+    transition: all 0.6s ease;
+}
+.slide-ul li{
+    float: left;
+    list-style: none;
+}
+.slide-ul li img{
+    width: 100%;
+    height: 100%;
+}
+
+/*====以上建议不修改*/
+
+
+/*下面为按钮样式等 自己改*/
+
+
+/*=========图片list*/
+.slide-list-ul{
+    margin: auto;
+    position: absolute;
+    bottom: 0.2rem;
+    left: 0;
+    right: 0;
+    z-index: 3;
+}
+.banner-bottom-bg{
+    width: 6.4rem;
+    height: 0.4rem;
+    background: rgba(0,0,0,0.5);
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+}
+.slide-list-ul li{
+    height: 0.2rem;
+    width: 0.2rem;
+    border-radius: 10000px;
+    overflow: hidden;
+    text-align: center;
+    float: left;
+    list-style: none;
+    cursor: pointer;
+    background: #404040;
+    margin: 0 0.1rem;
+    transition: all 0.5s ease;
+}
+.bg-white{
+    transition: all 0.5s ease;
+    background: #ffffff !important;
+}
+
+
+
+
+
+
+
+
+.main{
+    width: 6.4rem;
+}
+/*积分数和积分详情*/
+.integral-intro{
+    font-size: 0.24rem;
+    height: 0.99rem;
+    width: 100%;
+}
+.integral-num,
+.integral-details{
+    height: 0.99rem;
+    width: 50%;
+    float: left;
+    vertical-align: middle;
+    line-height: 0.99rem;
+    text-align: center;
+}
+.integral-num-span{
+    color: #ff5353;
+}
+.integral-num img,
+.integral-details img{
+    width: 0.26rem;
+    height: 0.26rem;
+    position: relative;
+    top: 0.04rem;
+}
+
+
+/*积分兑换*/
+.integral-convert{
+    width: 6.1rem;
+    margin: auto;
+    background: #ffffff;
+    border-radius: 5px;
+}
+.integral-convert-title{
+    font-size: 0.28rem;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    text-align: center;
+}
+.integral-convert-title img{
+    width: 0.36rem;
+    height: 0.36rem;
+    position: relative;
+    top: 0.08rem;
+}
+
+.goods{
+    display: inline-block;
+    width: 2.78rem;
+    height: 2.8rem;
+    margin-bottom: 0.16rem;
+    background: url("../../images/index/bg.png")no-repeat;
+    background-size: 100% 100%;
+}
+.goods-img{
+    width: 2.45rem;
+    height: 1.6rem;
+    margin: auto;
+    margin-top: 0.2rem;
+}
+.goods img{
+    width: 2.45rem;
+    height: 1.6rem;
+}
+.goods-p1{
+    font-size: 0.24rem;
+    width: 2.45rem;
+    margin: auto;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    overflow: hidden;
+}
+.goods-p2{
+    font-size: 0.20rem;
+    width: 2.45rem;
+    margin: auto;
+    margin-top: 0.06rem;
+    color: #ff5353;
+}
+.integral-convert-goods div:nth-child(2n){
+   margin-left: 0.22rem;
+}
+.integral-convert-goods div:nth-child(2n-1){
+    margin-left: 0.17rem;
+}
+a{
+    text-decoration: none;
+    color: #000;
+}
+#loading{
+    display: none;
+    font-size: 0.20rem;
+    text-align: center;
+}

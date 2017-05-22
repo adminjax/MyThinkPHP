@@ -1,0 +1,115 @@
+请求url  http://metmastersandbox.metworld.com.cn:8093/met/ticket  post json传输
+
+1、票务列表
+请求参数
+{
+	type 1 
+}
+返回值{
+	array {
+		Json{
+			sid 票务sid
+			name 票名称
+			style 票样式
+			desc 票描述
+			rmb 购票价格
+			startTime 使用时间
+			endTime 结束时间 -1表示永久有效
+			count 使用次数 -1表示无限次数
+			score 权重
+		}
+	
+	}
+}
+
+单张票
+请求参数
+{
+	type 1 
+	id
+}
+返回值
+{
+	...
+}
+
+
+2、新增票
+请求参数
+{
+	type 2
+	name 票名称
+	style 票样式
+	desc 票描述
+	rmb 购票价格
+	startTime 使用时间
+	endTime 结束时间 -1表示永久有效
+	count 使用次数 -1表示无限次数
+	score 权重
+}
+返回值{
+	sid 票务sid
+	name 票名称
+	style 票样式
+	desc 票描述
+	rmb 购票价格
+	startTime 使用时间
+	endTime 结束时间 -1表示永久有效
+	count 使用次数 -1表示无限次数
+	score 权重
+}
+
+
+3、删除票
+请求参数
+{
+	type 3
+	sid 票sid
+}
+返回值{
+	result true
+}
+
+4、编辑票
+请求参数
+{
+	type 4
+	sid 票sid
+	name 票名称
+	style 票样式
+	desc 票描述
+	rmb 购票价格
+	startTime 使用时间
+	endTime 结束时间 -1表示永久有效
+	count 使用次数 -1表示无限次数
+	score 权重
+}
+返回值{
+	sid 票务sid
+	name 票名称
+	style 票样式
+	desc 票描述
+	rmb 购票价格
+	startTime 使用时间
+	endTime 结束时间 -1表示永久有效
+	count 使用次数 -1表示无限次数
+	score 权重
+}
+
+5、使用票
+请求参数
+{
+	type 5
+	sid 票sid
+	name 票名称
+	style 票样式
+	desc 票描述
+	rmb 购票价格
+	startTime 使用时间
+	endTime 结束时间 -1表示永久有效
+	count 使用次数 -1表示无限次数
+	score 权重
+}
+返回值{
+	error 错误提示-----票未通过，有此提示
+}

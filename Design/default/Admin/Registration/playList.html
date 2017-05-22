@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打榜说明</title>
+    <include file="Common/head" />
+</head>
+<body>
+<div id="playList">
+    <div class="container">
+        <div class="main">
+            <include file="Common/header" />
+
+            <div class="content clear">
+                <div class="left">
+
+                    <include file="Common/left" />
+
+                </div>
+                <div class="right">
+                    <div class="playList clear">
+                        <div class="play_list_explain clear">
+                            <div class="play_list_content">
+                                <div class="explain">
+                                    <span class="size">打榜说明</span>
+                                </div>
+                                <include file="Common/msg" />
+                                <form id="play_instr" action="{:U('Registration/playInstr')}" method="post" class="clear">
+                                    <input name="p_instr" type="hidden" value="<?php echo $p_instr ?>"/>
+                                    <script id="container" type="text/html">
+                                        <?php echo $play_info['content'] ?>
+                                    </script>
+                                    <div class="sign_up_time">
+                                        <div class="size">报名时间</div>
+                                        <div class="sign_up_time1">
+                                            <div class="size">开始时间: <input placeholder="请输入日期" name="start" class="startTime" value="<?php echo $play_info['start_time']?date('Y-m-d H:i:s',$play_info['start_time']):'' ?>" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"></div>
+
+                                            <div class="size">结束时间: <input placeholder="请输入日期" name="end" class="endTime" value="<?php echo $play_info['end_time']?date('Y-m-d H:i:s',$play_info['end_time']):'' ?>" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"></div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="btn_info_audit">
+                                    {$save}
+                                </div>
+                            </div>
+
+
+                            <script type="text/javascript">
+                                $(document).ready(function(){
+                                    var ue = UE.getEditor('container', {
+                                        toolbars:  [
+                                            ['fullscreen', 'source', '|', 'undo', 'redo',
+                                                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript',  '|', 'forecolor', 'insertorderedlist', 'insertunorderedlist', '|',
+                                                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                                                'customstyle', 'fontsize', '|',
+                                                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                                                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify'
+                                            ]
+                                        ],
+                                        initialFrameHeight: 300,
+                                        initialFrameWidth: 300,
+                                        scaleEnabled:true
+                                    });
+                                    $(".save").click(function(){
+                                        var text = ue.getContent();
+                                        if(!text){
+                                            alert('请输入打榜说明内容!');
+                                            return false;
+                                        }
+                                        $("#play_instr").submit();
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Common/footer" />
+</body>
+</html>

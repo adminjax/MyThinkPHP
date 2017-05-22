@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>后台用户管理</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="acl">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="admin-user">
+							<div class="data-table">
+								<table width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+									<tbody>
+										<tr id="headerRow">
+											<th class="id">用户ID</th>
+											<th class="name">姓名</th>
+											<th class="gander">性别</th>
+											<th class="job">职位</th>
+											<th class="phone">联系电话</th>
+											<th class="username">登录名</th>
+											<th class="password">密码</th>
+											<th class="action"></th>
+										</tr>
+
+										<?php foreach($userList as $key => $value): ?>
+										<tr class="u_<?php echo $value['u_id']; ?>">
+											<td class="id"><input type="text" name="uid" value="<?php echo $value['u_id']; ?>" disabled="disabled"/></td>
+											<td class="name"><input type="text" name="name" value="<?php echo $value['realname']; ?>" readonly="true"/></td>
+											<td class="gander"><input type="text" name="gander" value="<?php if($value['gender'] == 1){echo '男'; }elseif($value['gender'] == 2){echo '女'; }?>" readonly="true"/></td>
+											<td class="job"><input type="text" name="job" value="<?php echo $value['position']; ?>" readonly="true"/></td>
+											<td class="phone"><input type="text" name="phone" value="<?php echo $value['phone']; ?>" readonly="true"/></td>
+											<td class="username"><input type="text" name="username" value="<?php echo $value['username']; ?>" readonly="true"/></td>
+											<td class="password"><input type="password" name="password" value="" readonly="true" placeholder="***********"></td>
+											<td class="action">
+												<?php echo $edit; ?>
+												<?php echo $delete; ?>
+												<?php echo $setAcl; ?>
+											</td>
+										</tr>
+										<?php endforeach; ?>
+
+										<tr class="template">
+											<td class="id"><input type="text" name="uid" value="" readonly="true" /></td>
+											<td class="name"><input type="text" name="name" value=""></td>
+											<td class="gander"><input type="text" name="gander" value=""></td>
+											<td class="job"><input type="text" name="job" value=""></td>
+											<td class="phone"><input type="text" name="phone" value=""></td>
+											<td class="username"><input type="text" name="username" value=""></td>
+											<td class="password"><input type="password" name="password" value=""></td>
+											<td class="action">
+												<button class="edit save"><span>保存</span></button>
+												<button class="delete"><span>删除</span></button>
+												<button class="setAcl"><span>设置权限</span></button>
+											</td>		
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="badoo">{$user_page}</div>
+							<script type="text/javascript">
+								//编辑用户信息
+								Action.aclUser(".action", "{$Think.config.ADMIN_URL}Acl/");
+							</script>
+
+							<div class="add-admin-user">
+								<?php echo $add; ?>
+							</div>
+							<script type="text/javascript">
+								Action.userAdd(".add", "{$Think.config.ADMIN_URL}Acl/");
+							</script>
+
+							<!-- jquery1.6 事件委托 -->
+							<script type="text/javascript" src="{$Think.config.PUBLIC_LIB}js/jquery.1.6.js"></script>
+							<script type="text/javascript">
+								//编辑用户信息
+								jQuery(document).ready(function(){
+									jQuery(".save").live("click", function(){
+										var uid = jQuery(this).parent().parent().find("[name='uid']").val();
+										var realname = jQuery(this).parent().parent().find("[name='name']").val();
+										var gender = jQuery(this).parent().parent().find("[name='gander']").val();
+										var position = jQuery(this).parent().parent().find("[name='job']").val();
+										var phone = jQuery(this).parent().parent().find("[name='phone']").val();
+										var username = jQuery(this).parent().parent().find("[name='username']").val();
+										var password = jQuery(this).parent().parent().find("[name='password']").val();
+										if(realname =='' || gender =='' || phone =='' || username == '' || password ==''){
+											alert("请填写完整的信息！");
+											return false;
+										}
+
+
+										jQuery.ajax({
+											url: '{$Think.config.ADMIN_URL}Acl/addUser',
+											type:'POST',
+											data:'uid='+uid+'&realname='+realname+'&gender='+gender+'&position='+position+'&phone='+phone+'&username='+username+'&password='+password,
+											success:function(data){
+												console.log(data);
+												if(data){
+													window.location.reload();
+												}
+											}
+										});
+										jQuery(this).parent().parent().find('input').each(function(){
+											jQuery(this).attr('readonly','true');
+											jQuery(this).removeClass('edit');
+										});
+										jQuery(this).removeClass('save');
+										jQuery(this).empty();
+										jQuery(this).html('<span>编辑</span>');
+									});
+								});
+
+								jQuery("input").live("blur",function(){
+									var value = jQuery(this).val();
+									var name = jQuery(this).attr('name');
+									if(name == 'name'){
+										if(!/^[\u4E00-\u9FA50-9a-zA-Z]{1,12}$/.test(value)){
+											alert('请填写汉字，字母，数字,12个字内！');
+											jQuery(this).val('');
+										}
+									}
+									if(name == 'gander'){
+										if(escape(value) != "%u7537" && escape(value) != "%u5973"){
+											alert('请填写"男"或"女"！');
+											jQuery(this).val('');
+										}
+									}
+									if(name == 'job'){
+										if(!/^[\u4E00-\u9FA50-9a-zA-Z，、:]{1,64}$/.test(value)){
+											alert('请填写汉字，字母，数字," , "," 、",32个字内！');
+											jQuery(this).val('');
+										}
+									}
+									if(name == 'phone'){
+										if(!/^[0-9]{11}$/.test(value)){
+											alert('请填写正确的手机号！');
+											jQuery(this).val('');
+										}
+									}
+									if(name == 'username'){
+										if(!/^[0-9a-zA-Z]{6,12}$/.test(value)){
+											alert('请填写字母，数字,6~12个字内！');
+											jQuery(this).val('');
+										}
+									}
+								});
+							</script>
+
+						</div>
+					</div>
+				</div>
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

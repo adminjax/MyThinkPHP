@@ -1,0 +1,79 @@
+<foreach name="await_audit" item="v" key="k">
+    <div class="ranking_pre" makerId="{$v.makerId}">
+
+        <div class="preview_ranking ranking size">第<span><input class="rankNum" type="text" value="{$v.index}" style="width: 22px;text-align: center;"/></span>名</div>
+
+        <!--<div class="preview_name">
+            <div class="maker_team size" style="line-height: 111px;text-align: center;">
+                {$v.maker_name}
+            </div>
+        </div>-->
+
+        <div class="preview_img">
+            <div class="preview_tmp" style="width:120px; height:70px;">
+                <img class="img preview" src="{$v.maker_icon}"/>
+            </div>
+            <span class="makerName size">{$v.maker_name}</span>
+        </div>
+
+        <div class="preview_con">
+            <textarea class="text_list size" placeholder="简述" disabled>{$v.maker_desc}</textarea>
+        </div>
+
+        <div class="preview_tag" style="color: red;line-height: 111px;font-size: 11px;">
+            <if condition="$v['is_active'] eq 4">
+                增加排名,待审核
+                <elseif condition="$v['is_active'] eq 5"/>
+                删除排名,待审核
+                <else/>
+            </if>
+        </div>
+    </div>
+</foreach>
+
+<foreach name="onlineListListInfo" item="v" key="k">
+    <div class="ranking_pre" makerId="{$v.makerId}">
+
+        <div class="preview_ranking ranking size">第<span><input class="rankNum" type="text" value="{$v.index}" style="width: 22px;text-align: center;"/></span>名</div>
+
+        <!--<if condition="$makerTeamList">
+            <div class="preview_name">
+                <select class="maker_team">
+                    <foreach name="makerTeamList" item="val">
+                        <if condition="$val['id'] eq $v['makerId']">
+                            <option value="{$val.id}" selected>{$val.name}</option>
+                            <else/>
+                            <option value="{$val.id}">{$val.name}</option>
+                        </if>
+                    </foreach>
+                </select>
+            </div>
+        </if>-->
+
+
+        <div class="preview_img">
+            <div class="preview_tmp" style="width:120px; height:70px;">
+                <img class="img preview" src="{$v.makerIcon}"/>
+            </div>
+            <span class="makerName size">{$v.makerName}</span>
+        </div>
+
+       <!-- <div class="preview_video">
+            <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                <video class="video preview" src="" controls preload></video>
+            </div>
+            <input class="file_upload" type="hidden" value=""/>
+            <input type="hidden" class="select" value="" name="video[1]"/>
+            <a href="javascript:void(0)" class="btn_tmp btnss button avater" id="btnss{$k}"><span>选择视频</span></a>
+        </div>-->
+
+        <div class="preview_con">
+            <textarea class="text_list size" placeholder="简述" disabled>{$v.makerDesc}</textarea>
+        </div>
+
+        <div class="preview_tag">
+            <button type="button" class="btn_delRank">删除</button>
+        </div>
+
+    </div>
+</foreach>

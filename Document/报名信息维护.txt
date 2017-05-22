@@ -1,0 +1,93 @@
+请求url  http://metmastersandbox.metworld.com.cn:8093/met/registTeam  post json传输
+
+1、队伍列表
+请求参数
+{
+	type 1 
+	page 当前页数 1开始
+	num 每页显示数量
+	startTime
+	endTime
+}
+返回值{
+	total 总数
+	array------>JSONArray{
+		Json{
+			teamName 队伍名称
+			teamTag 挑战榜单
+			teamRegistTime 报名时间
+			teamDeclaration 宣言
+			teamTime 创建时间
+			teamPhone 联系电话
+			url------->JSONArray{
+				 作品地址
+			}
+			members------>JSONArray{
+				 Json{
+				 	memberName 队员名称
+				 	memberAge	队员
+				 	memberSex 	性别
+				 	memberIdCard 身份证
+				 	memberStageName 艺名
+				 	memberSign 标签
+				 }
+			
+			}
+		}
+	
+	}
+}
+
+
+2、队员标签列表
+请求参数
+{
+	type 2
+}
+返回值{
+	array------>JSONArray{
+		Json{
+			id 标签id
+			desc 描述
+			score 权重
+		}
+	
+	}
+}
+
+3、增加标签
+ 请求参数
+ {
+ 	type 3
+ 	desc 描述
+ 	score 权重
+ }
+返回值{
+	id 标签id
+	desc 描述
+	score 权重
+}
+
+4、更新标签
+请求参数
+{
+	type 4
+	id 标签id
+	desc 描述
+	score 权重  
+}
+返回值{
+	id 标签id
+	desc 描述
+	score 权重
+}
+
+5、删除标签
+请求参数
+{
+	type 5
+	id 标签id
+}
+返回值{
+	id 标签id
+}

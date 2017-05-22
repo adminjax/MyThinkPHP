@@ -1,0 +1,68 @@
+<br/>
+<div class="size sel_listType">榜单类型</div>
+<div class="size sel_listType">{$listType}</div>
+
+<div class="preview_list_audit">
+    <div class="size">榜单内容</div>
+    <div class="listInfo_bottom line" style="overflow: auto;height: 489px;">
+        <foreach name="onlineListListInfo" item="v" key="k">
+            <if condition="$v['meggg'] eq 1">
+                <div class="ranking_pre" makerId="{$v.makerId}">
+                    <div class="preview_ranking ranking size">第<span><input class="rankNum" type="text" value="{$v.index}" style="width: 22px;text-align: center;"/></span>名</div>
+
+
+                    <div class="preview_img">
+                        <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                            <img class="img preview" src="{$v.makerIcon}"/>
+                        </div>
+                        <span class="makerName size">{$v.makerName}</span>
+                    </div>
+
+                    <div class="preview_con">
+                        <textarea class="text_list size" placeholder="简述" disabled>{$v.makerDesc}</textarea>
+                    </div>
+
+                    <div class="preview_meg size">
+                        <span>添加的排名</span>
+                    </div>
+                </div>
+                <elseif condition="$v['meggg'] eq 2"/>
+                <div class="ranking_pre" makerId="{$v.makerId}">
+                    <div class="preview_ranking ranking size">第<span><input class="rankNum" type="text" value="{$v.index}" style="width: 22px;text-align: center;"/></span>名</div>
+
+
+                    <div class="preview_img">
+                        <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                            <img class="img preview" src="{$v.makerIcon}"/>
+                        </div>
+                        <span class="makerName size">{$v.makerName}</span>
+                    </div>
+
+                    <div class="preview_con">
+                        <textarea class="text_list size" placeholder="简述" disabled>{$v.makerDesc}</textarea>
+                    </div>
+
+                    <div class="preview_meg size">
+                        <span>删除的排名</span>
+                    </div>
+                </div>
+                <else/>
+                <div class="ranking_pre" makerId="{$v.makerId}">
+                    <div class="preview_ranking ranking size">第<span><input class="rankNum" type="text" value="{$v.index}" style="width: 22px;text-align: center;"/></span>名</div>
+
+
+                    <div class="preview_img">
+                        <div class="preview_tmp" style="border: 1px solid #4F88BB;width:120px; height:70px;">
+                            <img class="img preview" src="{$v.makerIcon}"/>
+                        </div>
+                        <span class="makerName size">{$v.makerName}</span>
+                    </div>
+
+                    <div class="preview_con">
+                        <textarea class="text_list size" placeholder="简述" disabled>{$v.makerDesc}</textarea>
+                    </div>
+                </div>
+            </if>
+        </foreach>
+    </div>
+</div>

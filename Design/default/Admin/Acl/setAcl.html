@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>后台用户权限设置</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="acl">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="setacl admin-user">
+							<form class="acl-form" method="post" action="{:U('Acl/save', array('uid'=>$list[0]['u_id']))}">
+							<div class="data-table">
+								<table width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+									<tbody>
+										<tr id="headerRow">
+											<th class="id">用户ID</th>
+											<th class="name">姓名</th>
+											<th class="gander">性别</th>
+											<th class="job">职位</th>
+											<th class="phone">联系电话</th>
+											<th class="username">登录名</th>
+											<th class="password">密码</th>
+											<!--<th class="action"></th>-->
+										</tr>
+
+										<?php foreach($list as $key => $value): ?>
+										<tr>
+											<td class="id"><input type="text" name="id" value="<?php echo $value['u_id']; ?>" readonly="true" /></td>
+											<td class="name"><input type="text" name="name" value="<?php echo $value['realname']; ?>" readonly="true" /></td>
+											<td class="gander"><input type="text" name="gander" value="<?php echo $value['gender']; ?>" readonly="true" /></td>
+											<td class="job"><input type="text" name="job" value="<?php echo $value['position']; ?>" readonly="true" /></td>
+											<td class="phone"><input type="text" name="phone" value="<?php echo $value['phone']; ?>" readonly="true" /></td>
+											<td class="username"><input type="text" name="username" value="<?php echo $value['username']; ?>" readonly="true" /></td>
+											<td class="password"><input type="password" name="password" value="" readonly="true" placeholder="***************" /></td>
+											<!--
+											<td class="action">
+												<?php echo $edit; ?>
+												<?php echo $delete;?>
+											</td>
+											-->
+										</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="acl-list">
+								<div class="selectacl">
+									<label>权限设置</label>
+									<select name="acl" id="acl">
+										<option>请选择</option>
+										<option value="0">自定义</option>
+										<option value="all">All</option>
+									</select>
+								</div>
+								<script type="text/javascript">
+									jQuery('#acl').change(function(){
+										var val = jQuery(this).find("option:selected").val();
+										if(val == '0'){
+											jQuery('.acl').css('display','block');
+										}else if(val == 'all'){
+											jQuery('.acl').css('display','none');
+										}
+									});
+								</script>
+								<ul class="acl" style="display: none;">
+								<?php foreach($menu as $k => $v): ?>
+									<li class="li_<?php echo $k?>">
+										<span class="lable open"></span><input type="checkbox" name="checkbox[<?php echo $k; ?>]" value="<?php echo $k; ?>" /><a href="javascript:void(0)" class="onclick"><span><?php echo $v['name']; ?></span></a>
+										<?php if($v['low']): ?>
+											<ul class="controller acl-1">
+												<?php foreach($v['low'] as $ke => $val): ?>
+													<li class="li_<?php echo $ke; ?>">
+														<span class="lable open"></span><input type="checkbox" name="checkbox[<?php echo $ke; ?>]" value="<?php echo $ke; ?>" /><a href="javascript:void(0)"><span><?php echo $val['name']; ?></span></a>
+														<ul class="method acl-2">
+														<?php foreach($val['low'] as $key => $value): ?>
+															<li class="li_<?php echo $key; ?>">
+																<span class="lable open"></span><input type="checkbox" name="checkbox[<?php echo $key; ?>]" value="<?php echo $key; ?>" /><a href="javascript:void(0)"><span><?php echo $value['name'] ; ?></span></a>
+															</li>
+														<?php endforeach; ?>
+														</ul>
+													</li>
+												<?php endforeach; ?>
+											</ul>
+										<?php endif; ?>
+									</li>			
+								<?php endforeach; ?>
+								</ul>
+							</div>
+
+							
+							<?php echo $save; ?>
+							
+
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<script type="text/javascript">
+					jQuery('.save').live('click', function(){
+						jQuery('.acl-form').submit();
+					})
+					//编辑用户信息
+					//Action.acl(".action", "{$Think.config.ADMIN_URL}Acl/");
+					Selection.open();
+					Selection.select();
+					$(".save").click(function(){
+						$(".acl-form").submit();
+					});
+				</script>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

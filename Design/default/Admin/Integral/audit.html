@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>审核</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="audit">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="goodsedit-box3 audit clear">
+							<div class="box-1">
+								<div class="title"><span>待审核事项</span></div>
+
+								<div class="sub-title"><span>排版审核</span></div>
+								<div class="data-table">
+									<table url="{:U('Integral/getSortInfo')}">
+										<tbody>
+											<tr id="headerRow">
+												<th class="action">待审核操作</th>
+												<!--<th class="page">来源页面</th>-->
+												<th class="time">提交时间</th>
+												<th class="author">提交人</th>
+												<th class="desc">提交说明</th>
+												<th class="selelct">选择<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+											</tr>
+											<foreach name="goods_sort_info" item="v">
+												<tr class="goods_sort click">
+													<th class="goods_s" sort_id="{$v.id}"><if condition="$v['is_active'] eq 0">商品排序<else/></if></th>
+													<!--<th class="page">A</th>-->
+													<th class="time">{$v.created|date='Y-m-d H:i:s',###}</th>
+													<th class="author">{$v.username}</th>
+													<th class="desc"></th>
+													<th class="selelct"><input type="checkbox" name="selected" value="1" sort_id="{$v.id}"></th>
+												</tr>
+											</foreach>
+										</tbody>
+									</table>
+								</div>
+								<div class="badoo">{$sort_num}</div>
+								<div class="buttom" url="{:U('Integral/setting')}">
+									{$refuse_p}
+									{$pass}
+								</div>
+
+
+								<div class="sub-title"><span>商品审核</span></div>
+								<div class="data-table">
+									<table url="{:U('Integral/goodsAudit')}">
+										<tbody>
+											<tr id="goodsHeaderRow">
+												<th class="action">待审核操作</th>
+												<!--<th class="page">来源页面</th>-->
+												<th class="time">提交时间</th>
+												<th class="author">提交人</th>
+												<th class="desc">提交说明</th>
+												<th class="selelct">选择<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+											</tr>
+											<foreach name="goods_info" item="v">
+												<tr class="title click">
+													<th class="da" g_id="{$v.id}">
+														<?php
+														switch($v['is_active']){
+															case 3 : echo '添加商品';break;
+															case 4 : echo '修改商品';break;
+															case 5 : echo '删除商品';break;
+															default : break;
+														}
+
+														?>
+													</th>
+													<!--<th class="page">A</th>-->
+													<th class="time">{$v.created|date='Y-m-d H:i:s',###}</th>
+													<th class="author">{$v.username}</th>
+													<th class="desc"></th>
+													<th class="selelct"><input type="checkbox" name="selected" value="1" g_id="{$v.id}" active="{$v.is_active}"></th>
+												</tr>
+											</foreach>
+										</tbody>
+									</table>
+								</div>
+								<div class="badoo">{$goods_num}</div>
+								<script type="text/javascript">
+									$(document).ready(function()
+									{
+										//获取商品信息
+										$('.title').unbind().bind('click',getGoodsInfo);
+										function getGoodsInfo()
+										{
+											var thisElement = $(this).find('.da');
+											var g_id = thisElement.attr('g_id');
+											if(g_id)
+											{
+												$.ajax({
+													url:'{$Think.config.ADMIN_URL}Integral/getInfo',
+													type:'post',
+													data:{g_id:g_id},
+													success:function(response){
+														$.each(response,function(k,v){
+															$(".pre-title-img").attr('src', v.img);
+															$(".p_title").text(v.title);
+															$(".need-inte>span").text(v.integral);
+															$(".body>.desc").html(v.content);
+														});
+													}
+												});
+											}
+										}
+										check_all.check_all('.all_checkbox');
+									});
+								</script>
+								<div class="buttom">
+									{$refuse}
+									{$adopt}
+								</div>
+							</div>
+							
+							<div class="box-2">
+								<div class="title"><span>效果预览</span></div>
+								<div class="sub-title"><span>标题预览</span></div>
+								<div class="slider clear">
+									<ul>
+
+									</ul>
+								</div>
+
+								<div class="sub-title"><span>内容预览</span></div>
+								<div class="body" style="border: 1px solid #5b9bd5;">
+									<a href=""><img src="" width="100%" height="200"  class="pre-title-img"></a>
+									<div class="middle">
+								    	<div class="title">【积分兑换】<span class="p_title"></span></div>
+								    	<div class="show-inte">
+								    		<span class="need-inte">需要积分:<span></span></span>
+								    	</div>
+								    </div>
+								    <div class="desc">
+
+								    </div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

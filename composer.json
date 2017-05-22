@@ -1,0 +1,18 @@
+{
+    "name": "MET后台管理系统",
+    "description": "后台管理系统",
+    "type": "Manage System",
+    "keywords": ["Admin Manage","thinkphp"],
+    "homepage": "http://127.0.0.1/",
+    "license": "Apache2",
+    "authors": [
+        {
+            "name": "成都中哲光宇互动科技有限公司",
+            "email": "feedback@bertadata.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "minimum-stability": "dev"
+}

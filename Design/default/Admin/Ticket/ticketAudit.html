@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>票务审核</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="ticket">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="ticket-audit clear">
+							<div class="left">
+								<div class="header"><span>待审核事项</span></div>
+								
+								<div class="data-table">
+									<table width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+										<tbody>
+											<tr id="headerRow">
+												<th class="project">项目</th>
+												<th class="time">提交时间</th>
+												<th class="author">提交人</th>
+												<th class="desc">标题</th>
+												<th class="action">操作<input type="checkbox" name="all_checkbox" class="all_checkbox" /></th>
+											</tr>
+											<?php //var_dump($data); ?>
+											<?php foreach($data as $v): ?>
+												<tr class="ticket click">
+													<td class="project"><span>
+														<?php
+														switch ($v['is_active']) {
+															case '1':
+																echo '添加票务';
+																break;
+															case '2':
+																echo '修改票务';
+																break;
+															case '3':
+																echo '删除票务';
+																break;
+															default:
+																echo '';
+																break;
+														}
+
+													?>
+													</span></td>
+													<td class="time"><span><?php echo $v['created']?date('Y-m-d H:i:s', $v['created']):date('Y-m-d H:i:s', $v['modified']); ?></span></td>
+													<td class="author"><span><?php echo $v['creater']; ?></span></td>
+													<td class="desc"><span><?php echo $v['title']; ?></span></td>
+													<td class="action">
+														<input type="checkbox" name="selected" class="tid" value="<?php echo $v['t_id'];?>" dataType="<?php echo $v['is_active']; ?>" />
+													</td>
+												</tr>
+											<?php endforeach; ?>
+										</tbody>
+									</table>
+
+									<script type="text/javascript">
+										jQuery('.ticket').click(function(){
+											var id = jQuery(this).find('.tid').val();
+											var type = jQuery(this).find('.tid').attr('dataType');
+											ids = id+':'+type;	
+											
+											if(parseInt(id) > 0){
+												jQuery.ajax({
+													type:'GET',
+													url:'{:U("Ticket/getTicketById")}',
+													data:'id='+ids,
+													success:function(data){
+														console.log(data);
+														var start = DateTime.UnixToDate(data.starttime);
+														var end = DateTime.UnixToDate(data.exp_date);
+														jQuery('.ticketPreview .image').attr('src', data.img);
+														jQuery('.ticketPreview .beginTime').val(start);
+														jQuery('.ticketPreview .endTime').val(end);
+														jQuery('.ticketPreview .price').val(data.price);
+														jQuery('.ticketPreview .ticket-title').val(data.title);
+														jQuery('.ticketPreview .ticket-content').text(data.content);
+														jQuery('.ticketPreview .count').val(data.count);
+														jQuery('.ticketPreview .score').val(data.score);
+													}
+												});
+											}
+										});
+										check_all.check_all('.all_checkbox');
+									</script>
+								</div>
+								<div class="badoo">{$tic_page}</div>
+								<div class="bottom">
+									{$reject}
+									{$adopt}
+								</div>
+								<script type="text/javascript">
+									jQuery('.reject').click(function(){
+										var ids = '';
+										jQuery(".data-table tr.click input[type=checkbox]").each(function(){
+											if(this.checked){
+												var id = jQuery(this).val();
+												var type = jQuery(this).attr('dataType');
+												ids = id+':'+type+','+ids;	
+											}
+										});  
+
+										jQuery.ajax({
+											type : 'GET',
+											url : '{:U("Ticket/refuse")}',
+											data : 'id='+ids,
+											success : function(data){
+												 console.log(data);
+												if(data == 0){
+													alert('操作成功！');
+													window.location.reload()
+												}else{
+													alert('操作失败！');
+												}
+											}
+										});
+									});
+
+									//通过
+									jQuery('.adopts').click(function(){
+										var ids = '';
+										jQuery(".data-table input[type=checkbox]").each(function(){
+											if(this.checked){
+												var id = jQuery(this).val();
+												var type = jQuery(this).attr('dataType');
+												ids = id+':'+type+','+ids;	
+											}
+										});  
+
+										jQuery.ajax({
+											type : 'GET',
+											url : '{:U("Ticket/adopt")}',
+											data : 'id='+ids,
+											success : function(data){
+												 console.log(data);
+												if(data == 0){
+													alert('操作成功！');
+													window.location.reload()
+												}else{
+													alert('操作失败！');
+												}
+											}
+										});
+									});
+								</script>
+
+							</div>
+							<div class="right">
+								<div class="header"><span>内容预览</span></div>
+								<div class="ticketPreview ticket-preview">
+									<div class="img">
+										<img src="" class="image" />
+									</div>
+									<div class="min-header"><span>有效期设置</span></div>
+									<div class="begin">
+										<label>开始时间</label><input placeholder="选择起始时间" name="begin" class="beginTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" disabled="true">
+									</div>
+									<div class="end">
+										<label>结束时间</label><input placeholder="选择结束时间" name="end" class="endTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" disabled="true">
+									</div>
+									<div class="min-header"><span>价格</span></div>
+									<input type="text" name="price"  class="price" />
+									<div class="min-header"><span>标题</span></div>
+									<input class="ticket-title" name="ticket-title" value="" />
+									<div class="min-header"><span>包含内容</span></div>
+									<textarea class="ticket-content" name="ticket-content"></textarea>
+									<div class="min-header"><span>重复使用次数</span></div>
+									<input type="text" name="count" value="" class="count">
+									<div class="min-header"><span>排序</span></div>
+									<input type="text" name="score" value="" class="score">
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

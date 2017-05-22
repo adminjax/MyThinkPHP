@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>公告管理</title>
+
+	<include file="Common/head" />
+
+</head>
+<body>
+	<div id="notice">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="notice-box3 clear">
+							<div class="box-1">
+								<div class="title"><span>XX界面</span></div>
+								<div class="slider clear">
+									<div class="img sort-1">公告1</div>
+									<div class="img sort-2">公告2</div>
+									<div class="img sort-3">公告1</div>
+									<div class="img sort-4">公告1</div>
+									<div class="img sort-5"></div>
+									<div class="img sort-6"></div>
+									<div class="img sort-7"></div>
+									<div class="img sort-8"></div>
+									<div class="img sort-9">公告1</div>
+								</div>
+								<div class="buttom">
+									<?php echo $add; ?>
+									<?php echo $delete; ?>
+								</div>
+								<script type="text/javascript">
+									Selected.clicks('.slider');
+								</script>
+							</div>
+							<div class="box-2">
+								<div class="title"><span>编辑</span></div>
+								<div class="addslider">
+									<form class="notice-form" action="{:U('Info/setNotice')}" method="post" enctype="multipart/form-data">
+										<div class="uploadify-box">
+											<div class="formControls col-2">
+
+												<img id="img" src="" border="0"  width="130" height="130"/>
+												<input id="file_upload" type="hidden" value="" name="imgl"/>
+
+												<a href="javascript:void(0)" class="btnss button avater" id="btnss"><span>选择图片</span></a>
+
+												<!--<img id="img" src="" width="130" height="130" border="0" />
+								    			<input id="file_upload" name="img" type="file" multiple="true" value="" />
+								  				<input type="hidden" class="select" value="" id="imgl"  name="imgl"/>-->
+											</div>
+											<script type="text/javascript">
+											    //图片上传
+											    jQuery(function() {
+
+													//图片上传
+													var uploader = new plupload.Uploader({
+														//创建实例的构造方法
+														runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+														browse_button: 'btnss', // 上传按钮
+														url: "{:U('Info/uploadImage')}", //远程上传地址
+														filters: {
+															max_file_size: '500kb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+															mime_types: [//允许文件上传类型
+																{title: "files", extensions: "jpg,png,gif"}
+															]
+														},
+														init: {
+															FilesAdded: function(up, files) { //文件上传前
+																uploader.start();
+															},
+															FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+																var data = JSON.parse(info.response);
+																var d = jQuery(this).attr('class');
+																console.log(d);
+																jQuery('#imgl').attr('value', data.pic);
+																jQuery('#img').attr('src', data.pic);
+
+															},
+														}
+													});
+													uploader.init();
+
+
+											        /*jQuery('#file_upload').uploadify({
+														'swf'      : '{$Think.config.PUBLIC_LIB}js/Uploadify/uploadify.swf',
+														'uploader' : '{:U("Info/uploadImage")}',
+														'buttonText' : '选择图片',
+														'onUploadSuccess' : function(file, data, response) {
+															jQuery('#imgl').attr('value',  '{$Think.config.WEB_SITE}'+data);
+															jQuery('#img').attr('src', '{$Think.config.WEB_SITE}'+data);//图片地址
+															jQuery('textarea[name="links"]').val('{$Think.config.WEB_SITE}'+data);//链接地址
+															jQuery('#images1').val(data);
+
+															$.cookie('preview_img','{$Think.config.WEB_SITE}'+data);//保存图片地址
+															$.cookie('preview_img_header','{$Think.config.WEB_SITE}'+data);//保存链接地址
+														}
+													});*/
+											    });
+									    	</script> 
+
+										</div>
+										<div class="link">
+											<textarea name="links" class="input-text textarea" placeholder="粘贴链接"></textarea>
+										</div>
+									</form>
+								</div>
+
+								<div class="preview">
+									<button class="view">
+										<span>预览</span>
+									</button>
+								</div>
+							</div>
+							<div class="box-3">
+								<div class="title"><span>效果预览</span></div>
+								<div class="name">
+									<div>公告2</div>
+								</div>
+								<div class="body">
+									<div class="banner" id="b04">
+									    <ul class="slider clear">
+											<foreach name="notice_info" item="v">
+												<li><a href="{$v.link}"><img src="{$v.img}" alt="{$v.title}" title="{$v.title}" width="320px" height="200px"></a></li>
+											</foreach>
+									    </ul>
+									</div>
+
+									<script type="text/javascript">
+										//banner slider
+										$(document).ready(function(e) {
+											var data;
+											function unslider()
+											{
+												var unslider04 = $('#b04').unslider({
+													speed: 1000,
+													dots: true
+												});
+												data = unslider04.data('unslider');
+											}
+											unslider();
+											//图片预览
+											$('.view').one('click',preview);
+
+											function preview()
+											{
+												if($('#img').attr('src'))
+												{
+													var preview = '<li><a href=""><img src="" alt="" title="" width="320px" height="200px"></a></li>';
+													$('#b04 ul').prepend(preview);
+													$('#b04 ul').children($('li')).first().children().attr('href',$.cookie('preview_img_header'));
+													$('#b04 ul').children($('li')).first().children().children().attr('src',$.cookie('preview_img'));
+													$.cookie('preview_img_header',null);
+													$.cookie('preview_img',null);
+													data.stop();
+													unslider();
+													data.move(0);
+													$('.dots')[0].remove();
+												}
+											}
+										});
+									</script>
+
+									<div class="content">
+										加载当前app页面
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="bottom">
+							<div class="submit">
+								<?php echo $save; ?>
+							</div>
+							<script type="text/javascript">
+								//提交表单
+								jQuery(".submit").click(function(){
+									jQuery(".notice-form").submit();
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

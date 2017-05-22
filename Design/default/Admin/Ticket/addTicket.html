@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>票务管理</title>
+
+	<include file="Common/head" />
+	<script type="text/javascript">
+		var msg = "<?php echo $_GET['msg']; ?>";
+		if(msg){
+			alert(msg);
+		}
+	</script>
+</head>
+<body>
+	<div id="ticket">
+		<div class="container">
+			<div class="main">
+				<include file="Common/header" />
+
+				<div class="content clear">
+					<div class="left">
+						
+						<include file="Common/left" />
+
+					</div>
+					<div class="right">
+						<div class="ticket">
+							<div class="left">
+								<div class="header"><span>票务列表</span></div>
+								<div class="ticket-list">
+									<?php //var_dump($list); ?>
+									<ul>
+										<li class="last">
+											<div class="box">
+												<div class="ticket-add">
+													<a href="{:U('Ticket/addTicket')}"></a>
+												</div>
+											</div>
+										</li>
+										<?php foreach($list as $k => $v): ?>
+											<li>
+												<div class="box clear">
+													<input type="hidden" name="id" class="t_id" value="<?php echo $v['sid']; ?>">
+													<div class="ticket-img">
+														<img src="<?php echo $v['style']; ?>">
+													</div>
+													<div class="ticket-action">
+														{$delTicket}
+														{$editTicket}
+													</div>
+												</div>
+											</li>
+										<?php endforeach; ?>
+										<!---->
+										<!---->
+									</ul>
+									<script type="text/javascript">
+										jQuery('.delTicket').click(function(){
+											var id = jQuery(this).parent().parent().find('.t_id').val();
+
+											if(id > 0){
+												jQuery.ajax({
+													type:'GET',
+													url:'{:U("Ticket/delTicket")}',
+													data:'id='+id,
+													success:function(data){
+														console.log(data);
+														if(data == 1){
+															alert('删除成功！等待审核');
+															window.location.reload();
+														}
+													}
+												});
+											}
+										});
+
+										jQuery('.editTicket').click(function(){
+											var id = jQuery(this).parent().parent().find('.t_id').val();
+
+											if(id > 0){
+												jQuery.ajax({
+													type:'GET',
+													url:'{:U("Ticket/getTicketTid")}',
+													data:'id='+id,
+													success:function(data){
+														console.log(data);
+														jQuery('.edit_id').attr('value', data.reid);
+														jQuery('#img').attr('src', data.img);
+														jQuery('#imgl').attr('value', data.img);
+
+														var start = DateTime.UnixToDate(data.starttime);
+														var end = DateTime.UnixToDate(data.exp_date);
+														jQuery('.beginTime').attr('value', start);
+														jQuery('.endTime').attr('value', end);
+														jQuery('.price').attr('value', data.price);
+														jQuery('.ticket-title').attr('value', data.title);
+														jQuery('.ticket-content').text(data.content);
+														jQuery('.count').attr('value', data.count);
+														jQuery('.score').attr('value', data.score);
+													}
+												});
+											}
+										});
+									</script>
+								</div>
+							</div>
+							<div class="right">
+								<form class="add-ticket" action="{:U('Ticket/saveTicket')}" method="post">
+								<div class="header"><span>票务信息</span></div>
+								<div class="ticket-info">
+									<div class="min-header"><span>票根图片</span></div>
+									<input type="hidden" name="id" class="edit_id" value="" />
+									<div class="uploadify-box">
+										<div class="formControls col-2">
+
+											<img id="img" src="" border="0"  width="130" height="130"/>
+											<input id="file_upload" type="hidden" value="" name="img"/>
+											<input type="hidden" class="select" value="" id="imgl"  name="imgl"/>
+											<a href="javascript:void(0)" class="btnss button avater" id="btnss"><span>选择图片</span></a>
+
+
+											<!--<img id="img" src="" width="130" height="130" border="0" />
+							    			<input id="file_upload" name="img" type="file" multiple="true" value="" />
+							  				<input type="hidden" class="select" value="" id="imgl"  name="imgl"/>-->
+										</div>
+										<script type="text/javascript">
+										    //图片上传
+										    jQuery(function() {
+												var uploader = new plupload.Uploader({
+													//创建实例的构造方法
+													runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序
+													browse_button: 'btnss', // 上传按钮
+													url: "{:U('Ticket/uploadImage')}", //远程上传地址
+													filters: {
+														max_file_size: '200mb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+														mime_types: [//允许文件上传类型
+															{title: "files", extensions: "jpg,png,gif,mp4"}
+														]
+													},
+													init: {
+														FilesAdded: function(up, files) { //文件上传前
+															uploader.start();
+														},
+														FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+															var data = JSON.parse(info.response);
+															jQuery('#imgl').attr('value', data.pic);
+															jQuery('#img').attr('src', data.pic);
+														}
+													}
+												});
+												uploader.init();
+
+
+										        /*jQuery('#file_upload').uploadify({
+										            //'swf'      : '/MET_V2/Public/lib/js/Uploadify/uploadify.swf?ver='+Math.random(),
+										            //'uploader' : '/MET_V2/index.php/Admin/Subject/uploadImage.html?ver='+Math.random(),
+										            'swf'      : '{$Think.config.PUBLIC_LIB}js/Uploadify/uploadify.swf?ver='+Math.random(),
+										            'uploader' : '{:U("Subject/uploadImage")}?ver='+Math.random(),
+										            'buttonText' : '选择图片',
+										            'onUploadSuccess' : function(file, data, response) {
+										            	console.log(data);
+										                jQuery('#imgl').attr('value', data);
+										                jQuery('#img').attr('src', data);
+										                jQuery('#images1').val(data);
+										            },
+										        });*/
+										    });
+								    	</script> 
+									</div>
+
+									<div class="min-header"><span>有效期设置</span></div>
+									<div class="begin">
+										<label>开始时间</label><input placeholder="选择起始时间" name="begin" class="beginTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+									</div>
+									<div class="end">
+										<label>结束时间</label><input placeholder="选择结束时间" name="end" class="endTime" value="" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+									</div>
+									<div class="min-header"><span>价格</span></div>
+									<input type="text" name="price"  class="price" />
+									<div class="min-header"><span>标题</span></div>
+									<input class="ticket-title" name="ticket-title" value="" />
+									<div class="min-header"><span>包含内容</span></div>
+									<textarea class="ticket-content" name="ticket-content"></textarea>
+									<div class="min-header"><span>重复使用次数</span></div>
+									<input type="text" name="count" value="" class="count">
+									<div class="min-header"><span>排序</span></div>
+									<input type="text" name="score" value="" class="score">
+									
+									{$save}
+
+									<script type="text/javascript">
+										jQuery(".save").click(function(){
+											var img = jQuery('#imgl').val();
+											if(!img){
+												alert("请上传票据图片！");
+												return false;
+											}
+											var beginTime = jQuery('.beginTime').val();
+											if(!beginTime){
+												alert("请选择开始时间！");
+												return false;
+											}
+											var endTime = jQuery('.endTime').val();
+											if(!endTime){
+												alert("请选择结束时间！");
+												return false;
+											}
+											var price = jQuery('.price').val();
+											if(!price){
+												alert("请输入价格！");
+												return false;
+											}
+											var title = jQuery('.ticket-title').val();
+											if(!title){
+												alert("请输入名称！");
+												return false;
+											}
+											var content = jQuery('.ticket-content').val();
+											if(!content){
+												alert("请输入内容！");
+												return false;
+											}
+											var count = jQuery('.count').val();
+											if(!count){
+												alert("请输入重复使用次数！");
+												return false;
+											}
+
+											jQuery(".add-ticket").submit();
+										});
+
+										jQuery('.reset').click(function(){
+											jQuery('.add-ticket').reset();
+										});
+									</script>
+								</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<include file="Common/footer" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>
