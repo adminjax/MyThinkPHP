@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>通用后台管理工具</title>
+	<link rel="shortcut icon" href="{$Think.config.WEB_SITE}favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="{$Think.config.SKIN}css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="{$Think.config.SKIN}css/admin.css" />
+	<script type="text/javascript" src="{$Think.config.PUBLIC_LIB}js/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+	<div id="index">
+		<div class="container">
+			<div class="main">
+			    
+			    <!-- top -->
+			    <div class="top">
+			    </div>
+
+			    <!-- middle -->
+			    <div class="middle">
+			    	<div class="form-box">
+			    		<form class="login-form" action="<?php echo U('Login/loginto'); ?>" method="post">
+			    			<ul>
+			    				<li>
+			    					<span class="title">通用后台管理工具</span>
+			    				</li>
+			    				<li>
+			    					<label>用户名</label>
+			    					<input type="text" name="username" class="username" />
+			    				</li>
+			    				<li>
+			    					<label>密<span class="separator"></span>码</label>
+			    					<input type="password" name="password" class="password" />
+			    				</li>
+			    				<li>
+			    					<label>验证码</label>
+									<input id="j_verify" name="j_verify" type="text" class="verify-code">
+									<img id="verify_img" alt="点击更换验证码" title="点击更换验证码" src="{:U('Verify/getVerify')}" />
+
+									<script type="text/javascript">
+
+										/* 验证码刷新 */
+										jQuery("#verify_img").click(function(){
+											var verifyURL = "{$Think.config.ADMIN_URL}Verify/getVerify";
+											var time = new Date().getTime();
+											jQuery("#verify_img").attr({
+												"src" : verifyURL+"/"+time
+											});
+										});
+									</script>
+			    				</li>
+			    				<li class="clear">
+			    					<div class="left">
+			    						<a href="<?php echo U('Forgetpwd/'); ?>">忘记密码</a>	
+			    					</div>
+			    					<div class="right">
+			    						<input type="checkbox" name="remember" class="remember" />
+			    						<span class="remember">记住登录</span>
+			    					</div>
+			    				</li>
+			    				<li>
+			    					<button><span>登录</span></button>
+			    				</li>
+			    			</ul>
+			    			<script type="text/javascript">
+			    				$(".login-form").Validform();
+			    			</script>
+			    		</form>
+			    	</div>	
+			    </div>
+				
+				<!-- footer -->
+				<div class="footer">
+					
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>

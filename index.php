@@ -14,7 +14,7 @@ define('APP_DEBUG',true);
 define('APP_PATH','./App/');
 
 //定义模版目录
-define('TMPL_PATH','./Design/default/');
+define('TMPL_PATH','./Design/Default/Template/');
 //runtime目录
 define('RUNTIME_PATH', './Var/');
 

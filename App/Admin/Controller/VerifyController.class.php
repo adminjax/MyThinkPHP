@@ -1,6 +1,6 @@
 <?php
 /**
- * MET纪元后台音乐管理工具
+ * 通用后台管理工具
  *
  * @Author: jax
  *
@@ -10,7 +10,7 @@
 namespace Admin\Controller;
 
 /**
- * 验证码
+ * 验证码类
  */
 class VerifyController extends CommonController
 {

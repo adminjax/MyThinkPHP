@@ -1,0 +1,78 @@
+/**
+ * 所有文字通用字体
+ */
+*{
+	font-family: "Microsoft YaHei",SimSun,'\5b8b\4f53',sans-serif;
+}
+
+
+
+/**
+ * index
+ */
+ #index .form-box{
+     width: 100%;
+ }
+ #index .form-box ul{
+     width: 500px;
+     border: 1px solid;
+     margin: 200px auto;
+     text-align: center;
+ }
+#index .form-box ul .title{
+    font-size: 25px;
+    padding: 20px;
+    display: inline-block;
+}
+#index .form-box ul label{
+	font-size: 20px;
+}
+#index .form-box ul .separator{
+	display: inline-block;
+	width: 20px;
+}
+#index .form-box ul input{
+	width: 200px;
+	height: 25px;
+	margin-bottom: 10px;
+}
+#index .form-box ul .left{
+	float: left;
+}
+#index .form-box ul .right{
+	float: right;
+}
+#index .form-box ul .remember{
+	width: 15px;
+	height: 15px;
+	margin: 0px;
+	vertical-align: middle;
+}
+#index .form-box ul .clear{
+	width: 271px;
+	margin: auto;
+	height: 29px;
+	line-height: 25px;
+}
+#index .form-box ul button{
+	width: 100px;
+	height: 30px;
+	margin: 10px 0px;
+	font-size: 18px;
+	padding: 0px;
+	
+}
+#index .form-box ul button span{
+	display: block;
+	width: 100%;
+}
+#index .form-box ul .verify-code{
+	width: 118px;
+}
+#verify_img{
+	border: 1px solid;
+	height: 31px;
+	vertical-align: middle;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
