@@ -5,7 +5,15 @@
 	font-family: "Microsoft YaHei",SimSun,'\5b8b\4f53',sans-serif;
 }
 
-
+.msg{
+	display: block;
+	font-size: 12px;
+	color: red;
+	margin: auto;
+	margin-bottom: 5px;
+	width: 270px;
+	text-align: left;
+}
 
 /**
  * index
@@ -35,6 +43,8 @@
 	width: 200px;
 	height: 25px;
 	margin-bottom: 10px;
+	text-align: center;
+	font-size: 15px;
 }
 #index .form-box ul .left{
 	float: left;
@@ -60,6 +70,7 @@
 	margin: 10px 0px;
 	font-size: 18px;
 	padding: 0px;
+	cursor: pointer;
 	
 }
 #index .form-box ul button span{

@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="{$Think.config.SKIN}css/reset.css" />
 	<link rel="stylesheet" type="text/css" href="{$Think.config.SKIN}css/admin.css" />
 	<script type="text/javascript" src="{$Think.config.PUBLIC_LIB}js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="{$Think.config.PUBLIC_LIB}js/ValidData.js"></script>
 </head>
 <body>
 	<div id="index">
@@ -19,26 +20,25 @@
 			    <!-- middle -->
 			    <div class="middle">
 			    	<div class="form-box">
-			    		<form class="login-form" action="<?php echo U('Login/loginto'); ?>" method="post">
+			    		<form id="login-form" action="<?php echo U('Login/loginto'); ?>" method="post">
 			    			<ul>
 			    				<li>
 			    					<span class="title">通用后台管理工具</span>
 			    				</li>
 			    				<li>
 			    					<label>用户名</label>
-			    					<input type="text" name="username" class="username" />
+			    					<input type="text" name="username" value="" class="username need-valid" dataMsg="请输入6~12个字母、数字、下划线！" />
 			    				</li>
 			    				<li>
 			    					<label>密<span class="separator"></span>码</label>
-			    					<input type="password" name="password" class="password" />
+			    					<input type="password" name="password" value="" class="password need-valid" dataMsg="请输入密码！" />
 			    				</li>
 			    				<li>
 			    					<label>验证码</label>
-									<input id="j_verify" name="j_verify" type="text" class="verify-code">
+									<input id="j_verify" name="j_verify" type="text" value="" class="verify-code need-valid" dataMsg="请输入验证码！" />
 									<img id="verify_img" alt="点击更换验证码" title="点击更换验证码" src="{:U('Verify/getVerify')}" />
 
 									<script type="text/javascript">
-
 										/* 验证码刷新 */
 										jQuery("#verify_img").click(function(){
 											var verifyURL = "{$Think.config.ADMIN_URL}Verify/getVerify";
@@ -63,7 +63,7 @@
 			    				</li>
 			    			</ul>
 			    			<script type="text/javascript">
-			    				$(".login-form").Validform();
+			    				ValidForm.init("#login-form");
 			    			</script>
 			    		</form>
 			    	</div>	
